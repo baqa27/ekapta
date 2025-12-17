@@ -1,0 +1,22 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class RevisiPendaftaran extends Model
+{
+    use HasFactory;
+
+    protected $fillable = [
+        'pendaftaran_id',
+        'catatan',
+        'lampiran',
+    ];
+
+    public function pendaftarans()
+    {
+        return $this->belongsTo(Pendaftaran::class);
+    }
+}
