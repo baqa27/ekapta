@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="row mb-2">
                                         <div class="col-md-3">
-                                            JUDUL KERJA PRAKTIK
+                                            JUDUL KERJA Praktek
                                         </div>
                                         <div class="col-md-9">
                                             <b>{{ $pengajuan ? $pengajuan->judul : '-' }}</b>
@@ -92,7 +92,7 @@
                                             <td>: <b>{{ $prodi ? $prodi->namaprodi : '' }}</b></td>
                                         </tr>
                                         <tr>
-                                            <td>JUDUL KERJA PRAKTIK</td>
+                                            <td>JUDUL KERJA Praktek</td>
                                             <td>: <b>{{ $pengajuan ? $pengajuan->judul : '' }}</b></td>
                                         </tr>
                                         <tr>
@@ -125,23 +125,10 @@
                                         Belum Bimbingan/Review/Belum Di Acc
                                     </span>
                                 </div>
-                                <div class="col-md-6 p-3 rounded border mb-2">
-                                    @if($dosen_utama)
-                                        Pembimbing 1: <b>{{ $dosen_utama->nama . ', ' . $dosen_utama->gelar }}</b><hr>
-                                        @foreach ($mahasiswa->bimbingans()->where('pembimbing', 'utama')->get() as $bimbingan)
-                                            <a href="#"
-                                                class="btn {{ $bimbingan->status == 'diterima' ? 'btn-success' : 'btn-secondary' }} mb-3 btn-sm"><i
-                                                    class="fas {{ $bimbingan->status == 'diterima' ? 'fa-check-circle' : 'fa-circle' }}"></i>
-                                                {{ $bimbingan->bagian->bagian }}</a>
-                                        @endforeach
-                                    @else
-                                        TIDAK ADA BIMBINGAN
-                                    @endif
-                                </div>
-                                <div class="col-md-6 p-3 rounded border mb-2">
-                                    @if($dosen_pendamping)
-                                        Pembimbing 2: <b>{{ $dosen_pendamping->nama . ', ' . $dosen_pendamping->gelar }}</b><hr>
-                                        @foreach ($mahasiswa->bimbingans()->where('pembimbing', 'pendamping')->get() as $bimbingan)
+                                <div class="col-md-12 p-3 rounded border mb-2">
+                                    @if($dosen_pembimbing)
+                                        Pembimbing KP: <b>{{ $dosen_pembimbing->nama . ', ' . $dosen_pembimbing->gelar }}</b><hr>
+                                        @foreach ($mahasiswa->bimbingans as $bimbingan)
                                             <a href="#"
                                                 class="btn {{ $bimbingan->status == 'diterima' ? 'btn-success' : 'btn-secondary' }} mb-3 btn-sm"><i
                                                     class="fas {{ $bimbingan->status == 'diterima' ? 'fa-check-circle' : 'fa-circle' }}"></i>

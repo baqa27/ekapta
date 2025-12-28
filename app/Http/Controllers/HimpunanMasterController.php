@@ -111,4 +111,24 @@ class HimpunanMasterController extends Controller
 
         return redirect()->route('himpunans')->with('success', "Berhasil import $imported data himpunan");
     }
+
+    public function updatePayment(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:himpunans,id',
+            'biaya_seminar' => 'required|integer|min:0',
+        ]);
+
+        $himpunan = Himpunan::findOrFail($request->id);
+        $himpunan->update([
+            'biaya_seminar' => $request->biaya_seminar,
+            'nama_rekening' => $request->nama_rekening,
+            'nomor_rekening' => $request->nomor_rekening,
+            'bank' => $request->bank,
+            'nomor_dana' => $request->nomor_dana,
+            'nomor_seabank' => $request->nomor_seabank,
+        ]);
+
+        return redirect()->route('himpunans')->with('success', 'Info pembayaran berhasil diupdate');
+    }
 }

@@ -17,6 +17,12 @@ class Himpunan extends Authenticatable
         'password',
         'prodi_id',
         'is_pendaftaran_seminar_open',
+        'biaya_seminar',
+        'nama_rekening',
+        'nomor_rekening',
+        'bank',
+        'nomor_dana',
+        'nomor_seabank',
     ];
 
     protected $casts = [

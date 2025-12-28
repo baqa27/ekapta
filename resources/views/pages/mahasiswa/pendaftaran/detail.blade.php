@@ -70,7 +70,7 @@
 
                             <div class="row">
                                 <div class="col-md-4">
-                                    Dosen Pembimbing Kerja Praktik
+                                    Dosen Pembimbing Kerja Praktek
                                 </div>
                                 <div class="col-md-8">
                                     <b>{{ $dosen_pembimbing ? $dosen_pembimbing->nama . ', ' . $dosen_pembimbing->gelar : 'Belum ditentukan' }}</b>
@@ -80,7 +80,7 @@
 
                             <div class="row">
                                 <div class="col-md-4">
-                                    Judul Kerja Praktik
+                                    Judul Kerja Praktek
                                 </div>
                                 <div class="col-md-8">
                                     <b>{{ $pendaftaran->pengajuan->judul }}</b>
@@ -101,7 +101,7 @@
 
                             <div class="row">
                                 <div class="col-md-4">
-                                    Bukti Lembar Pernyataan Keaslian Hasil Kerja Praktik
+                                    Bukti Lembar Pernyataan Keaslian Hasil Kerja Praktek
                                 </div>
                                 <div class="col-md-8">
                                     <a href="{{ storage_url($pendaftaran->lampiran_2) }}" target="_blank"><i
@@ -134,7 +134,7 @@
 
                             <div class="row">
                                 <div class="col-md-4">
-                                    Bukti Pembayaran Kerja Praktik
+                                    Bukti Pembayaran Kerja Praktek
                                 </div>
                                 <div class="col-md-8">
                                     <a href="{{ storage_url($pendaftaran->lampiran_5) }}" target="_blank"><i
@@ -175,27 +175,15 @@
 
                             <div class="row">
                                 <div class="col-md-4">
-                                    Sertifikat Peserta KP #1
+                                    Dokumen Pendukung KP
                                 </div>
                                 <div class="col-md-8">
-                                    @if($pendaftaran->sertifikat_peserta_1)
+                                    @if($pendaftaran->dokumen_pendukung_kp)
+                                    <a href="{{ storage_url($pendaftaran->dokumen_pendukung_kp) }}" target="_blank"><i
+                                            class="fas fa-paperclip"></i> {{ basename($pendaftaran->dokumen_pendukung_kp) }}</a>
+                                    @elseif($pendaftaran->sertifikat_peserta_1)
                                     <a href="{{ storage_url($pendaftaran->sertifikat_peserta_1) }}" target="_blank"><i
                                             class="fas fa-paperclip"></i> {{ Str::substr($pendaftaran->sertifikat_peserta_1, 40) }}</a>
-                                    @else
-                                    -
-                                    @endif
-                                </div>
-                            </div>
-                            <hr>
-
-                            <div class="row">
-                                <div class="col-md-4">
-                                    Sertifikat Peserta KP #2
-                                </div>
-                                <div class="col-md-8">
-                                    @if($pendaftaran->sertifikat_peserta_2)
-                                    <a href="{{ storage_url($pendaftaran->sertifikat_peserta_2) }}" target="_blank"><i
-                                            class="fas fa-paperclip"></i> {{ Str::substr($pendaftaran->sertifikat_peserta_2, 40) }}</a>
                                     @else
                                     -
                                     @endif
@@ -303,7 +291,7 @@
                                                         <span class="text-secondary ml-2"><b>Lampiran : </b></span>
                                                         <a href="{{ storage_url($revisi->lampiran) }}" target="_blank">
                                                             <i class="fas fa-paperclip ml-1"></i>
-                                                            {{ Str::substr($revisi->lampiran, 40) }}
+                                                            {{ basename($revisi->lampiran) }}
                                                         </a>
                                                     </small>
                                                 </div>

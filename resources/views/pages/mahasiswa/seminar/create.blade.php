@@ -83,17 +83,8 @@
                                     </div>
                                     <div class="card-body">
                                         <div class="form-group">
-                                            <label>Judul Kerja Praktik (dari Pengajuan)</label>
+                                            <label>Judul Kerja Praktek</label>
                                             <input type="text" class="form-control" value="{{ $pengajuan_acc->judul }}" disabled>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Judul Laporan <span class="text-danger">*</span></label>
-                                            <input type="text" class="form-control @error('judul_laporan') is-invalid @enderror"
-                                                name="judul_laporan" placeholder="Masukkan Judul Laporan..." 
-                                                value="{{ old('judul_laporan', $pengajuan_acc->judul) }}" required>
-                                            @error('judul_laporan')
-                                                <div class="invalid-feedback">{{ $message }}</div>
-                                            @enderror
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
@@ -179,13 +170,52 @@
                                 {{-- BAGIAN 4: PEMBAYARAN --}}
                                 <div class="card card-secondary">
                                     <div class="card-header py-2">
-                                        <h5 class="card-title mb-0">4. Pembayaran Seminar</h5>
+                                        <h5 class="card-title mb-0">4. Link Akses Produk KP</h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group">
+                                            <label>Link Akses Produk <span class="text-danger">*</span></label>
+                                            <input type="url" class="form-control @error('link_akses_produk') is-invalid @enderror"
+                                                name="link_akses_produk" placeholder="https://..." 
+                                                value="{{ old('link_akses_produk') }}" required>
+                                            <small class="text-muted">Masukkan link untuk mengakses produk KP (Google Drive, GitHub, dll)</small>
+                                            @error('link_akses_produk')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {{-- BAGIAN 5: PEMBAYARAN --}}
+                                <div class="card card-secondary">
+                                    <div class="card-header py-2">
+                                        <h5 class="card-title mb-0">5. Pembayaran Seminar</h5>
                                     </div>
                                     <div class="card-body">
                                         <div class="alert alert-light border mb-3">
                                             <i class="fas fa-info-circle text-primary mr-2"></i>
-                                            Nominal pembayaran: <strong>Rp 25.000</strong>
+                                            Nominal pembayaran: <strong>Rp {{ number_format($himpunan->biaya_seminar ?? 25000, 0, ',', '.') }}</strong>
                                         </div>
+                                        
+                                        @if($himpunan && ($himpunan->bank || $himpunan->nomor_dana || $himpunan->nomor_seabank))
+                                        <div class="card bg-light mb-3">
+                                            <div class="card-body py-2">
+                                                <h6 class="mb-2"><i class="fas fa-wallet mr-2"></i>Informasi Rekening Pembayaran:</h6>
+                                                <ul class="mb-0 pl-3">
+                                                    @if($himpunan->bank && $himpunan->nomor_rekening)
+                                                    <li><strong>{{ $himpunan->bank }}</strong>: {{ $himpunan->nomor_rekening }} a.n. {{ $himpunan->nama_rekening ?? '-' }}</li>
+                                                    @endif
+                                                    @if($himpunan->nomor_dana)
+                                                    <li><strong>DANA</strong>: {{ $himpunan->nomor_dana }}</li>
+                                                    @endif
+                                                    @if($himpunan->nomor_seabank)
+                                                    <li><strong>SeaBank</strong>: {{ $himpunan->nomor_seabank }}</li>
+                                                    @endif
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        @endif
+                                        
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
@@ -195,6 +225,9 @@
                                                         <option value="Cash" {{ old('metode_bayar') == 'Cash' ? 'selected' : '' }}>Cash</option>
                                                         <option value="DANA" {{ old('metode_bayar') == 'DANA' ? 'selected' : '' }}>DANA</option>
                                                         <option value="SeaBank" {{ old('metode_bayar') == 'SeaBank' ? 'selected' : '' }}>SeaBank</option>
+                                                        @if($himpunan && $himpunan->bank)
+                                                        <option value="Transfer Bank" {{ old('metode_bayar') == 'Transfer Bank' ? 'selected' : '' }}>Transfer Bank ({{ $himpunan->bank }})</option>
+                                                        @endif
                                                     </select>
                                                     @error('metode_bayar')
                                                         <div class="invalid-feedback">{{ $message }}</div>

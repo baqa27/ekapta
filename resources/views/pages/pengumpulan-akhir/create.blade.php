@@ -10,7 +10,7 @@
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Pengumpulan Akhir KP</a></li>
+                        <li class="breadcrumb-item"><a href="#">Jilid KP</a></li>
                         <li class="breadcrumb-item active">{{ $title }}</li>
                     </ol>
                 </div><!-- /.col -->
@@ -41,9 +41,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lembar_keaslian')
                                         <small class="text-danger"
@@ -60,9 +58,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lembar_persetujuan_pembimbing')
                                         <small class="text-danger"
@@ -79,9 +75,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lembar_persetujuan_penguji')
                                         <small class="text-danger"
@@ -98,9 +92,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lembar_pengesahan')
                                         <small class="text-danger"
@@ -108,7 +100,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Lembar Bimbingan Pembimbing 1 dan 2 (Dijadikan 1 file)<br>
+                                    <label for="exampleInputFile">Lembar Bimbingan KP<br>
                                         <small><a href="{{ route('cetak.riwayat.bimbingan.mahasiswa') }}" target="_blank"><i
                                                     class="fas fa-download"></i> Download Lembar
                                                 Bimbingan</a></small></label>
@@ -120,9 +112,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lembar_bimbingan')
                                         <small class="text-danger"
@@ -140,9 +130,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lembar_revisi')
                                         <small class="text-danger"
@@ -150,7 +138,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Laporan Kerja Praktik Format PDF (Digabung Dengan Lembar
+                                    <label for="exampleInputFile">Laporan Kerja Praktek Format PDF (Digabung Dengan Lembar
                                         Pengesahan TTD)<br><small>Jika terjadi error, silahan upload file PDF ke Google
                                             Drive dan isikan URL file PDF yang diupload ke Google Drive</small></label>
                                     <select name="type_laporan_pdf" id="type_laporan_pdf" class="form-control"
@@ -179,7 +167,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Laporan Kerja Praktik Format Word<br><small>Jika terjadi
+                                    <label for="exampleInputFile">Laporan Kerja Praktek Format Word<br><small>Jika terjadi
                                             error, silahan upload file WORD ke Google Drive dan isikan URL file WORD yang
                                             diupload ke Google Drive</small></label>
                                     <select name="type_laporan" id="type_laporan" class="form-control"
@@ -208,7 +196,7 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Artikel Kerja Praktik Format WORD <br><small>Jika terjadi
+                                    <label for="exampleInputFile">Artikel Kerja Praktek Format WORD <br><small>Jika terjadi
                                             error, silahan upload file WORD ke Google Drive dan isikan URL file WORD yang
                                             diupload ke Google Drive</small></label>
                                     <select name="type_artikel" id="type_artikel" class="form-control"
@@ -237,13 +225,30 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label>Link Produk Kerja Praktik (Opsional)<br>
+                                    <label>Link Produk Kerja Praktek (Opsional)<br>
                                         <small>Upload ke google drive, kemudian inputkan link project</small></label>
                                     <input type="url" class="form-control" name="link_project"
                                         value="{{ old('link_project') }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Berita acara serah terima produk KP</label>
+                                    <label for="exampleInputFile">Bukti Nilai dari Instansi KP</label>
+                                    <div class="input-group mb-3">
+                                        <div class="custom-file">
+                                            <input type="file"
+                                                class="custom-file-input @error('bukti_nilai_instansi')is-invalid @enderror"
+                                                name="bukti_nilai_instansi" accept=".pdf" required>
+                                            <label class="custom-file-label" for="exampleInputFile">Choose
+                                                file</label>
+                                        </div>
+                                        
+                                    </div>
+                                    @error('bukti_nilai_instansi')
+                                        <small class="text-danger"
+                                            style="position:relative;top:-15px;left:5px">{{ $message }}</small>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInputFile">Berita Acara Serah Terima Produk KP</label>
                                     <div class="input-group mb-3">
                                         <div class="custom-file">
                                             <input type="file"
@@ -252,9 +257,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('berita_acara')
                                         <small class="text-danger"
@@ -271,34 +274,14 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lampiran')
                                         <small class="text-danger"
                                             style="position:relative;top:-15px;left:5px">{{ $message }}</small>
                                     @enderror
                                 </div>
-                                <div class="form-group">
-                                    <label for="exampleInputFile">Bukti Nilai Instansi/Lapangan (PDF)</label>
-                                    <div class="input-group mb-3">
-                                        <div class="custom-file">
-                                            <input type="file"
-                                                class="custom-file-input @error('bukti_nilai_instansi')is-invalid @enderror"
-                                                name="bukti_nilai_instansi" accept=".pdf" required>
-                                            <label class="custom-file-label" for="exampleInputFile">Choose
-                                                file</label>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
-                                    </div>
-                                    @error('bukti_nilai_instansi')
-                                        <small class="text-danger"
-                                            style="position:relative;top:-15px;left:5px">{{ $message }}</small>
-                                    @enderror
-                                </div>
+
                                 <div class="form-group">
                                     <label for="exampleInputFile">Panduan Penggunaan Produk KP <br><small>Jika terjadi
                                             error, silahan upload file WORD ke Google Drive dan isikan URL file WORD yang
@@ -329,7 +312,12 @@
                                     @enderror
                                 </div>
                                 <div class="form-group mt-4">
-                                    <button type="submit" class="btn btn-success">Submit</button>
+                                    <a href="{{ route('pengumpulan-akhir.mahasiswa') }}" class="btn btn-secondary mr-2">
+                                        <i class="fas fa-arrow-left mr-1"></i> Kembali
+                                    </a>
+                                    <button type="submit" class="btn btn-success">
+                                        <i class="fas fa-paper-plane mr-1"></i> Submit
+                                    </button>
                                 </div>
                             </form>
                         </div>

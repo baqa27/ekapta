@@ -70,9 +70,9 @@
 
             <div class="row">
                 <div class="col-md-6">
-                    <div class="card" style="min-height: 16rem">
-                        <div class="card-header bg-info">
-                            Seminar KP Berdasarkan Status
+                    <div class="card card-info card-outline" style="min-height: 16rem">
+                        <div class="card-header">
+                            <h3 class="card-title">Seminar KP Berdasarkan Status</h3>
                         </div>
                         <div class="card-body">
 
@@ -108,9 +108,9 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div class="card" style="min-height: 16rem">
-                        <div class="card-header bg-secondary">
-                            Informasi Panel Himpunan
+                    <div class="card card-secondary card-outline" style="min-height: 16rem">
+                        <div class="card-header">
+                            <h3 class="card-title">Informasi Panel Himpunan</h3>
                         </div>
                         <div class="card-body">
                             <p>Anda dapat mengelola:</p>

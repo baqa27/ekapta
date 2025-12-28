@@ -41,8 +41,7 @@
                                         <th>NIM</th>
                                         <th>NAMA MAHASISWA</th>
                                         <th>PRODI</th>
-                                        <th>PEMBIMBING 1</th>
-                                        <th>PEMBIMBING 2</th>
+                                        <th>PEMBIMBING KP</th>
                                         <th>JUDUL KP</th>
                                     </tr>
                                 </thead>
@@ -52,16 +51,14 @@
                                     @endphp
                                     @foreach ($seminars as $seminar)
                                     @php
-                                        $dosen_utama = $seminar->mahasiswa->dosens()->where('status', 'utama')->first();
-                                        $dosen_pendamping = $seminar->mahasiswa->dosens()->where('status', 'pendamping')->first();
+                                        $dosen_pembimbing = $seminar->mahasiswa->dosens()->where('status', 'pembimbing')->first();
                                     @endphp
                                         <tr>
                                             <td>{{ $no++ }}</td>
                                             <td>{{ $seminar->mahasiswa->nim }}</td>
                                             <td>{{ $seminar->mahasiswa->nama }}</td>
                                             <td>{{ $seminar->mahasiswa->prodi }}</td>
-                                            <td>{{ $dosen_utama ? $dosen_utama->nama.', '.$dosen_utama->gelar : null }}</td>
-                                            <td>{{ $dosen_pendamping ? $dosen_pendamping->nama.', '.$dosen_pendamping->gelar : null }}</td>
+                                            <td>{{ $dosen_pembimbing ? $dosen_pembimbing->nama.', '.$dosen_pembimbing->gelar : '-' }}</td>
                                             <td>{{ $seminar->pengajuan->judul }}</td>
                                         </tr>
                                     @endforeach
@@ -73,8 +70,7 @@
                                         <th>NIM</th>
                                         <th>NAMA MAHASISWA</th>
                                         <th>PRODI</th>
-                                        <th>PEMBIMBING 1</th>
-                                        <th>PEMBIMBING 2</th>
+                                        <th>PEMBIMBING KP</th>
                                         <th>JUDUL KP</th>
                                     </tr>
                                 </tfoot>

@@ -27,7 +27,7 @@
             <div class="col-md-12">
                 <div class="card card-primary card-outline">
                     <div class="card-header">
-                        <h3 class="card-title">Form Pengajuan Kerja Praktik</h3>
+                        <h3 class="card-title">Form Pengajuan Kerja Praktek</h3>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('pengajuan.store') }}" method="post" enctype="multipart/form-data">
@@ -60,50 +60,37 @@
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Gambaran Singkat Masalah + Solusi</label>
-                                <textarea id="summernote" name="deskripsi" required>
-                                    {{ old('deskripsi') }}
-                                </textarea>
+                                <label for="deskripsi">Gambaran Singkat</label>
+                                <textarea class="form-control @error('deskripsi') is-invalid @enderror" 
+                                    name="deskripsi" id="deskripsi" rows="4" 
+                                    placeholder="Gambaran singkat masalah dan solusi">{{ old('deskripsi') }}</textarea>
                                 @error('deskripsi')
-                                <div class="text-danger"><small>{{ $message }}</small></div>
+                                <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="exampleInputFile">Bukti Diterima Instansi (.pdf)</label>
-                                <div class="input-group mb-3">
-                                    <div class="custom-file">
-                                        <input type="file"
-                                            class="custom-file-input @error('lampiran') is-invalid @enderror"
-                                            name="lampiran" accept=".pdf" required>
-                                        <label class="custom-file-label" for="exampleInputFile">Choose
-                                            file</label>
-                                    </div>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">Dokumen</span>
-                                    </div>
+                                <label for="lampiran">Bukti Diterima Instansi (.pdf)</label>
+                                <div class="custom-file">
+                                    <input type="file"
+                                        class="custom-file-input @error('lampiran') is-invalid @enderror"
+                                        name="lampiran" accept=".pdf" required>
+                                    <label class="custom-file-label" for="lampiran">Choose file</label>
                                 </div>
                                 @error('lampiran')
-                                <small class="text-danger" style="position:relative;top:-15px;left:5px">{{ $message
-                                    }}</small>
+                                <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="files_pendukung">File Pendukung (Opsional)</label>
-                                <div class="input-group mb-3">
-                                    <div class="custom-file">
-                                        <input type="file"
-                                            class="custom-file-input @error('files_pendukung') is-invalid @enderror"
-                                            name="files_pendukung" accept=".pdf,.zip,.rar">
-                                        <label class="custom-file-label" for="files_pendukung">Choose
-                                            file</label>
-                                    </div>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">Pendukung</span>
-                                    </div>
+                                <label for="files_pendukung">Dokumen Pendukung KP (.pdf, .zip, .rar)</label>
+                                <div class="custom-file">
+                                    <input type="file"
+                                        class="custom-file-input @error('files_pendukung') is-invalid @enderror"
+                                        name="files_pendukung" accept=".pdf,.zip,.rar" required>
+                                    <label class="custom-file-label" for="files_pendukung">Choose file</label>
                                 </div>
+                                <small class="text-muted">Upload dokumen pendukung KP seperti proposal, surat permohonan, dll</small>
                                 @error('files_pendukung')
-                                <small class="text-danger" style="position:relative;top:-15px;left:5px">{{ $message
-                                    }}</small>
+                                <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
                             <div class="form-group mt-4">

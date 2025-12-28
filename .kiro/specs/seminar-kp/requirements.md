@@ -2,15 +2,15 @@
 
 ## Introduction
 
-Fitur Seminar KP adalah modul untuk mengelola seluruh proses seminar Kerja Praktik (KP) di sistem ekapta12. Fitur ini mencakup pembukaan pendaftaran oleh Himpunan, pengisian formulir oleh mahasiswa, verifikasi berkas, penjadwalan seminar, penilaian oleh dosen penguji (tanpa login via link unik), proses revisi pasca seminar, upload nilai instansi, dan penetapan nilai akhir seminar. Sistem ini mengintegrasikan peran Mahasiswa, Himpunan, Dosen Penguji, dan Prodi.
+Fitur Seminar KP adalah modul untuk mengelola seluruh proses seminar Kerja Praktek (KP) di sistem ekapta12. Fitur ini mencakup pembukaan pendaftaran oleh Himpunan, pengisian formulir oleh mahasiswa, verifikasi berkas, penjadwalan seminar, penilaian oleh dosen penguji (tanpa login via link unik), proses revisi pasca seminar, upload nilai instansi, dan penetapan nilai akhir seminar. Sistem ini mengintegrasikan peran Mahasiswa, Himpunan, Dosen Penguji, dan Prodi.
 
 ## Glossary
 
-- **Seminar KP**: Ujian presentasi laporan Kerja Praktik mahasiswa
+- **Seminar KP**: Ujian presentasi laporan Kerja Praktek mahasiswa
 - **Himpunan**: Organisasi mahasiswa yang mengelola administrasi seminar KP
 - **Sesi Seminar**: Satu slot waktu seminar yang berisi beberapa mahasiswa dengan satu dosen penguji
 - **Token Penilaian**: Link unik yang digunakan dosen penguji untuk menilai mahasiswa tanpa login
-- **Nilai Instansi**: Nilai yang diberikan oleh tempat praktik mahasiswa
+- **Nilai Instansi**: Nilai yang diberikan oleh tempat Praktek mahasiswa
 - **Nilai Seminar**: Nilai yang diberikan oleh dosen penguji saat seminar
 - **Nilai Akhir**: Gabungan nilai seminar dan nilai instansi dengan bobot tertentu
 - **Status Seminar**: Status alur mahasiswa dalam proses seminar (menunggu_verifikasi, diterima, revisi, ditolak, dijadwalkan, selesai_seminar, revisi_pasca, revisi_disetujui, selesai)

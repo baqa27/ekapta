@@ -33,9 +33,9 @@
             @if (count($pendaftaranIsAcc) != 0)
                 <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    Selamat! Pendaftaran kerja praktik anda sudah di Acc oleh Admin, anda bisa memulai <b><a
+                    Selamat! Pendaftaran kerja Praktek anda sudah di Acc oleh Admin, anda bisa memulai <b><a
                             href="{{ route('bimbingan.mahasiswa') }}">Bimbingan Kerja
-                            Praktik.</a></b>
+                            Praktek.</a></b>
                 </div>
             @endif
 
@@ -105,14 +105,20 @@
                                         </td>
                                         <td>
                                             @if ($pendaftaran->status =='diterima')
+                                                <a href="{{ url('pendaftaran/detail/'.$pendaftaran->id) }}"
+                                                   class="btn btn-primary btn-sm mr-1"><i
+                                                        class="fas fa-info-circle mr-1"></i>Detail</a>
                                                 <a href="{{ route('cetak.surat.tugas.bimbingan') }}"
                                                    class="btn btn-success btn-sm" target="_blank"><i
                                                         class="fas fa-download mr-1"></i>
                                                     Surat Tugas Bimbingan KP</a>
 
                                             @elseif ($pendaftaran->status =='revisi')
+                                                <a href="{{ url('pendaftaran/detail/'.$pendaftaran->id) }}"
+                                                   class="btn btn-primary btn-sm mr-1"><i
+                                                        class="fas fa-info-circle mr-1"></i>Detail</a>
                                                 <a href="{{ url('pendaftaran/edit/'.$pendaftaran->id) }}"
-                                                   class="btn btn-primary btn-sm"><i class="fa fa-upload mr-1"></i>
+                                                   class="btn btn-warning btn-sm"><i class="fa fa-upload mr-1"></i>
                                                     Submit Revisi</a>
 
                                             @elseif ($pendaftaran->status =='review')

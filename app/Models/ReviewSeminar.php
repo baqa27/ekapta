@@ -10,6 +10,9 @@ class ReviewSeminar extends Model
 {
     use HasFactory;
 
+    // Nama tabel dengan suffix _kp
+    protected $table = 'review_seminar_kps';
+
     public const DITERIMA = 'diterima';
     public const REVISI = 'revisi';
     public const REVIEW = 'review';

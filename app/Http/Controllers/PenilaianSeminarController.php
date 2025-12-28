@@ -46,6 +46,8 @@ class PenilaianSeminarController extends Controller
 
     /**
      * Submit semua penilaian
+     * KP: Hanya nilai, tidak ada status revisi dari penguji
+     * Setelah dinilai, mahasiswa langsung upload nilai instansi
      */
     public function submit(Request $request, $token)
     {
@@ -64,11 +66,13 @@ class PenilaianSeminarController extends Controller
         // Validasi semua mahasiswa sudah dinilai
         foreach ($seminars as $seminar) {
             if (!isset($penilaian[$seminar->id]) || 
-                !isset($penilaian[$seminar->id]['nilai']) || 
-                !isset($penilaian[$seminar->id]['status'])) {
+                !isset($penilaian[$seminar->id]['nilai']) ||
+                $penilaian[$seminar->id]['nilai'] === '' ||
+                $penilaian[$seminar->id]['nilai'] < 0 ||
+                $penilaian[$seminar->id]['nilai'] > 100) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Semua mahasiswa harus dinilai sebelum submit.'
+                    'message' => 'Semua mahasiswa harus dinilai dengan nilai 0-100 sebelum submit.'
                 ], 400);
             }
         }
@@ -77,17 +81,11 @@ class PenilaianSeminarController extends Controller
         foreach ($seminars as $seminar) {
             $data = $penilaian[$seminar->id];
             
-            // Update nilai seminar
+            // Update nilai seminar - langsung selesai seminar (tidak ada revisi)
             $seminar->nilai_seminar = $data['nilai'];
-            
-            if ($data['status'] === 'diterima') {
-                $seminar->status_seminar = Seminar::STATUS_SELESAI_SEMINAR;
-                $seminar->is_lulus = 1;
-            } else {
-                $seminar->status_seminar = Seminar::STATUS_REVISI_PASCA;
-                $seminar->is_lulus = 0;
-            }
-            
+            $seminar->status_seminar = Seminar::STATUS_SELESAI_SEMINAR;
+            $seminar->is_lulus = 1;
+            $seminar->catatan_penguji = $data['catatan'] ?? null;
             $seminar->save();
 
             // Simpan review dari penguji
@@ -95,8 +93,8 @@ class PenilaianSeminarController extends Controller
                 'seminar_id' => $seminar->id,
                 'dosen_id' => $sesi->dosen_penguji_id,
                 'dosen_status' => ReviewSeminar::DOSEN_PENGUJI,
-                'status' => $data['status'] === 'diterima' ? ReviewSeminar::DITERIMA : ReviewSeminar::REVISI,
-                'status_hasil' => $data['status'],
+                'status' => ReviewSeminar::DITERIMA,
+                'status_hasil' => 'diterima',
                 'nilai_angka' => $data['nilai'],
                 'catatan_penguji' => $data['catatan'] ?? null,
                 'is_dinilai' => true,
@@ -105,10 +103,9 @@ class PenilaianSeminarController extends Controller
 
             // Kirim notifikasi ke mahasiswa
             if ($seminar->mahasiswa->email && $seminar->mahasiswa->email != '-') {
-                $statusText = $data['status'] === 'diterima' ? 'DITERIMA' : 'REVISI';
                 AppHelper::instance()->send_mail([
                     'mail' => $seminar->mahasiswa->email,
-                    'message' => "Hasil Seminar KP Anda: <b>$statusText</b><br>Nilai: <b>{$data['nilai']}</b><br>Silahkan cek dashboard untuk detail lebih lanjut.",
+                    'message' => "Seminar KP Anda telah selesai!<br>Nilai Seminar: <b>{$data['nilai']}</b><br><br>Silahkan login ke sistem untuk upload <b>Nilai KP dari Instansi</b> untuk menyelesaikan proses KP.",
                 ]);
             }
         }

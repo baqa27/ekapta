@@ -47,9 +47,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lampiran_proposal')
                                     <small class="text-danger"
@@ -63,7 +61,7 @@
                                                 <b>Loporan di Upload : </b>
                                                 <a href="{{ storage_url($seminar->lampiran_proposal) }}" class="ml-3 text-primary"
                                                    target="_blank"><i class="fas fa-paperclip mr-2"></i>
-                                                    {{ Str::substr($seminar->lampiran_proposal, 19) }}</a>
+                                                    {{ basename($seminar->lampiran_proposal) }}</a>
                                             </small>
                                         </div>
                                     @endif

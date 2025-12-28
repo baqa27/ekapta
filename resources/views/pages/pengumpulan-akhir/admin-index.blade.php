@@ -3,7 +3,7 @@
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">{{ $title }}</h1>
@@ -20,8 +20,8 @@
     <!-- /.content-header -->
 
     <!-- Main content -->
-    <div class="content">
-        <div class="container">
+    <section class="content">
+        <div class="container-fluid">
             @if (Auth::guard('admin')->user()->type != \App\Models\Admin::TYPE_SUPER_ADMIN)
                 <div class="mb-3 d-flex">
                     <h4 class="flex-grow-1">Selamat datang {{ Auth::guard('admin')->user()->nama }}</h4>
@@ -32,26 +32,23 @@
                 </div>
             @endif
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header d-flex p-0">
                             <h3 class="card-title p-3">{{ $title }}</h3>
                             <ul class="nav nav-pills ml-auto p-2">
                                 @if (Auth::guard('admin')->user()->type == \App\Models\Admin::TYPE_SUPER_ADMIN)
-                                    <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Review</a>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Revisi</a>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Valid</a>
-                                    </li>
-                                     <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Selesai</a>
-                                    </li>
+                                    <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Review</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#tab_3" data-toggle="tab">Revisi</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#tab_4" data-toggle="tab">Valid</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#tab_2" data-toggle="tab">Selesai</a></li>
                                 @endif
                             </ul>
                         </div>
                         <div class="card-body">
                             @if (Auth::guard('admin')->user()->type == \App\Models\Admin::TYPE_SUPER_ADMIN)
                                 <div class="tab-content">
+                                    {{-- Tab Review --}}
                                     <div class="tab-pane active" id="tab_1">
                                         <table id="example1" class="table table-bordered">
                                             <thead>
@@ -64,44 +61,26 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @php
-                                                    $no = 1;
-                                                @endphp
+                                                @php $no = 1; @endphp
                                                 @foreach ($jilids as $jilid)
                                                     @if ($jilid->status == \App\Models\Jilid::JILID_REVIEW)
                                                         <tr>
                                                             <td>{{ $no++ }}</td>
-                                                            <td>{{ $jilid->mahasiswa->nim . '/' . $jilid->mahasiswa->nama }}
-                                                            </td>
+                                                            <td>{{ $jilid->mahasiswa->nim . '/' . $jilid->mahasiswa->nama }}</td>
                                                             <td>
                                                                 @if ($jilid->total_pembayaran)
-                                                                    <span class="text-success">
-                                                                        Rp
-                                                                        {{ number_format($jilid->total_pembayaran, 0, ',', '.') }}
-                                                                    </span>
+                                                                    <span class="text-success">Rp {{ number_format($jilid->total_pembayaran, 0, ',', '.') }}</span>
                                                                 @endif
                                                             </td>
+                                                            <td><span class="badge bg-secondary">PEMERIKSAAN DOKUMEN</span></td>
                                                             <td>
-                                                                <span class="badge bg-secondary">PEMERIKSAAN
-                                                                    DOKUMEN</span>
-                                                            </td>
-                                                            <td>
-                                                                @if ($jilid->status == 1)
-                                                                    <a href="{{ route('pengumpulan-akhir.detail', $jilid->id) }}"
-                                                                        class="btn btn-primary btn-sm"><i
-                                                                            class="fas fa-eye"></i>
-                                                                        Periksa Dokumen</a>
-                                                                @elseif ($jilid->status == 3)
-                                                                    <a href="{{ route('pengumpulan-akhir.detail', $jilid->id) }}"
-                                                                        class="btn btn-primary btn-sm"><i
-                                                                            class="fas fa-book"></i> LIHAT
-                                                                        DOKUMEN</a>
-                                                                @endif
+                                                                <a href="{{ route('pengumpulan-akhir.detail', $jilid->id) }}" class="btn btn-primary btn-sm shadow">
+                                                                    <i class="fas fa-eye mr-1"></i> Periksa Dokumen
+                                                                </a>
                                                             </td>
                                                         </tr>
                                                     @endif
                                                 @endforeach
-
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -114,6 +93,8 @@
                                             </tfoot>
                                         </table>
                                     </div>
+
+                                    {{-- Tab Selesai --}}
                                     <div class="tab-pane" id="tab_2">
                                         <table id="example2" class="table table-bordered">
                                             <thead>
@@ -126,45 +107,36 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @php
-                                                    $no = 1;
-                                                @endphp
+                                                @php $no = 1; @endphp
                                                 @foreach ($jilids as $jilid)
                                                     @if ($jilid->status == \App\Models\Jilid::JILID_SELESAI)
                                                         <tr>
                                                             <td>{{ $no++ }}</td>
-                                                            <td>{{ $jilid->mahasiswa->nim . '/' . $jilid->mahasiswa->nama }}
-                                                            </td>
+                                                            <td>{{ $jilid->mahasiswa->nim . '/' . $jilid->mahasiswa->nama }}</td>
                                                             <td>
                                                                 @if ($jilid->total_pembayaran)
-                                                                    <span class="text-success">
-                                                                        Rp
-                                                                        {{ number_format($jilid->total_pembayaran, 0, ',', '.') }}
-                                                                    </span>
+                                                                    <span class="text-success">Rp {{ number_format($jilid->total_pembayaran, 0, ',', '.') }}</span>
                                                                 @endif
                                                             </td>
                                                             <td>
                                                                 <span class="badge bg-success">SELESAI</span>
                                                                 @if ($jilid->is_completed)
                                                                     <br>
-                                                                    <span class="badge bg-primary"><i
-                                                                            class="fas fa-check-circle"></i> Sudah
-                                                                        disetorkan ke perpus</span>
+                                                                    <span class="badge bg-primary"><i class="fas fa-check-circle"></i> Sudah disetorkan ke perpus</span>
                                                                 @endif
                                                             </td>
-                                                            <td class="text-center">
+                                                            <td>
                                                                 @if (!$jilid->is_completed)
                                                                     <a href="{{ route('pengumpulan-akhir.confirm.completed', $jilid->id) }}"
-                                                                        class="btn btn-primary btn-sm"
-                                                                        onclick="return confirm('Yakin ingin konfirmasi?')"><i
-                                                                            class="fas fa-check-circle"></i> Konfirmasi
-                                                                        Sudah Setor ke Perpus</a>
+                                                                        class="btn btn-success btn-sm shadow"
+                                                                        onclick="return confirm('Yakin ingin konfirmasi?')">
+                                                                        <i class="fas fa-check-circle mr-1"></i> Konfirmasi Sudah Setor ke Perpus
+                                                                    </a>
                                                                 @endif
                                                             </td>
                                                         </tr>
                                                     @endif
                                                 @endforeach
-
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -177,6 +149,8 @@
                                             </tfoot>
                                         </table>
                                     </div>
+
+                                    {{-- Tab Revisi --}}
                                     <div class="tab-pane" id="tab_3">
                                         <table id="example3" class="table table-bordered">
                                             <thead>
@@ -189,24 +163,18 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @php
-                                                    $no = 1;
-                                                @endphp
+                                                @php $no = 1; @endphp
                                                 @foreach ($jilids as $jilid)
                                                     @if ($jilid->status == \App\Models\Jilid::JILID_REVISI)
                                                         <tr>
                                                             <td>{{ $no++ }}</td>
-                                                            <td>{{ $jilid->mahasiswa->nim . '/' . $jilid->mahasiswa->nama }}
-                                                            </td>
+                                                            <td>{{ $jilid->mahasiswa->nim . '/' . $jilid->mahasiswa->nama }}</td>
                                                             <td></td>
-                                                            <td>
-                                                                <span class="badge bg-warning">REVISI</span>
-                                                            </td>
-                                                            <td></td>
+                                                            <td><span class="badge bg-warning">REVISI</span></td>
+                                                            <td>-</td>
                                                         </tr>
                                                     @endif
                                                 @endforeach
-
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -219,6 +187,8 @@
                                             </tfoot>
                                         </table>
                                     </div>
+
+                                    {{-- Tab Valid --}}
                                     <div class="tab-pane" id="tab_4">
                                         <table id="example4" class="table table-bordered">
                                             <thead>
@@ -231,24 +201,26 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @php
-                                                    $no = 1;
-                                                @endphp
+                                                @php $no = 1; @endphp
                                                 @foreach ($jilids as $jilid)
                                                     @if ($jilid->status == \App\Models\Jilid::JILID_VALID)
                                                         <tr>
                                                             <td>{{ $no++ }}</td>
-                                                            <td>{{ $jilid->mahasiswa->nim . '/' . $jilid->mahasiswa->nama }}
-                                                            </td>
-                                                            <td></td>
+                                                            <td>{{ $jilid->mahasiswa->nim . '/' . $jilid->mahasiswa->nama }}</td>
                                                             <td>
-                                                                <span class="badge bg-primary">VALID</span>
+                                                                @if ($jilid->total_pembayaran)
+                                                                    <span class="text-success">Rp {{ number_format($jilid->total_pembayaran, 0, ',', '.') }}</span>
+                                                                @endif
                                                             </td>
-                                                            <td></td>
+                                                            <td><span class="badge bg-primary">VALID</span></td>
+                                                            <td>
+                                                                <a href="{{ route('pengumpulan-akhir.detail', $jilid->id) }}" class="btn btn-primary btn-sm shadow">
+                                                                    <i class="fas fa-book mr-1"></i> Lihat Dokumen
+                                                                </a>
+                                                            </td>
                                                         </tr>
                                                     @endif
                                                 @endforeach
-
                                             </tbody>
                                             <tfoot>
                                                 <tr>
@@ -263,6 +235,7 @@
                                     </div>
                                 </div>
                             @else
+                                {{-- Tampilan untuk Fotokopian - Hanya lihat yang Valid --}}
                                 <table id="example1" class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -274,33 +247,24 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @php
-                                            $no = 1;
-                                        @endphp
+                                        @php $no = 1; @endphp
                                         @foreach ($jilids as $jilid)
                                             <tr>
                                                 <td>{{ $no++ }}</td>
-                                                <td>{{ $jilid->mahasiswa->nim . '/' . $jilid->mahasiswa->nama }}
-                                                </td>
+                                                <td>{{ $jilid->mahasiswa->nim . '/' . $jilid->mahasiswa->nama }}</td>
                                                 <td>
                                                     @if ($jilid->total_pembayaran)
-                                                        <span class="text-success">
-                                                            Rp
-                                                            {{ number_format($jilid->total_pembayaran, 0, ',', '.') }}
-                                                        </span>
+                                                        <span class="text-success">Rp {{ number_format($jilid->total_pembayaran, 0, ',', '.') }}</span>
                                                     @endif
                                                 </td>
+                                                <td><span class="badge bg-primary">VALID</span></td>
                                                 <td>
-                                                    <span class="badge bg-primary">VALID</span>
-                                                </td>
-                                                <td>
-                                                    <a href="{{ route('pengumpulan-akhir.detail', $jilid->id) }}"
-                                                        class="btn btn-primary btn-sm"><i class="fas fa-book"></i> LIHAT
-                                                        DOKUMEN</a>
+                                                    <a href="{{ route('pengumpulan-akhir.detail', $jilid->id) }}" class="btn btn-primary btn-sm shadow">
+                                                        <i class="fas fa-book mr-1"></i> JILID KP
+                                                    </a>
                                                 </td>
                                             </tr>
                                         @endforeach
-
                                     </tbody>
                                     <tfoot>
                                         <tr>
@@ -314,12 +278,9 @@
                                 </table>
                             @endif
                         </div>
-                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card -->
                 </div>
             </div>
         </div>
-    </div>
-    <!-- /.content -->
+    </section>
 @endsection

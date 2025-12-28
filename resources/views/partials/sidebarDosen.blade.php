@@ -76,16 +76,16 @@
                 </li>
 
                 <li class="nav-item
-                 @if($active == 'bimbingan' || $active == 'seminar' || $active=='bimbingan-progress')
+                 @if($active == 'bimbingan' || $active == 'seminar' || $active=='bimbingan-progress' || $active=='penilaian')
                     menu-open
                     @endif">
                     <a href="#" class="nav-link
-                    @if($active == 'bimbingan' || $active == 'seminar' || $active=='bimbingan-progress')
+                    @if($active == 'bimbingan' || $active == 'seminar' || $active=='bimbingan-progress' || $active=='penilaian')
                     active
                     @endif">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
-                            Menu Kerja Praktik
+                            Menu Kerja Praktek
                             <i class="fas fa-angle-right right"></i>
                         </p>
                     </a>
@@ -117,6 +117,16 @@
                                 <i class="nav-icon far fa-circle"></i>
                                 <p>
                                     Review Seminar KP
+                                </p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="{{ route('penilaian.pembimbing.index') }}"
+                               class="nav-link {{ $active=='penilaian' ? 'active' : '' }}">
+                                <i class="nav-icon far fa-circle"></i>
+                                <p>
+                                    Penilaian Pembimbing
                                 </p>
                             </a>
                         </li>

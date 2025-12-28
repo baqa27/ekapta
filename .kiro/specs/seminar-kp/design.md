@@ -2,7 +2,7 @@
 
 ## Overview
 
-Fitur Seminar KP mengelola seluruh alur seminar Kerja Praktik di ekapta12. Sistem ini mengintegrasikan model Seminar yang sudah ada dengan penambahan fitur penjadwalan sesi, penilaian via link tanpa login, dan perhitungan nilai akhir otomatis.
+Fitur Seminar KP mengelola seluruh alur seminar Kerja Praktek di ekapta12. Sistem ini mengintegrasikan model Seminar yang sudah ada dengan penambahan fitur penjadwalan sesi, penilaian via link tanpa login, dan perhitungan nilai akhir otomatis.
 
 Fitur utama:
 - Pembukaan/penutupan pendaftaran oleh Himpunan

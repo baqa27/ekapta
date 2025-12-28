@@ -19,7 +19,7 @@
             @if($active == 'dashboard' || $active == 'pengajuan' || $active == 'pendaftaran' || $active == 'bimbingan' || $active == 'seminar' || $active == 'profile' || $active == 'pengumpulan-akhir')
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a href="{{ route('dashboard.mahasiswa.ta') }}"
+                        <a href="{{ route('dashboard.mahasiswa.kp') }}"
                            class="nav-link {{ $active == 'dashboard' ? 'active' : '' }}">Dashboard</a>
                     </li>
                     <li class="nav-item">
@@ -40,7 +40,7 @@
                     </li>
                     <li class="nav-item">
                         <a href="{{ route('pengumpulan-akhir.mahasiswa') }}"
-                           class="nav-link {{ $active == 'pengumpulan-akhir' ? 'active' : '' }}">Pengumpulan Akhir</a>
+                           class="nav-link {{ $active == 'pengumpulan-akhir' ? 'active' : '' }}">Jilid KP</a>
                     </li>
                 </ul>
             @endif

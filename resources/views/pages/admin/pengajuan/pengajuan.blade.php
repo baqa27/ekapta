@@ -25,8 +25,8 @@
     <div class="container-fluid">
 
         <div class="row">
-            <div class="col-md-12">
-                <div class="card">
+            <div class="col-12">
+                <div class="card card-primary card-outline">
                     <div class="card-header">
                         <h3 class="card-title">Tabel {{ $title }}</h3>
                     </div>
@@ -71,7 +71,7 @@
                                     </td>
                                     <td>
                                         <a href="{{ url('/pengajuan/review-admin/'.$pengajuan->id) }}"
-                                            class="btn btn-info btn-sm shadow">
+                                            class="btn btn-primary btn-sm shadow">
                                             <i class="fas fa-info-circle mr-1"></i> Detail
                                         </a>
                                     </td>
@@ -90,10 +90,13 @@
                                 </tr>
                             </tfoot>
                         </table>
-                    </div>
+                    </div><!-- /.card-body -->
                 </div>
+                <!-- ./card -->
             </div>
+            <!-- /.col -->
         </div>
+    </div>
 </section>
 <!-- /.content -->
 

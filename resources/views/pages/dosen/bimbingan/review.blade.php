@@ -21,10 +21,15 @@
     <!-- /.content-header -->
 
     <!-- Main content -->
-    <div class="content">
-        <div class="container">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="mb-3">
+                <a href="{{ route('bimbingan.dosen') }}" class="btn btn-secondary shadow">
+                    <i class="fas fa-arrow-left mr-2"></i> Kembali
+                </a>
+            </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="card card-primary card-outline">
                         <div class="ribbon-wrapper ribbon-lg">
                             <div
@@ -85,11 +90,11 @@
 
                             <p class="mt-3"><b>Lampiran : </b> <a href="{{ storage_url($bimbingan->lampiran) }}" class="ml-3"
                                     target="_blank"><i class="fas fa-paperclip"></i>
-                                    {{ Str::substr($bimbingan->lampiran, 40) }}</a></p>
+                                    {{ basename($bimbingan->lampiran) }}</a></p>
 
                             <hr>
                             <div class="bordered mt-2">
-                                <b>Bagian Bimbingan Kerja Praktik</b>
+                                <b>Bagian Bimbingan Kerja Praktek</b>
 
                                 <div class="mt-2 border p-2 rounded">
 
@@ -215,7 +220,7 @@
                                                 @if ($revisi->lampiran_revisi)
                                                     <a href="{{ storage_url($bimbingan->lampiran_revisi) }}" class="ml-3" target="_blank"><i
                                                             class="fas fa-paperclip"></i>
-                                                        {{ Str::substr($revisi->lampiran_revisi, 40) }}</a>
+                                                        {{ basename($revisi->lampiran_revisi) }}</a>
                                                 @endif
                                             </small>
                                         @endif
@@ -226,7 +231,7 @@
                                             Lampiran bimbingan sebelumnya:
                                                 <a href="{{ storage_url($bimbingan->lampiran) }}" class="ml-3" target="_blank"><i
                                                         class="fas fa-paperclip"></i>
-                                                    {{ Str::substr($revisi->lampiran, 40) }}</a>
+                                                    {{ basename($revisi->lampiran) }}</a>
                                         </small>
                                     </div>
                                     @endif
@@ -260,10 +265,10 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="" class="form-label">Catatan</label>
-                            <textarea id="summernote" name="catatan" required></textarea>
+                            <label for="catatan">Catatan</label>
+                            <textarea class="form-control @error('catatan') is-invalid @enderror" name="catatan" id="catatan" rows="4" placeholder="Catatan revisi" required></textarea>
                             @error('catatan')
-                                <small class="text-danger">{{ $message }}</small>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         <div class="form-group">
@@ -275,9 +280,7 @@
                                     <label class="custom-file-label" for="exampleInputFile">Choose
                                         file</label>
                                 </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">Dokumen</span>
-                                </div>
+                                
                             </div>
                             @error('lampiran')
                                 <small class="text-danger"
@@ -325,9 +328,7 @@
                                     <label class="custom-file-label" for="exampleInputFile">Choose
                                         file</label>
                                 </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">Dokumen</span>
-                                </div>
+                                
                             </div>
                             @error('lampiran')
                                 <small class="text-danger"

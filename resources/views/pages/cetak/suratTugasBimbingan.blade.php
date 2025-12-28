@@ -122,7 +122,7 @@ $bulan = 'XII';
         <tr>
             <td>
                 <center>
-                    <h3>SURAT TUGAS PEMBIMBINGAN KERJA PRAKTIK <br>
+                    <h3>SURAT TUGAS PEMBIMBINGAN KERJA Praktek <br>
                         No. {{ $no_urut }}/ST.KP/FASTIKOM-UNSIQ/{{ $bulan }}/{{ $date->format('Y') }}
                     </h3>
                     <br>
@@ -162,7 +162,7 @@ $bulan = 'XII';
         <tr>
             <td colspan="3">
                 <br>
-                <p class="margin-left">Untuk memberikan bimbingan Kerja Praktik kepada mahasiswa tersebut
+                <p class="margin-left">Untuk memberikan bimbingan Kerja Praktek kepada mahasiswa tersebut
                     dibawah ini:</p>
                 <br>
             </td>
@@ -202,6 +202,17 @@ $bulan = 'XII';
         </tr>
         <tr>
             <td>
+                <p class="margin-left">Judul Kerja Praktek</p>
+            </td>
+            <td>
+                <p class="titik-dua">:</p>
+            </td>
+            <td>
+                <p class="margin-right"><b>{{ $pendaftaran->pengajuan->judul }}</b></p>
+            </td>
+        </tr>
+        <tr>
+            <td>
                 <p class="margin-left">Tanggal Pembayaran</p>
             </td>
             <td>
@@ -213,18 +224,13 @@ $bulan = 'XII';
         </tr>
         <tr>
             <td>
-                <p class="margin-left">Judul Kerja Praktik</p>
+                <p class="margin-left">Masa Berlaku</p>
             </td>
             <td>
                 <p class="titik-dua">:</p>
             </td>
-            <td></td>
-        </tr>
-        <tr>
-            <td></td>
-            <td></td>
             <td>
-                <p class="margin-right top"><b>{{ $pendaftaran->pengajuan->judul }}</b></p>
+                <p>{{ $dateLocale }} s/d {{ $date_expired }}</p>
             </td>
         </tr>
         <tr>
@@ -297,7 +303,7 @@ $bulan = 'XII';
         <tr>
             <td>
                 <center>
-                    <h3>LEMBAR BIMBINGAN KERJA PRAKTIK (KP)</h3>
+                    <h3>LEMBAR BIMBINGAN KERJA Praktek (KP)</h3>
                     <br>
                 </center>
             </td>
@@ -336,6 +342,11 @@ $bulan = 'XII';
             <td width="2">:</td>
             <td>{{ $no_urut }}/ST.KP/FASTIKOM-UNSIQ/{{$bulan}}/{{ $date->format('Y') }}
             </td>
+        </tr>
+        <tr>
+            <td>MASA BERLAKU</td>
+            <td width="2">:</td>
+            <td>{{ $dateLocale }} s/d {{ $date_expired }}</td>
         </tr>
     </table>
 

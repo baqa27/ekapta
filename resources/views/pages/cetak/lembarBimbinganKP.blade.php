@@ -117,7 +117,7 @@ $bulan = 'XII';
         <tr>
             <td>
                 <center>
-                    <h3>LEMBAR BIMBINGAN KERJA PRAKTIK (KP)</h3>
+                    <h3>LEMBAR BIMBINGAN KERJA Praktek (KP)</h3>
                     <br>
                 </center>
             </td>
@@ -155,6 +155,11 @@ $bulan = 'XII';
             <td>NO SURAT TUGAS</td>
             <td width="2">:</td>
             <td>{{ $no_urut }}/ST.KP/FASTIKOM-UNSIQ/{{$bulan}}/{{ $date->format('Y') }}</td>
+        </tr>
+        <tr>
+            <td>MASA BERLAKU</td>
+            <td width="2">:</td>
+            <td>{{ $dateLocale }} s/d {{ $date_expired }}</td>
         </tr>
     </table>
 
@@ -205,7 +210,7 @@ $bulan = 'XII';
         <tr>
             <td>
                 <center>
-                    <h3>LEMBAR BIMBINGAN KERJA PRAKTIK (KP)</h3>
+                    <h3>LEMBAR BIMBINGAN KERJA Praktek (KP)</h3>
                     <br>
                 </center>
             </td>

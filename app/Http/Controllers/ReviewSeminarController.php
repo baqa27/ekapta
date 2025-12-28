@@ -104,9 +104,9 @@ class ReviewSeminarController extends Controller
             if ($review_seminar->seminar->mahasiswa->email != '-') {
                 AppHelper::instance()->send_mail([
                     'mail' => $review_seminar->seminar->mahasiswa->email,
-                    'subject' => 'Seminar Kerja Praktik',
+                    'subject' => 'Seminar Kerja Praktek',
                     'title' => 'EKAPTA',
-                    'message' => 'Seminar Kerja Praktik Anda Berstatus REVISI. Silahkan perbaiki kemudian lakukan submit ulang!. <br><br>Catatan revisi: '.$request->catatan,
+                    'message' => 'Seminar Kerja Praktek Anda Berstatus REVISI. Silahkan perbaiki kemudian lakukan submit ulang!. <br><br>Catatan revisi: '.$request->catatan,
                 ]);
             }
             return back()->with('success', 'Revisi berhasil ditambahkan.');
@@ -139,9 +139,9 @@ class ReviewSeminarController extends Controller
         if ($review_seminar->seminar->mahasiswa->email != '-') {
             AppHelper::instance()->send_mail([
                 'mail' => $review_seminar->seminar->mahasiswa->email,
-                'subject' => 'Seminar Kerja Praktik',
+                'subject' => 'Seminar Kerja Praktek',
                 'title' => 'EKAPTA',
-                'message' => 'Selamat Seminar Kerja Praktik Anda Berstatus DITERIMA.',
+                'message' => 'Selamat Seminar Kerja Praktek Anda Berstatus DITERIMA.',
             ]);
         }
         return back()->with('success','Seminar TA berhasil di Acc.');

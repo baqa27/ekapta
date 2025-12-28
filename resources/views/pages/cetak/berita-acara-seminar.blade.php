@@ -71,7 +71,7 @@
             <td colspan="3">
                 <br>
                 <p class="margin-left">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kerja Praktik Fakultas Teknik dan Ilmu Komputer (FASTIKOM) Universitas
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kerja Praktek Fakultas Teknik dan Ilmu Komputer (FASTIKOM) Universitas
                     Sains Al-Qur’an (UNSIQ) Jawa Tengah di Wonosobo telah mengadakan Sidang pada:
                 </p>
                 <br>
@@ -152,7 +152,7 @@
         <tr>
             <td width="100"></td>
             <td style="vertical-align: top !important;">
-                <p><b>Judul Kerja Praktik</b></p>
+                <p><b>Judul Kerja Praktek</b></p>
             </td>
             <td style="vertical-align: top !important;" width="1">:</td>
             <td width="350" style="text-align: justify;">
@@ -333,7 +333,7 @@
             </tr>
             <tr>
                 <td style="vertical-align: top !important;">
-                    <p><b>Judul Kerja Praktik</b></p>
+                    <p><b>Judul Kerja Praktek</b></p>
                 </td>
                 <td style="vertical-align: top !important;" width="1">:</td>
                 <td width="400" style="text-align: justify;">
@@ -369,7 +369,7 @@
             </tr>
             <tr>
                 <td height="40" style="border: 1px solid black; text-align: center;">3. </td>
-                <td height="40" style="border: 1px solid black;padding-left:5px;">Metodologi dan Redaksi Kerja Praktik
+                <td height="40" style="border: 1px solid black;padding-left:5px;">Metodologi dan Redaksi Kerja Praktek
                     (Kadar Keaslian), Bobot Analisis dan Referensi : 20%</td>
                 <td height="40" style="border: 1px solid black; text-align:center;">
                     {{ $is_blank ? '……………' : $review->nilai_3 }}
@@ -507,7 +507,7 @@
                 </tr>
                 <tr>
                     <td style="vertical-align: top !important;">
-                        <p><b>Judul Kerja Praktik</b></p>
+                        <p><b>Judul Kerja Praktek</b></p>
                     </td>
                     <td style="vertical-align: top !important;" width="1">:</td>
                     <td width="400" style="text-align: justify;">
@@ -546,7 +546,7 @@
                 </tr>
                 <tr>
                     <td height="40" style="border: 1px solid black; text-align: center;">3. </td>
-                    <td height="40" style="border: 1px solid black;padding-left:5px;">Metodologi dan Redaksi Kerja Praktik
+                    <td height="40" style="border: 1px solid black;padding-left:5px;">Metodologi dan Redaksi Kerja Praktek
                         (Kadar Keaslian), Bobot Analisis dan Referensi : 20%</td>
                     <td height="40" style="border: 1px solid black; text-align:center;">
                         {{ $is_blank ? '……………' : $review->nilai_3 }}
@@ -665,7 +665,7 @@
                 </tr>
                 <tr>
                     <td style="vertical-align: top !important;">
-                        <p><b>Judul Kerja Praktik</b></p>
+                        <p><b>Judul Kerja Praktek</b></p>
                     </td>
                     <td style="vertical-align: top !important;" width="1">:</td>
                     <td width="400" style="text-align: justify;">

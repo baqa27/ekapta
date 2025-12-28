@@ -47,9 +47,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lampiran_lembar_revisi')
                                     <small class="text-danger"
@@ -63,7 +61,7 @@
                                                 <b>Lampiran sebelumnya : </b>
                                                 <a href="{{ storage_url($seminar->lampiran) }}" class="ml-3 text-primary"
                                                    target="_blank"><i class="fas fa-paperclip mr-2"></i>
-                                                    {{ Str::substr($review->lampiran, 16) }}</a>
+                                                    {{ basename($review->lampiran) }}</a>
                                             </small>
                                         </div>
                                     @endif

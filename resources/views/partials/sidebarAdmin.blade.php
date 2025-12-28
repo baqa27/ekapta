@@ -85,7 +85,7 @@
                     @endif">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
-                            Menu Kerja Praktik
+                            Menu Kerja Praktek
                             <i class="fas fa-angle-right right"></i>
                         </p>
                     </a>

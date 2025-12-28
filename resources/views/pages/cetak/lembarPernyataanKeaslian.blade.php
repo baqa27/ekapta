@@ -44,7 +44,7 @@
 <body>
     <br><br>
     <center>
-        <h4>LEMBAR PERNYATAAN KEASLIAN <br>HASIL KERJA PRAKTIK</h4>
+        <h4>LEMBAR PERNYATAAN KEASLIAN <br>HASIL KERJA Praktek</h4>
     </center>
     <br><br>
     <table>
@@ -83,7 +83,7 @@
         </tr>
         <tr>
             <td colspan="3">
-                <p class="margin-left">Menyatakan bahwa seluruh komponen dan isi dalam Laporan Kerja Praktik ini adalah
+                <p class="margin-left">Menyatakan bahwa seluruh komponen dan isi dalam Laporan Kerja Praktek ini adalah
                     hasil karya saya sendiri. Apabila dikemudian hari terbukti bahwa dari karya ini saya melakukan
                     plagiarisme, maka saya siap menanggung resiko dan konsekuensi apapun termasuk dicabut dan dibatalkan
                     gelar akademikanya.</p>

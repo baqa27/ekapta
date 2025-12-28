@@ -226,7 +226,6 @@ class CetakController extends Controller
 
     public function cetakBeritaAcaraUjianProposalBlank($ujian_or_seminar, $type)
     {
-        // Type 1 = Seminar KP, Type 2 tidak dipakai lagi (ujian pendadaran dihapus)
         $ujian_or_seminar = Seminar::findOrFail($ujian_or_seminar);
         
         if(count($ujian_or_seminar->reviews) == 2){
@@ -317,17 +316,25 @@ class CetakController extends Controller
     }
 
     public function cetakLembarPersetujuan($type){
-        $mahasiswa = Mahasiswa::with(['ujians','pengajuans','dosens'])->where('nim', Auth::guard('mahasiswa')->user()->nim)->first();
+        $mahasiswa = Mahasiswa::with(['seminar','pengajuans','dosens'])->where('nim', Auth::guard('mahasiswa')->user()->nim)->first();
         $pengajuan = $mahasiswa->pengajuans()->where('status', Pengajuan::DITERIMA)->first();
         $pendaftaran = Pendaftaran::where('pengajuan_id', $pengajuan->id)->first();
         $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
-        $dosenUtama = $mahasiswa->dosens()->where('status', 'utama')->first();
-        $dosenPendamping = $mahasiswa->dosens()->where('status', 'pendamping')->first();
-        $ujian = $mahasiswa->ujians()->whereNotIn('is_lulus', [Ujian::NOT_VALID_LULUS])->where('is_valid', Ujian::VALID_LULUS)->first();
-        $reviews  = $ujian->reviews()->where('dosen_status', ReviewUjian::DOSEN_PENGUJI)->with(['dosen'])->get();
+        
+        // KP: single dosen pembimbing
+        $dosenPembimbing = $mahasiswa->dosens()->where('status', 'pembimbing')->first();
+        if (!$dosenPembimbing) {
+            $dosenPembimbing = $mahasiswa->dosens()->where('status', 'utama')->first();
+        }
+        
+        // Gunakan Seminar untuk KP (bukan Ujian)
+        $seminar = $mahasiswa->seminar()->where('is_lulus', 1)->first();
         $dosens = [];
-        foreach ($reviews as $review) {
-            $dosens[] = $review->dosen;
+        if ($seminar) {
+            $reviews = $seminar->reviews()->where('dosen_status', ReviewSeminar::DOSEN_PENGUJI)->with(['dosen'])->get();
+            foreach ($reviews as $review) {
+                $dosens[] = $review->dosen;
+            }
         }
 
         $data = [
@@ -335,12 +342,11 @@ class CetakController extends Controller
             'mahasiswa' => $mahasiswa,
             'pendaftaran' => $pendaftaran,
             'pengajuan' => $pengajuan,
-            'dosen_utama' => $dosenUtama,
-            'dosen_pendamping' => $dosenPendamping,
+            'dosen_utama' => $dosenPembimbing,
+            'dosen_pembimbing' => $dosenPembimbing,
             'prodi' => $prodi,
-            'date' => $ujian ? AppHelper::parse_date_short_surat($ujian->tanggal_ujian) : null,
-            'ttd_dosen_utama' => $dosenUtama->ttd != null ? AppHelper::instance()->convertImage('storage/app/public/' . substr($dosenUtama->ttd, 31)) : null,
-            'ttd_dosen_pendamping' => $dosenPendamping->ttd != null ? AppHelper::instance()->convertImage('storage/app/public/' . substr($dosenPendamping->ttd, 31)) : null,
+            'date' => $seminar ? AppHelper::parse_date_short_surat($seminar->tanggal_ujian) : null,
+            'ttd_dosen_utama' => $dosenPembimbing && $dosenPembimbing->ttd != null ? AppHelper::instance()->convertImage('storage/app/public/' . substr($dosenPembimbing->ttd, 31)) : null,
             'dosens' => $dosens,
             'type' => $type,
         ];
@@ -352,27 +358,33 @@ class CetakController extends Controller
     }
 
     public function cetakLembarPengesahan(){
-        $mahasiswa = Mahasiswa::with(['ujians','pengajuans','dosens'])->where('nim', Auth::guard('mahasiswa')->user()->nim)->first();
+        $mahasiswa = Mahasiswa::with(['seminar','pengajuans','dosens'])->where('nim', Auth::guard('mahasiswa')->user()->nim)->first();
         $pengajuan = $mahasiswa->pengajuans()->where('status', Pengajuan::DITERIMA)->first();
         $pendaftaran = Pendaftaran::where('pengajuan_id', $pengajuan->id)->first();
         $prodi = Prodi::with(['fakultas', 'fakultas.dekans'])->where('namaprodi', $mahasiswa->prodi)->first();
         $dekan = $prodi->fakultas->dekans()->where('status', 'active')->first();
-        $dosenUtama = $mahasiswa->dosens()->where('status', 'utama')->first();
-        $dosenPendamping = $mahasiswa->dosens()->where('status', 'pendamping')->first();
-        $ujian = $mahasiswa->ujians()->whereNotIn('is_lulus', [Ujian::NOT_VALID_LULUS])->where('is_valid', Ujian::VALID_LULUS)->first();
+        
+        // KP: single dosen pembimbing
+        $dosenPembimbing = $mahasiswa->dosens()->where('status', 'pembimbing')->first();
+        if (!$dosenPembimbing) {
+            $dosenPembimbing = $mahasiswa->dosens()->where('status', 'utama')->first();
+        }
+        
+        // Gunakan Seminar untuk KP (bukan Ujian)
+        $seminar = $mahasiswa->seminar()->where('is_lulus', 1)->first();
+        
         $data = [
             'title' => 'LEMBAR PENGESAHAN',
             'mahasiswa' => $mahasiswa,
             'pendaftaran' => $pendaftaran,
             'pengajuan' => $pengajuan,
-            'dosen_utama' => $dosenUtama,
-            'dosen_pendamping' => $dosenPendamping,
+            'dosen_utama' => $dosenPembimbing,
+            'dosen_pembimbing' => $dosenPembimbing,
             'prodi' => AppHelper::instance()->getDosen($prodi->kodekaprodi),
-            'date' => $ujian ? AppHelper::parse_date_short_surat($ujian->tanggal_ujian) : null,
-            'ttd_dosen_utama' => $dosenUtama->ttd != null ? AppHelper::instance()->convertImage('storage/app/public/' . substr($dosenUtama->ttd, 31)) : null,
-            'ttd_dosen_pendamping' => $dosenPendamping->ttd != null ? AppHelper::instance()->convertImage('storage/app/public/' . substr($dosenPendamping->ttd, 31)) : null,
+            'date' => $seminar ? AppHelper::parse_date_short_surat($seminar->tanggal_ujian) : null,
+            'ttd_dosen_utama' => $dosenPembimbing && $dosenPembimbing->ttd != null ? AppHelper::instance()->convertImage('storage/app/public/' . substr($dosenPembimbing->ttd, 31)) : null,
             'dekan' => $dekan,
-            'ttd_dekan' => $dekan->image ? AppHelper::instance()->convertImage('storage/app/public/' . substr($dekan->image,31)): null,
+            'ttd_dekan' => $dekan && $dekan->image ? AppHelper::instance()->convertImage('storage/app/public/' . substr($dekan->image,31)): null,
             'stempel' => $prodi->fakultas->image ? AppHelper::instance()->convertImage('storage/app/public/' . substr($prodi->fakultas->image,31)) : null,
         ];
 
@@ -380,5 +392,53 @@ class CetakController extends Controller
         $pdf->loadView('pages.cetak.lembar-pengesahan', $data);
         $pdf->setPaper('A4', 'portrait');
         return $pdf->stream('Lembar-Pengesahan.pdf');
+    }
+
+    /**
+     * Cetak Surat Penolakan Pengajuan KP
+     */
+    public function cetakSuratPenolakan($pengajuan)
+    {
+        $pengajuan = Pengajuan::with(['mahasiswa', 'prodi', 'revisis'])->findOrFail($pengajuan);
+        
+        // Pastikan pengajuan milik mahasiswa yang login
+        if ($pengajuan->mahasiswa_id != Auth::guard('mahasiswa')->user()->id) {
+            return back()->with('error', 'Akses ditolak');
+        }
+        
+        // Pastikan status ditolak
+        if ($pengajuan->status != Pengajuan::DITOLAK) {
+            return back()->with('error', 'Pengajuan belum ditolak');
+        }
+        
+        $mahasiswa = $pengajuan->mahasiswa;
+        $prodi = $pengajuan->prodi;
+        
+        // Ambil catatan penolakan terakhir
+        $revisiTerakhir = $pengajuan->revisis()->orderBy('created_at', 'desc')->first();
+        
+        $tanggalTolak = $revisiTerakhir ? $revisiTerakhir->created_at : $pengajuan->updated_at;
+        $dateLocale = Carbon::parse($tanggalTolak)->day.' '.Carbon::parse($tanggalTolak)->monthName.' '.Carbon::parse($tanggalTolak)->year;
+        
+        // Hitung sisa kesempatan
+        $jumlahTolak = $pengajuan->jumlah_tolak ?? 1;
+        $sisaKesempatan = Pengajuan::MAX_TOLAK - $jumlahTolak;
+        
+        $data = [
+            'title' => 'Surat Penolakan Pengajuan KP',
+            'kop_surat' => AppHelper::instance()->convertImage('public/ekapta/assets/img/kop-surat.jpg'),
+            'mahasiswa' => $mahasiswa,
+            'pengajuan' => $pengajuan,
+            'prodi' => $prodi,
+            'catatan' => $revisiTerakhir ? $revisiTerakhir->catatan : '-',
+            'tanggal_tolak' => $dateLocale,
+            'jumlah_tolak' => $jumlahTolak,
+            'sisa_kesempatan' => $sisaKesempatan,
+        ];
+        
+        $pdf = PDF::setOptions(['isHTML5ParserEnabled' => true, 'isRemoteEnabled' => true]);
+        $pdf->loadView('pages.cetak.suratPenolakan', $data);
+        $pdf->setPaper('A4', 'portrait');
+        return $pdf->stream('Surat-Penolakan-Pengajuan-KP.pdf');
     }
 }

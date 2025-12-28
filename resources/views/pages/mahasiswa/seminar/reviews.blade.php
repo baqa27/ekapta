@@ -79,7 +79,7 @@
                                                                 <span class="text-secondary ml-2"><b>Lampiran : </b></span>
                                                                 <a href="{{ storage_url($seminar->lampiran) }}" target="_blank">
                                                                     <i class="fas fa-paperclip ml-1"></i>
-                                                                    {{ Str::substr($revisi->lampiran, 40) }}
+                                                                    {{ basename($revisi->lampiran) }}
                                                                 </a>
                                                             </small>
                                                         </div>

@@ -102,7 +102,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <a href="{{ route('jadwal.himpunan.detail', $sesi->id) }}" class="btn btn-info btn-sm">
+                                        <a href="{{ route('jadwal.himpunan.detail', $sesi->id) }}" class="btn btn-primary btn-sm">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         @if(!$sesi->is_token_used)

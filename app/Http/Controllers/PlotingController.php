@@ -84,6 +84,4 @@ class PlotingController extends Controller
 
         return back()->with('success', 'Ploting dosen penguji berhasil.');
     }
-
-    // Method plotingPengujiUjian dihapus karena KP tidak ada ujian pendadaran
 }

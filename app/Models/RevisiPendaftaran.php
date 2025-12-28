@@ -9,6 +9,9 @@ class RevisiPendaftaran extends Model
 {
     use HasFactory;
 
+    // Nama tabel dengan suffix _kp
+    protected $table = 'revisi_pendaftaran_kps';
+
     protected $fillable = [
         'pendaftaran_id',
         'catatan',

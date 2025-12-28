@@ -24,7 +24,7 @@
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header d-flex p-0">
                             <h3 class="card-title p-3">Tabel {{ $title }}</h3>
@@ -130,7 +130,7 @@
                                                     <td>
                                                         <div class="d-flex">
                                                             <a href="{{ url('/bimbingan/review/' . $bimbingan->id) }}"
-                                                                class="btn btn-info btn-sm shadow mr-2">
+                                                                class="btn btn-primary btn-sm shadow mr-2">
                                                                 <i class="fas fa-info-circle mr-1"></i> Detail
                                                             </a>
                                                             @if(!$bimbingan->mahasiswa->seminar()->where('is_valid', 1)->first())
@@ -198,7 +198,7 @@
                                                     <td>
                                                         <div class="d-flex">
                                                             <a href="{{ url('/bimbingan/review/' . $bimbingan->id) }}"
-                                                                class="btn btn-info btn-sm shadow mr-2">
+                                                                class="btn btn-primary btn-sm shadow mr-2">
                                                                 <i class="fas fa-info-circle mr-1"></i> Detail
                                                             </a>
                                                             <form action="{{ route('bimbingan.cancel.revisi') }}"

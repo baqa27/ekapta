@@ -20,10 +20,15 @@
     <!-- /.content-header -->
 
     <!-- Main content -->
-    <div class="content">
-        <div class="container">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="mb-3">
+                <a href="{{ route('pengajuan.admin') }}" class="btn btn-secondary shadow">
+                    <i class="fas fa-arrow-left mr-2"></i> Kembali
+                </a>
+            </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="card card-primary card-outline">
                         <div class="ribbon-wrapper ribbon-lg">
                             <div
@@ -66,6 +71,13 @@
                             <strong>Alamat Instansi</strong> <br>
                             {{ $pengajuan->alamat_instansi }} }
                             <br><br>
+                            @if ($pengajuan->lampiran)
+                                <strong>Bukti Diterima Instansi</strong> <br>
+                                <a href="{{ storage_url($pengajuan->lampiran) }}" target="_blank">
+                                    <i class="fas fa-paperclip"></i> Lihat Bukti Diterima Instansi
+                                </a>
+                                <br><br>
+                            @endif
                             @if ($pengajuan->files_pendukung)
                                 <strong>File Pendukung</strong> <br>
                                 <a href="{{ storage_url($pengajuan->files_pendukung) }}" target="_blank">
@@ -74,7 +86,7 @@
                                 <br><br>
                             @endif
                             <hr>
-                            <p><b>Gambaran Masalah + Solusi</b></p>
+                            <p><b>Gambaran Singkat</b></p>
                             {!! nl2br($pengajuan->deskripsi) !!}
                             <div class="mt-3 text-secondary"><i class="fas fa-calendar mr-2"></i>
                                 {{ $pengajuan->created_at->format('d M y H:m') }}
@@ -84,11 +96,7 @@
                                     {{ date('d M y H:m', strtotime($pengajuan->tanggal_acc)) }}
                                 </div>
                             @endif
-                            <hr>
-                            <p class="mt-3"><b>Lampiran : </b> <a href="{{ storage_url($pengajuan->lampiran) }}" class="ml-3"
-                                    target="_blank"><i class="fas fa-paperclip"></i>
-                                    {{ Str::substr($pengajuan->lampiran, 40) }}</a></p>
-                        </div>
+                            </div>
 
                     </div>
 
@@ -116,7 +124,7 @@
                                             @if ($revisi->lampiran)
                                                 <a href="{{ storage_url($pengajuan->lampiran) }}" class="ml-3" target="_blank"><i
                                                         class="fas fa-paperclip"></i>
-                                                    {{ Str::substr($revisi->lampiran, 40) }}</a>
+                                                    {{ basename($revisi->lampiran) }}</a>
                                             @endif
                                         </small>
                                     </div>

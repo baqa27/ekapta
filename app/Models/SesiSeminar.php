@@ -10,6 +10,9 @@ class SesiSeminar extends Model
 {
     use HasFactory;
 
+    // Nama tabel dengan suffix _kp
+    protected $table = 'sesi_seminar_kps';
+
     protected $fillable = [
         'tanggal',
         'jam_mulai',

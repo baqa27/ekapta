@@ -37,7 +37,7 @@
         <center>
             <b class="f-14">{{ $title }}</b>
             <br><br><br>
-            <b class="f-14">LAPORAN KERJA PRAKTIK</b>
+            <b class="f-14">LAPORAN KERJA Praktek</b>
             <br><br><br>
             <div style="margin: 0px 50px 0px 50px;">
                 <b style="text-transform: uppercase;">{{ $pengajuan->judul }}</b>

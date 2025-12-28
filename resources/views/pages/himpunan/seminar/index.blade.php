@@ -91,8 +91,8 @@
                                                     <td>{{ $seminar->created_at->format('d M Y H:i') }}</td>
                                                     <td>
                                                         <a href="{{ route('seminar.himpunan.review', $seminar->id) }}"
-                                                            class="btn btn-info btn-sm">
-                                                            <i class="fas fa-eye mr-1"></i> Review
+                                                            class="btn btn-primary btn-sm">
+                                                            <i class="fas fa-eye mr-1"></i> Detail
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -127,8 +127,8 @@
                                                     <td>{{ $seminar->created_at->format('d M Y H:i') }}</td>
                                                     <td>
                                                         <a href="{{ route('seminar.himpunan.review', $seminar->id) }}"
-                                                            class="btn btn-warning btn-sm">
-                                                            <i class="fas fa-eye mr-1"></i> Lihat
+                                                            class="btn btn-primary btn-sm">
+                                                            <i class="fas fa-eye mr-1"></i> Detail
                                                         </a>
                                                     </td>
                                                 </tr>
@@ -165,7 +165,7 @@
                                                     <td>{{ $seminar->tempat_ujian ?? '-' }}</td>
                                                     <td>
                                                         <a href="{{ route('seminar.himpunan.review', $seminar->id) }}"
-                                                            class="btn btn-success btn-sm">
+                                                            class="btn btn-primary btn-sm">
                                                             <i class="fas fa-eye mr-1"></i> Detail
                                                         </a>
                                                     </td>

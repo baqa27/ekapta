@@ -50,12 +50,12 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Dosen Pembimbing Kerja Praktik</label>
+                                    <label for="exampleInputEmail1">Dosen Pembimbing Kerja Praktek</label>
                                     <input type="text" class="form-control" value="{{ $dosen_pembimbing ? $dosen_pembimbing->nama.', '.$dosen_pembimbing->gelar : 'Belum ditentukan' }}" disabled>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Judul Kerja Praktik</label>
+                                    <label for="exampleInputEmail1">Judul Kerja Praktek</label>
                                     <input type="text" class="form-control" value="{{ $pendaftaran->pengajuan->judul }}" disabled>
                                 </div>
 
@@ -72,9 +72,6 @@
                                                 name="lampiran_1">
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
                                         </div>
                                     </div>
                                     @error('lampiran_1')
@@ -104,9 +101,6 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
                                     </div>
                                     @error('lampiran_2')
                                         <small class="text-danger"
@@ -135,9 +129,6 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
                                     </div>
                                     @error('lampiran_3')
                                         <small class="text-danger"
@@ -164,9 +155,6 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
                                     </div>
                                     @error('lampiran_4')
                                         <small class="text-danger"
@@ -183,8 +171,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Bukti Pembayaran Kerja Praktik <br>
-                                        <small>Pembayaran Kerja Praktik (KP) ke Juru bayar FASTIKOM (Mas Harri) di kantor FASTIKOM atau bisa transfer melalui Bank BRI No. <b>011201103039505</b> a.n. Harri Kurniawan R.</small> </label>
+                                    <label for="exampleInputFile">Bukti Pembayaran Kerja Praktek <br>
+                                        <small>Pembayaran Kerja Praktek (KP) ke Juru bayar FASTIKOM (Mas Harri) di kantor FASTIKOM atau bisa transfer melalui Bank BRI No. <b>011201103039505</b> a.n. Harri Kurniawan R.</small> </label>
                                     <div class="input-group mb-3">
                                         <div class="custom-file">
                                             <input type="file"
@@ -192,9 +180,6 @@
                                                 name="lampiran_5">
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
                                         </div>
                                     </div>
                                     @error('lampiran_5')
@@ -220,9 +205,6 @@
                                                 name="lampiran_6">
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
                                         </div>
                                     </div>
                                     @error('lampiran_6')
@@ -253,9 +235,6 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
                                     </div>
                                     @error('lampiran_7')
                                         <small class="text-danger"
@@ -276,62 +255,33 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Sertifikat Peserta KP #1 (Seminar/Pelatihan)</label>
+                                    <label for="exampleInputFile">Dokumen Pendukung KP <br>
+                                        <small>Upload 2 sertifikat peserta seminar KP (dijadikan 1 file PDF)</small>
+                                    </label>
                                     <div class="input-group mb-3">
                                         <div class="custom-file">
                                             <input type="file"
-                                                class="custom-file-input @error('sertifikat_peserta_1') is-invalid @enderror"
-                                                name="sertifikat_peserta_1">
+                                                class="custom-file-input @error('dokumen_pendukung_kp') is-invalid @enderror"
+                                                name="dokumen_pendukung_kp">
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
                                     </div>
-                                    @error('sertifikat_peserta_1')
+                                    @error('dokumen_pendukung_kp')
                                         <small class="text-danger"
                                             style="position:relative;top:-15px;left:5px">{{ $message }}</small>
                                     @enderror
                                     <div class="rounded bg-light">
                                         <small>
                                             <span class="ml-3">Lampiran sebelumnya : </span>
-                                            @if ($pendaftaran->sertifikat_peserta_1)
+                                            @if ($pendaftaran->dokumen_pendukung_kp)
+                                            <a href="{{ storage_url($pendaftaran->dokumen_pendukung_kp) }}" class="text-primary"
+                                                target="_blank"><i class="fas fa-paperclip ml-2"></i>
+                                                {{ basename($pendaftaran->dokumen_pendukung_kp) }}</a>
+                                            @elseif ($pendaftaran->sertifikat_peserta_1)
                                             <a href="{{ storage_url($pendaftaran->sertifikat_peserta_1) }}" class="text-primary"
                                                 target="_blank"><i class="fas fa-paperclip ml-2"></i>
                                                 {{ Str::substr($pendaftaran->sertifikat_peserta_1, 21) }}</a>
-                                            @else
-                                            <span class="text-muted ml-2">Belum ada file</span>
-                                            @endif
-                                        </small>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="exampleInputFile">Sertifikat Peserta KP #2 (Seminar/Pelatihan)</label>
-                                    <div class="input-group mb-3">
-                                        <div class="custom-file">
-                                            <input type="file"
-                                                class="custom-file-input @error('sertifikat_peserta_2') is-invalid @enderror"
-                                                name="sertifikat_peserta_2">
-                                            <label class="custom-file-label" for="exampleInputFile">Choose
-                                                file</label>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
-                                    </div>
-                                    @error('sertifikat_peserta_2')
-                                        <small class="text-danger"
-                                            style="position:relative;top:-15px;left:5px">{{ $message }}</small>
-                                    @enderror
-                                    <div class="rounded bg-light">
-                                        <small>
-                                            <span class="ml-3">Lampiran sebelumnya : </span>
-                                            @if ($pendaftaran->sertifikat_peserta_2)
-                                            <a href="{{ storage_url($pendaftaran->sertifikat_peserta_2) }}" class="text-primary"
-                                                target="_blank"><i class="fas fa-paperclip ml-2"></i>
-                                                {{ Str::substr($pendaftaran->sertifikat_peserta_2, 21) }}</a>
                                             @else
                                             <span class="text-muted ml-2">Belum ada file</span>
                                             @endif
@@ -366,7 +316,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">BIAYA KERJA PRAKTIK (KP)
+                                    <label for="exampleInputEmail1">BIAYA KERJA Praktek (KP)
                                     </label>
                                     <div class="form-check mb-2">
                                         <input class="form-check-input @error('biaya') is-invalid @enderror"

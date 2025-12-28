@@ -58,7 +58,7 @@
                     <a href="#" class="nav-link {{ in_array($active, ['seminar', 'jadwal']) ? 'active' : '' }}">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
-                            Menu Kerja Praktik
+                            Menu Kerja Praktek
                             <i class="fas fa-angle-right right"></i>
                         </p>
                     </a>

@@ -28,7 +28,7 @@
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title">Alur Kerja Praktik (KP)</h3>
+                            <h3 class="card-title">Alur Kerja Praktek (KP)</h3>
                         </div>
                         <div class="card-body">
                             <div id="accordion">
@@ -210,7 +210,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-header">
-                            <h3 class="card-title">Timeline Kerja Praktik</h3>
+                            <h3 class="card-title">Timeline Kerja Praktek</h3>
                         </div>
                         <div class="card-body">
                             <div class="timeline-steps aos-init aos-animate" data-aos="fade-up">

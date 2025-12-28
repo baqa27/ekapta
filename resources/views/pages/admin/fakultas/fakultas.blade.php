@@ -24,16 +24,16 @@
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
+                <div class="col-12">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">Tabel {{ $title }}</h3>
                         </div>
                         <div class="card-body">
 
-                            <button type="button" class="btn btn-primary col-md-4 col-sm-12 mb-2" data-toggle="modal"
+                            <button type="button" class="btn btn-primary btn-sm shadow mb-2 mr-1" data-toggle="modal"
                                 data-target="#modal-import">
-                                <i class="bi bi-upload mr-2"></i> Import Data Fakultas
+                                <i class="bi bi-upload mr-1"></i> Import Data Fakultas
                             </button>
 
                             <table id="example1" class="table table-bordered">
@@ -119,9 +119,7 @@
                                     <label class="custom-file-label" for="exampleInputFile">Choose
                                         file</label>
                                 </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">Dokumen</span>
-                                </div>
+                                
                             </div>
                             @error('file')
                                 <small class="text-danger"

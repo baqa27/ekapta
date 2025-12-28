@@ -6,7 +6,7 @@
         <div class="container">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Pengajuan Kerja Praktik</h1>
+                    <h1 class="m-0">Pengajuan Kerja Praktek</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -23,15 +23,24 @@
     <div class="content">
         <div class="container">
 
+            @php
+                // Cek apakah ada pengajuan aktif (review/diterima/revisi)
+                $hasActivePengajuan = $pengajuans->whereIn('status', ['review', 'diterima', 'revisi'])->count() > 0;
+                // Bisa ajukan lagi kalau tidak ada pengajuan aktif (ditolak bisa kirim lagi tanpa batas)
+                $bisaAjukanLagi = !$hasActivePengajuan;
+            @endphp
+
             @if (count($pengajuans_acc) == 0)
-                <a href="{{ route('pengajuan.create') }}" class="btn btn-primary mb-4"><i class="fas fa-plus mr-2"></i> Buat
-                    Pengajuan KP</a>
+                @if ($bisaAjukanLagi)
+                    <a href="{{ route('pengajuan.create') }}" class="btn btn-primary mb-4"><i class="fas fa-plus mr-2"></i> Buat
+                        Pengajuan KP</a>
+                @endif
             @else
                 <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    Selamat! Pengajuan kerja praktik anda sudah di Acc oleh Prodi, silahkan lakukan <b><a
+                    Selamat! Pengajuan kerja Praktek anda sudah di Acc oleh Prodi, silahkan lakukan <b><a
                             href="{{ route('pendaftaran.create') }}">Pendaftaran Kerja
-                            Praktik.</a></b>
+                            Praktek.</a></b>
                 </div>
             @endif
 
@@ -107,39 +116,38 @@
                                                     </div>
                                                 @elseif ($pengajuan->status == 'revisi')
                                                     <a href="{{ url('/pengajuan/edit/' . $pengajuan->id) }}"
-                                                        class="btn btn-primary btn-sm shadow" type="submit"><i
-                                                            class="fas fa-upload mr-1"></i>Submit</a>
+                                                        class="btn btn-success btn-sm shadow"><i
+                                                            class="fas fa-upload mr-1"></i>Submit Revisi</a>
                                                 @elseif ($pengajuan->status == 'diterima')
+                                                    <div class="d-flex flex-wrap gap-1">
+                                                        <a href="{{ url('/pengajuan/detail/' . $pengajuan->id) }}"
+                                                            class="btn btn-primary btn-sm shadow mr-2 mb-1">
+                                                            <i class="fas fa-info-circle mr-1"></i> Detail
+                                                        </a>
+                                                        @if (count(Auth::guard('mahasiswa')->user()->dosens) != 0)
+                                                            <a href="{{ route('cetak.lembar.persetujuan.mahasiswa') }}"
+                                                                class="btn btn-success btn-sm shadow mb-1" target="_blank">
+                                                                <i class="fas fa-download mr-1"></i> Lembar Persetujuan
+                                                            </a>
+                                                        @else
+                                                            <a href="#" class="btn btn-secondary btn-sm shadow mb-1">
+                                                                <i class="bi bi-hourglass-bottom mr-1"></i> Menunggu Ploting Dosen
+                                                            </a>
+                                                        @endif
+                                                    </div>
+                                                @elseif ($pengajuan->status == 'ditolak' || $pengajuan->status == 'dibatalkan')
                                                     <div class="d-flex">
                                                         <a href="{{ url('/pengajuan/detail/' . $pengajuan->id) }}"
                                                             class="btn btn-primary btn-sm shadow mr-2">
                                                             <i class="fas fa-info-circle mr-1"></i> Detail
                                                         </a>
-                                                        @if (count(Auth::guard('mahasiswa')->user()->dosens) != 0)
-                                                            <a href="{{ route('cetak.lembar.persetujuan.mahasiswa') }}"
-                                                                class="btn btn-success btn-sm shadow" target="_blank">
-                                                                <i class="bi bi-download"></i> Lembar Persetujuan Pembimbing
+                                                        @if ($pengajuan->status == 'ditolak')
+                                                            <a href="{{ route('cetak.surat.penolakan', $pengajuan->id) }}"
+                                                                class="btn btn-secondary btn-sm shadow" target="_blank">
+                                                                <i class="fas fa-file-alt mr-1"></i> Surat Penolakan
                                                             </a>
-                                                        @else
-                                                        <a href="#" class="btn btn-secondary btn-sm shadow">
-                                                            <i class="bi bi-hourglass-bottom mr-1"></i> Menunggu Ploting Dosen Pembimbing
-                                                        </a>
                                                         @endif
                                                     </div>
-                                                @elseif ($pengajuan->status == 'ditolak' || $pengajuan->status == 'dibatalkan')
-                                                    <a href="{{ url('/pengajuan/detail/' . $pengajuan->id) }}"
-                                                        class="btn btn-primary btn-sm shadow mr-2">
-                                                        <i class="fas fa-info-circle mr-1"></i> Detail
-                                                    </a>
-                                                    {{--<div onclick="confirmDelete()">
-                                                        <form action="{{ route('pengajuan.delete') }}" method="post">
-                                                            @csrf
-                                                            <input type="hidden" name="id"
-                                                                value="{{ $pengajuan->id }}">
-                                                            <button class="btn btn-danger btn-sm shadow" type="submit">
-                                                                <i class="fas fa-trash mr-1"></i>Hapus</button>
-                                                        </form>
-                                                    </div>--}}
                                                 @endif
                                             </td>
                                         </tr>

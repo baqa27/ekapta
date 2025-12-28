@@ -9,6 +9,9 @@ class Bagian extends Model
 {
     use HasFactory;
 
+    // Nama tabel dengan suffix _kp
+    protected $table = 'bagian_kps';
+
     protected $fillable = [
         'prodi_id',
         'bagian',

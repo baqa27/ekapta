@@ -9,6 +9,9 @@ class SeminarCanceled extends Model
 {
     use HasFactory;
 
+    // Nama tabel dengan suffix _kp
+    protected $table = 'seminar_canceled_kps';
+
     protected $fillable = [
         'pengajuan_id',
         'mahasiswa_id',

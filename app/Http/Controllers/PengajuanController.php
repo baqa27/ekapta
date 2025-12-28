@@ -27,7 +27,7 @@ class PengajuanController extends Controller
         $pengajuans_ditolak = $prodi->pengajuans()->where('status', Pengajuan::DITOLAK)->orderBy('created_at', 'desc')->get();
 
         return view('pages.prodi.pengajuan.pengajuan', [
-            'title' => 'Pengajuan Kerja Praktik',
+            'title' => 'Pengajuan Kerja Praktek',
             'active' => 'pengajuan',
             'pengajuans' => $pengajuans_review,
             'sidebar' => 'partials.sidebarProdi',
@@ -46,7 +46,7 @@ class PengajuanController extends Controller
         $pengajuans = Pengajuan::orderBy('created_at','desc')->where('mahasiswa_id', Auth::guard('mahasiswa')->user()->id)->get();
         $pengajuans_acc = Pengajuan::where('mahasiswa_id', Auth::guard('mahasiswa')->user()->id)->where('status', Pengajuan::DITERIMA)->get();
         return view('pages.mahasiswa.pengajuan.pengajuan', [
-            'title' => 'Pengajuan Kerja Praktik',
+            'title' => 'Pengajuan Kerja Praktek',
             'active' => 'pengajuan',
             'pengajuans' => $pengajuans,
             'pengajuans_acc' => $pengajuans_acc,
@@ -57,7 +57,7 @@ class PengajuanController extends Controller
     {
         $pengajuans = Pengajuan::orderBy('created_at', 'desc')->get();
         return view('pages.admin.pengajuan.pengajuan', [
-            'title' => 'Pengajuan Kerja Praktik',
+            'title' => 'Pengajuan Kerja Praktek',
             'sidebar' => 'partials.sidebarAdmin',
             'active' => 'pengajuan',
             'pengajuans' => $pengajuans,
@@ -71,7 +71,7 @@ class PengajuanController extends Controller
             return back()->with('warning', 'Pengajuan anda sudah diterima');
         }
         return view('pages.mahasiswa.pengajuan.create', [
-            'title' => 'Form Pengajuan Kerja Praktik',
+            'title' => 'Form Pengajuan Kerja Praktek',
             'active' => 'pengajuan',
         ]);
     }
@@ -143,9 +143,9 @@ class PengajuanController extends Controller
                 'judul' => ['required', 'min:5'],
                 'lokasi_kp' => ['required'],
                 'alamat_instansi' => ['required'],
-                'deskripsi' => ['required', 'min:100'],
+                'deskripsi' => ['nullable'],
                 'lampiran' => 'required|mimes:pdf,doc,docx|file|max:10000',
-                'files_pendukung' => ['nullable', 'mimes:pdf,zip,rar', 'max:10000'],
+                'files_pendukung' => ['required', 'mimes:pdf,zip,rar', 'max:10000'],
             ]);
 
             $mahasiswa = Mahasiswa::findOrFail(Auth::guard('mahasiswa')->user()->id);
@@ -161,7 +161,7 @@ class PengajuanController extends Controller
 
             Pengajuan::create($validatedData);
 
-            return redirect('pengajuan-mahasiswa')->with('success', 'Berhasil melakukan pengajuan kerja praktik');
+            return redirect('pengajuan-mahasiswa')->with('success', 'Berhasil melakukan pengajuan kerja Praktek');
         } else {
             return redirect('pengajuan-mahasiswa')->with('warning', 'Menunggu review dari prodi');
         }
@@ -180,7 +180,7 @@ class PengajuanController extends Controller
         }
 
         return view('pages.mahasiswa.pengajuan.edit', [
-            'title' => 'Form Edit Pengajuan Kerja Praktik',
+            'title' => 'Form Edit Pengajuan Kerja Praktek',
             'active' => 'pengajuan',
             'pengajuan' => $pengajuan,
         ]);
@@ -193,7 +193,7 @@ class PengajuanController extends Controller
             'judul' => ['required', 'min:5'],
             'lokasi_kp' => ['required'],
             'alamat_instansi' => ['required'],
-            'deskripsi' => ['required', 'min:100'],
+            'deskripsi' => ['nullable'],
             'lampiran' => [Rule::requiredIf(function () use($request) {
                 if (empty($request->lampiran)) {
                     return false;
@@ -220,7 +220,7 @@ class PengajuanController extends Controller
         $validatedData['status'] = Pengajuan::REVIEW;
 
         $pengajuan->update($validatedData);
-        return redirect('pengajuan-mahasiswa')->with('success', 'Berhasil melakukan pengajuan kerja praktik');
+        return redirect('pengajuan-mahasiswa')->with('success', 'Berhasil melakukan pengajuan kerja Praktek');
 
     }
 
@@ -263,9 +263,9 @@ class PengajuanController extends Controller
                     if ($pengajuan->mahasiswa->email && $pengajuan->mahasiswa->email != '-') {
                         AppHelper::instance()->send_mail([
                             'mail' => $pengajuan->mahasiswa->email,
-                            'subject' => 'Pengajuan Kerja Praktik',
+                            'subject' => 'Pengajuan Kerja Praktek',
                             'title' => 'EKAPTA',
-                            'message' => 'Selamat Pengajuan Kerja Praktik Anda Berstatus DITERIMA. Silahkan tunggu prodi menentukan dosen pembimbing Anda.',
+                            'message' => 'Selamat Pengajuan Kerja Praktek Anda Berstatus DITERIMA. Silahkan tunggu prodi menentukan dosen pembimbing Anda.',
                         ]);
                     }
                 } catch (\Exception $e) {
@@ -316,15 +316,26 @@ class PengajuanController extends Controller
                 $pengajuan->revisis()->save($revisi);
             }
 
+            // Increment jumlah_tolak
+            $jumlahTolak = ($pengajuan->jumlah_tolak ?? 0) + 1;
+
             $pengajuan->update([
                 'status' => Pengajuan::DITOLAK,
+                'jumlah_tolak' => $jumlahTolak,
             ]);
+
+            // Kirim email dengan info sisa kesempatan
+            $sisaKesempatan = Pengajuan::MAX_TOLAK - $jumlahTolak;
+            $pesanTambahan = $sisaKesempatan > 0 
+                ? "Anda masih bisa mengajukan {$sisaKesempatan}x lagi." 
+                : "Anda sudah mencapai batas maksimal pengajuan.";
+
             if ($pengajuan->mahasiswa->email != '-') {
                 AppHelper::instance()->send_mail([
                     'mail' => $pengajuan->mahasiswa->email,
-                    'subject' => 'Pengajuan Kerja Praktik',
+                    'subject' => 'Pengajuan Kerja Praktek',
                     'title' => 'EKAPTA',
-                    'message' => 'Pengajuan Kerja Praktik Anda Berstatus DITOLAK. Silahkan lakukan pengajuan ulang. <br><br> Catatan : '.$request->catatan,
+                    'message' => 'Pengajuan Kerja Praktek Anda Berstatus DITOLAK. ' . $pesanTambahan . '<br><br> Catatan : '.$request->catatan,
                 ]);
             }
             return redirect('pengajuan-prodi')->with('success', 'Pengajuan berhasil ditolak');
@@ -377,9 +388,9 @@ class PengajuanController extends Controller
                 if ($pengajuan->mahasiswa->email != '-') {
                     AppHelper::instance()->send_mail([
                         'mail' => $pengajuan->mahasiswa->email,
-                        'subject' => 'Pengajuan Kerja Praktik',
+                        'subject' => 'Pengajuan Kerja Praktek',
                         'title' => 'EKAPTA',
-                        'message' => 'Pengajuan Kerja Praktik Anda Berstatus REVISI. Silahkan perbaiki kemudian submit ulang. <br><br> Catatan Revisi: '.$request->catatan,
+                        'message' => 'Pengajuan Kerja Praktek Anda Berstatus REVISI. Silahkan perbaiki kemudian submit ulang. <br><br> Catatan Revisi: '.$request->catatan,
                     ]);
                 }
                 $pengajuan->revisis()->save($revisi);

@@ -156,10 +156,10 @@ class DashboardController extends Controller
     }
 
     /**
-     * Dashboard Mahasiswa untuk Sistem Kerja Praktik (KP)
+     * Dashboard Mahasiswa untuk Sistem Kerja Praktek (KP)
      * Alur: Pengajuan -> Pendaftaran -> Bimbingan -> Seminar KP -> Pengumpulan Akhir
      */
-    public function dashboardMahasiswaTA()
+    public function dashboardMahasiswaKP()
     {
         $mahasiswa = Mahasiswa::with(['bimbingans','pengajuans','pendaftarans','seminar','jilid'])->findOrFail(Auth::guard('mahasiswa')->user()->id);
         if($mahasiswa->email == '-'){
@@ -189,7 +189,7 @@ class DashboardController extends Controller
             }
         }
 
-        // Cek pengumpulan akhir completed (untuk KP, ini menggantikan ujian pendadaran)
+        // Cek pengumpulan akhir completed
         $is_pengumpulan_akhir_completed = false;
         if ($mahasiswa->jilid){
             if($mahasiswa->jilid->status == Jilid::JILID_SELESAI || $mahasiswa->jilid->is_completed == Jilid::JILID_COMPLETED){
@@ -207,11 +207,6 @@ class DashboardController extends Controller
             'is_seminar_completed' => $mahasiswa->seminar ? $is_seminar_completed : false,
             'is_pengumpulan_akhir_completed' => $mahasiswa->jilid ? $is_pengumpulan_akhir_completed : false,
         ]);
-    }
-
-    public function dashboardMahasiswaKP()
-    {
-        return "<center><h1>SEDANG DALAM TAHAP PENGEMBANGAN</h1></center>";
     }
 
     public function dashboardMahasiswaJilid()

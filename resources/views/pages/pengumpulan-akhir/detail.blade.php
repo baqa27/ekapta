@@ -3,31 +3,29 @@
 @section('content')
     <!-- Content Header (Page header) -->
     <div class="content-header">
-        <div class="container">
+        <div class="{{ $is_admin ? 'container-fluid' : 'container' }}">
             <div class="row mb-2">
                 <div class="col-sm-6">
                     <h1 class="m-0">{{ $title }}</h1>
-                </div><!-- /.col -->
+                </div>
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">{{ $title }}</a></li>
-                        <li class="breadcrumb-item active">Home</li>
+                        <li class="breadcrumb-item"><a href="#">Pengumpulan Akhir</a></li>
+                        <li class="breadcrumb-item active">{{ $title }}</li>
                     </ol>
-                </div><!-- /.col -->
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.content-header -->
 
     <!-- Main content -->
     <div class="content">
-        <div class="container">
+        <div class="{{ $is_admin ? 'container-fluid' : 'container' }}">
             <div class="mb-3 d-flex">
-                <div class="shrink">
+                <div class="flex-shrink-1">
                     <a href="{{ route($is_admin ? 'pengumpulan-akhir.index' : 'pengumpulan-akhir.mahasiswa') }}"
                         class="btn btn-secondary float-end"><i class="bi bi-arrow-left ml-2"></i> Kembali</a>
                 </div>
-                <h4 class="grow-04>
             </div>
             <div class="row">
                 <div class="col-md-12">
@@ -44,75 +42,97 @@
                                     </tr>
                                     <tr>
                                         <td>PRODI</td>
-                                        <td>: <b>{{ $prodi ? $prodi->namaprodi : '' }}</b></td>
+                                        <td>: <b>{{ $prodi ? $prodi->namaprodi : $mahasiswa->prodi }}</b></td>
                                     </tr>
                                     <tr>
-                                        <td>JUDUL KERJA PRAKTIK</td>
-                                        <td>:
-                                            <b>{{ $jilid->mahasiswa->pengajuans()->where('status', 'diterima')->first()->judul }}</b>
-                                        </td>
+                                        <td>JUDUL KERJA PRAKTEK</td>
+                                        <td>: <b>{{ $jilid->mahasiswa->pengajuans()->where('status', 'diterima')->first()->judul ?? '-' }}</b></td>
                                     </tr>
                                 </table>
                             </div>
 
                             @if ($is_admin)
+                                {{-- Tampilan untuk Admin --}}
                                 @if ($jilid->status == 1)
+                                    {{-- Status Review - Tampilkan semua dokumen untuk diperiksa --}}
                                     <div class="mt-3">
-                                        <a href="{{ asset($jilid->lembar_keaslian) }}" class="btn btn-primary mb-3"
-                                            target="_blank"><i class="fas fa-download"></i> LEMBAR KEASLIAN</a>
-                                        <a href="{{ asset($jilid->lembar_persetujuan_pembimbing) }}"
-                                            class="btn btn-primary mb-3" target="_blank"><i class="fas fa-download"></i>
-                                            LEMBAR
-                                            PERSETUJUAN PEMBIMBING</a>
-                                        <a href="{{ asset($jilid->lembar_persetujuan_penguji) }}"
-                                            class="btn btn-primary mb-3" target="_blank"><i class="fas fa-download"></i>
-                                            LEMBAR PERSETUJUAN PENGUJI</a>
-                                        <a href="{{ asset($jilid->lembar_pengesahan) }}" class="btn btn-primary mb-3"
-                                            target="_blank"><i class="fas fa-download"></i> LEMBAR PENGESAHAN</a>
-                                        <a href="{{ asset($jilid->lembar_bimbingan) }}" class="btn btn-primary mb-3"
-                                            target="_blank"><i class="fas fa-download"></i> LEMBAR BIMBINGAN</a>
-                                        <a href="{{ asset($jilid->lembar_revisi) }}" class="btn btn-primary mb-3"
-                                            target="_blank"><i class="fas fa-download"></i> LEMBAR REVISI</a>
-                                        <a href="{{ asset($jilid->laporan_pdf) }}" class="btn btn-primary mb-3"
-                                            target="_blank"><i class="fas fa-download"></i> LAPORAN FORMAT PDF</a>
-                                        <a href="{{ asset($jilid->laporan_word) }}" class="btn btn-primary mb-3"
-                                            target="_blank"><i class="fas fa-download"></i> LAPORAN FORMAT WORD</a>
-                                        <a href="{{ asset($jilid->artikel) }}" class="btn btn-primary mb-3"
-                                            target="_blank"><i class="fas fa-download"></i> ARTIKEL FORMAT WORD</a>
+                                        <a href="{{ asset($jilid->lembar_keaslian) }}" class="btn btn-primary mb-3" target="_blank">
+                                            <i class="fas fa-download"></i> LEMBAR KEASLIAN
+                                        </a>
+                                        <a href="{{ asset($jilid->lembar_persetujuan_pembimbing) }}" class="btn btn-primary mb-3" target="_blank">
+                                            <i class="fas fa-download"></i> LEMBAR PERSETUJUAN PEMBIMBING
+                                        </a>
+                                        <a href="{{ asset($jilid->lembar_persetujuan_penguji) }}" class="btn btn-primary mb-3" target="_blank">
+                                            <i class="fas fa-download"></i> LEMBAR PERSETUJUAN PENGUJI
+                                        </a>
+                                        <a href="{{ asset($jilid->lembar_pengesahan) }}" class="btn btn-primary mb-3" target="_blank">
+                                            <i class="fas fa-download"></i> LEMBAR PENGESAHAN
+                                        </a>
+                                        <a href="{{ asset($jilid->lembar_bimbingan) }}" class="btn btn-primary mb-3" target="_blank">
+                                            <i class="fas fa-download"></i> LEMBAR BIMBINGAN
+                                        </a>
+                                        <a href="{{ asset($jilid->lembar_revisi) }}" class="btn btn-primary mb-3" target="_blank">
+                                            <i class="fas fa-download"></i> LEMBAR REVISI
+                                        </a>
+                                        <a href="{{ asset($jilid->laporan_pdf) }}" class="btn btn-primary mb-3" target="_blank">
+                                            <i class="fas fa-download"></i> LAPORAN FORMAT PDF
+                                        </a>
+                                        <a href="{{ asset($jilid->laporan_word) }}" class="btn btn-primary mb-3" target="_blank">
+                                            <i class="fas fa-download"></i> LAPORAN FORMAT WORD
+                                        </a>
+                                        @if ($jilid->artikel)
+                                        <a href="{{ asset($jilid->artikel) }}" class="btn btn-primary mb-3" target="_blank">
+                                            <i class="fas fa-download"></i> ARTIKEL FORMAT WORD
+                                        </a>
+                                        @endif
+                                        @if ($jilid->bukti_nilai_instansi)
+                                        <a href="{{ asset($jilid->bukti_nilai_instansi) }}" class="btn btn-primary mb-3" target="_blank">
+                                            <i class="fas fa-download"></i> BUKTI NILAI INSTANSI
+                                        </a>
+                                        @endif
                                         @if ($jilid->berita_acara)
-                                            <a href="{{ asset($jilid->berita_acara) }}" class="btn btn-primary mb-3"
-                                                target="_blank"><i class="fas fa-download"></i> BERITA ACARA</a>
+                                        <a href="{{ asset($jilid->berita_acara) }}" class="btn btn-primary mb-3" target="_blank">
+                                            <i class="fas fa-download"></i> BERITA ACARA
+                                        </a>
                                         @endif
                                         @if ($jilid->panduan)
-                                            <a href="{{ asset($jilid->panduan) }}" class="btn btn-primary mb-3"
-                                                target="_blank"><i class="fas fa-download"></i> PANDUAN PENGGUNAAN PRODUK KP</a>
+                                        <a href="{{ asset($jilid->panduan) }}" class="btn btn-primary mb-3" target="_blank">
+                                            <i class="fas fa-download"></i> PANDUAN PENGGUNAAN
+                                        </a>
                                         @endif
                                         @if ($jilid->lampiran)
-                                            <a href="{{ storage_url($jilid->lampiran) }}" class="btn btn-primary mb-3"
-                                                target="_blank"><i class="fas fa-download"></i> DOKUMEN LAMPIRAN</a>
+                                        <a href="{{ asset($jilid->lampiran) }}" class="btn btn-primary mb-3" target="_blank">
+                                            <i class="fas fa-download"></i> DOKUMEN LAMPIRAN
+                                        </a>
                                         @endif
                                         @if ($jilid->link_project)
-                                            <a href="{{ asset($jilid->link_project) }}" class="btn btn-secondary mb-3"
-                                                target="_blank"><i class="fas fa-paper-plane"></i> LINK PROJECT</a>
+                                        <a href="{{ $jilid->link_project }}" class="btn btn-secondary mb-3" target="_blank">
+                                            <i class="fas fa-paper-plane"></i> LINK PROJECT
+                                        </a>
                                         @endif
                                     </div>
                                 @elseif ($jilid->status == 3)
-                                    <a href="{{ asset($jilid->laporan_pdf) }}" class="btn btn-primary mb-3 mt-4"
-                                        target="_blank"><i class="fas fa-download"></i> LAPORAN PDF</a>
+                                    {{-- Status Valid - Untuk Fotokopian --}}
+                                    <a href="{{ asset($jilid->laporan_pdf) }}" class="btn btn-primary mb-3 mt-4" target="_blank">
+                                        <i class="fas fa-download"></i> LAPORAN PDF
+                                    </a>
                                 @endif
 
+                                {{-- Form Aksi Admin --}}
                                 <form action="{{ route('pengumpulan-akhir.acc', $jilid->id) }}" method="post">
                                     @method('put')
                                     @csrf
                                     @if ($jilid->status == 3)
+                                        {{-- Fotokopian: Input pembayaran dan selesaikan --}}
                                         <input type="hidden" name="status" value="4">
                                         <div class="mt-4">
-                                            <label>JUMLAH PEMBAYARAN</label>
+                                            <label>JUMLAH PEMBAYARAN (Opsional)</label>
                                             <input type="number" name="total_pembayaran" class="form-control"
-                                                placeholder="Nominal pembayaran"
-                                                value="{{ $jilid->total_pembayaran }}" required>
+                                                placeholder="Nominal pembayaran jilid KP"
+                                                value="{{ $jilid->total_pembayaran }}">
                                         </div>
                                     @elseif ($jilid->status == 1)
+                                        {{-- Admin: Review dokumen --}}
                                         <div class="form-group">
                                             <label for="">Status</label>
                                             <select name="status" class="form-control" required>
@@ -123,11 +143,13 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="">Catatan</label>
-                                            <textarea name="catatan" id="summernote" required></textarea>
+                                            <textarea name="catatan" class="form-control" rows="4" placeholder="Catatan..." required></textarea>
                                         </div>
                                     @endif
+                                    @if ($jilid->status == 1 || $jilid->status == 3)
                                     <div class="mt-4">
-                                        <button type="submit" class="btn btn-success"><i class="fas fa-check"></i>
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-check"></i>
                                             @if ($jilid->status == 1)
                                                 SIMPAN
                                             @elseif ($jilid->status == 3)
@@ -135,50 +157,84 @@
                                             @endif
                                         </button>
                                     </div>
+                                    @endif
                                 </form>
                             @else
+                                {{-- Tampilan untuk Mahasiswa --}}
                                 <div class="mt-3">
-                                    <a href="{{ asset($jilid->lembar_keaslian) }}" class="btn btn-primary mb-3"
-                                        target="_blank"><i class="fas fa-download"></i> LEMBAR KEASLIAN</a>
-                                    <a href="{{ asset($jilid->lembar_persetujuan_pembimbing) }}"
-                                        class="btn btn-primary mb-3" target="_blank"><i class="fas fa-download"></i>
-                                        LEMBAR
-                                        PERSETUJUAN PEMBIMBING</a>
-                                    <a href="{{ asset($jilid->lembar_persetujuan_penguji) }}"
-                                        class="btn btn-primary mb-3" target="_blank"><i class="fas fa-download"></i>
-                                        LEMBAR PERSETUJUAN PENGUJI</a>
-                                    <a href="{{ asset($jilid->lembar_pengesahan) }}" class="btn btn-primary mb-3"
-                                        target="_blank"><i class="fas fa-download"></i> LEMBAR PENGESAHAN</a>
-                                    <a href="{{ asset($jilid->lembar_bimbingan) }}" class="btn btn-primary mb-3"
-                                        target="_blank"><i class="fas fa-download"></i> LEMBAR BIMBINGAN</a>
-                                    <a href="{{ asset($jilid->lembar_revisi) }}" class="btn btn-primary mb-3"
-                                        target="_blank"><i class="fas fa-download"></i> LEMBAR REVISI</a>
-                                    <a href="{{ asset($jilid->laporan_pdf) }}" class="btn btn-primary mb-3"
-                                        target="_blank"><i class="fas fa-download"></i> LAPORAN FORMAT PDF</a>
-                                    <a href="{{ asset($jilid->laporan_word) }}" class="btn btn-primary mb-3"
-                                        target="_blank"><i class="fas fa-download"></i> LAPORAN FORMAT WORD</a>
-                                    <a href="{{ asset($jilid->artikel) }}" class="btn btn-primary mb-3"
-                                        target="_blank"><i class="fas fa-download"></i> ARTIKEL FORMAT WORD</a>
+                                    @if($jilid->lembar_keaslian)
+                                    <a href="{{ asset($jilid->lembar_keaslian) }}" class="btn btn-primary mb-3" target="_blank">
+                                        <i class="fas fa-download"></i> LEMBAR KEASLIAN
+                                    </a>
+                                    @endif
+                                    @if($jilid->lembar_persetujuan_pembimbing)
+                                    <a href="{{ asset($jilid->lembar_persetujuan_pembimbing) }}" class="btn btn-primary mb-3" target="_blank">
+                                        <i class="fas fa-download"></i> LEMBAR PERSETUJUAN PEMBIMBING
+                                    </a>
+                                    @endif
+                                    @if($jilid->lembar_persetujuan_penguji)
+                                    <a href="{{ asset($jilid->lembar_persetujuan_penguji) }}" class="btn btn-primary mb-3" target="_blank">
+                                        <i class="fas fa-download"></i> LEMBAR PERSETUJUAN PENGUJI
+                                    </a>
+                                    @endif
+                                    @if($jilid->lembar_pengesahan)
+                                    <a href="{{ asset($jilid->lembar_pengesahan) }}" class="btn btn-primary mb-3" target="_blank">
+                                        <i class="fas fa-download"></i> LEMBAR PENGESAHAN
+                                    </a>
+                                    @endif
+                                    @if($jilid->lembar_bimbingan)
+                                    <a href="{{ asset($jilid->lembar_bimbingan) }}" class="btn btn-primary mb-3" target="_blank">
+                                        <i class="fas fa-download"></i> LEMBAR BIMBINGAN
+                                    </a>
+                                    @endif
+                                    @if($jilid->lembar_revisi)
+                                    <a href="{{ asset($jilid->lembar_revisi) }}" class="btn btn-primary mb-3" target="_blank">
+                                        <i class="fas fa-download"></i> LEMBAR REVISI
+                                    </a>
+                                    @endif
+                                    @if($jilid->laporan_pdf)
+                                    <a href="{{ asset($jilid->laporan_pdf) }}" class="btn btn-primary mb-3" target="_blank">
+                                        <i class="fas fa-download"></i> LAPORAN FORMAT PDF
+                                    </a>
+                                    @endif
+                                    @if($jilid->laporan_word)
+                                    <a href="{{ asset($jilid->laporan_word) }}" class="btn btn-primary mb-3" target="_blank">
+                                        <i class="fas fa-download"></i> LAPORAN FORMAT WORD
+                                    </a>
+                                    @endif
+                                    @if ($jilid->artikel)
+                                    <a href="{{ asset($jilid->artikel) }}" class="btn btn-primary mb-3" target="_blank">
+                                        <i class="fas fa-download"></i> ARTIKEL FORMAT WORD
+                                    </a>
+                                    @endif
+                                    @if ($jilid->bukti_nilai_instansi)
+                                    <a href="{{ asset($jilid->bukti_nilai_instansi) }}" class="btn btn-primary mb-3" target="_blank">
+                                        <i class="fas fa-download"></i> BUKTI NILAI INSTANSI
+                                    </a>
+                                    @endif
                                     @if ($jilid->berita_acara)
-                                        <a href="{{ asset($jilid->berita_acara) }}" class="btn btn-primary mb-3"
-                                            target="_blank"><i class="fas fa-download"></i> BERITA ACARA</a>
+                                    <a href="{{ asset($jilid->berita_acara) }}" class="btn btn-primary mb-3" target="_blank">
+                                        <i class="fas fa-download"></i> BERITA ACARA
+                                    </a>
                                     @endif
                                     @if ($jilid->panduan)
-                                            <a href="{{ asset($jilid->panduan) }}" class="btn btn-primary mb-3"
-                                                target="_blank"><i class="fas fa-download"></i> PANDUAN PENGGUNAAN PRODUK KP</a>
+                                    <a href="{{ asset($jilid->panduan) }}" class="btn btn-primary mb-3" target="_blank">
+                                        <i class="fas fa-download"></i> PANDUAN PENGGUNAAN
+                                    </a>
                                     @endif
                                     @if ($jilid->lampiran)
-                                        <a href="{{ storage_url($jilid->lampiran) }}" class="btn btn-primary mb-3"
-                                            target="_blank"><i class="fas fa-download"></i> DOKUMEN LAMPIRAN</a>
+                                    <a href="{{ asset($jilid->lampiran) }}" class="btn btn-primary mb-3" target="_blank">
+                                        <i class="fas fa-download"></i> DOKUMEN LAMPIRAN
+                                    </a>
                                     @endif
                                     @if ($jilid->link_project)
-                                        <a href="{{ asset($jilid->link_project) }}" class="btn btn-secondary mb-3"
-                                            target="_blank"><i class="fas fa-paper-plane"></i> LINK PROJECT</a>
+                                    <a href="{{ $jilid->link_project }}" class="btn btn-secondary mb-3" target="_blank">
+                                        <i class="fas fa-paper-plane"></i> LINK PROJECT
+                                    </a>
                                     @endif
                                 </div>
                             @endif
                         </div>
-                        <!-- /.card-body -->
                     </div>
                     
                     {{-- Revisi --}}
@@ -186,26 +242,20 @@
                         <div class="card-header">
                             <h3 class="card-title">
                                 <b>Revisi</b>
-                                <span class="badge bg-danger rounded-pill">
-                                    {{ count($revisis) }}
-                                </span>
+                                <span class="badge bg-danger rounded-pill">{{ count($revisis) }}</span>
                             </h3>
-
                             <div class="card-tools">
                                 {{ $revisis->links() }}
                             </div>
                         </div>
-
                         <div class="card-body">
                             <div class="p-2">
-
-                                @foreach ($revisis as $revisi)
+                                @forelse ($revisis as $revisi)
                                     <div class="direct-chat-msg">
                                         <div class="direct-chat-infos clearfix">
-                                            <span
-                                                class="direct-chat-name float-left">Admin Ekapta</span>
+                                            <span class="direct-chat-name float-left">Admin Ekapta</span>
                                             <span class="direct-chat-timestamp float-right">
-                                                {{ $revisi->created_at->format('d M Y H:m a') }}
+                                                {{ $revisi->created_at->format('d M Y H:i a') }}
                                             </span>
                                         </div>
                                         <img class="direct-chat-img"
@@ -215,15 +265,14 @@
                                             {!! nl2br($revisi->catatan) !!}
                                         </div>
                                     </div>
-                                @endforeach
-
+                                @empty
+                                    <p class="text-muted">Belum ada revisi</p>
+                                @endforelse
                             </div>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- /.content -->
 @endsection

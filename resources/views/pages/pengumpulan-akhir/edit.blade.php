@@ -48,9 +48,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lembar_keaslian')
                                     <small class="text-danger"
@@ -74,9 +72,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lembar_persetujuan_pembimbing')
                                     <small class="text-danger"
@@ -100,9 +96,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lembar_persetujuan_penguji')
                                     <small class="text-danger"
@@ -127,9 +121,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lembar_pengesahan')
                                     <small class="text-danger"
@@ -145,7 +137,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Lembar Bimbingan Pembimbing 1 dan 2 (Dijadikan 1 file)<br> <small><a href="{{ route('cetak.riwayat.bimbingan.mahasiswa') }}" target="_blank"><i class="fas fa-download"></i> Download Lembar Bimbingan</a></small></label>
+                                    <label for="exampleInputFile">Lembar Bimbingan KP<br> <small><a href="{{ route('cetak.riwayat.bimbingan.mahasiswa') }}" target="_blank"><i class="fas fa-download"></i> Download Lembar Bimbingan</a></small></label>
                                     <div class="input-group mb-3">
                                         <div class="custom-file">
                                             <input type="file"
@@ -154,9 +146,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lembar_bimbingan')
                                     <small class="text-danger"
@@ -181,9 +171,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lembar_revisi')
                                     <small class="text-danger"
@@ -199,7 +187,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Laporan Kerja Praktik Format PDF (Digabung Dengan Lembar
+                                    <label for="exampleInputFile">Laporan Kerja Praktek Format PDF (Digabung Dengan Lembar
                                         Pengesahan TTD)<br><small>Jika terjadi error, silahan upload file PDF ke  Google Drive dan isikan URL file PDF yang diupload ke Google Drive</small></label>
                                     <select name="type_laporan_pdf" id="type_laporan_pdf" class="form-control"
                                         onchange="toggleInputFieldsPdf()">
@@ -235,7 +223,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Laporan Kerja Praktik Format Word<br><small>Jika terjadi error, silahan upload file WORD ke  Google Drive dan isikan URL file WORD yang diupload ke Google Drive</small></label>
+                                    <label for="exampleInputFile">Laporan Kerja Praktek Format Word<br><small>Jika terjadi error, silahan upload file WORD ke  Google Drive dan isikan URL file WORD yang diupload ke Google Drive</small></label>
                                     <select name="type_laporan" id="type_laporan" class="form-control"
                                         onchange="toggleInputFields()">
                                         <option value="">--pilih--</option>
@@ -270,7 +258,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Artikel Kerja Praktik Format WORD <br><small>Jika terjadi error, silahan upload file WORD ke  Google Drive dan isikan URL file WORD yang diupload ke Google Drive</small></label>
+                                    <label for="exampleInputFile">Artikel Kerja Praktek Format WORD <br><small>Jika terjadi error, silahan upload file WORD ke  Google Drive dan isikan URL file WORD yang diupload ke Google Drive</small></label>
                                     <select name="type_artikel" id="type_artikel" class="form-control"
                                         onchange="toggleInputFieldsArtikel()">
                                         <option value="">--pilih--</option>
@@ -305,7 +293,7 @@
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label>Link Produk Kerja Praktik (Opsional) <br>
+                                    <label>Link Produk Kerja Praktek (Opsional) <br>
                                         <small>Upload ke google drive, kemudian inputkan link project</small></label>
                                     <input type="url" class="form-control" name="link_project"
                                         value="{{ $jilid->link_project }}">
@@ -320,9 +308,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('berita_acara')
                                         <small class="text-danger"
@@ -349,9 +335,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lampiran')
                                         <small class="text-danger"

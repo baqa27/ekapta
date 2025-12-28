@@ -76,6 +76,7 @@ class HimpunanController extends Controller
         $seminar = Seminar::findOrFail($request->id);
         $seminar->update([
             'is_valid' => Seminar::DITERIMA,
+            'status_seminar' => Seminar::STATUS_DITERIMA,
             'tanggal_acc' => now(),
         ]);
 
@@ -83,7 +84,7 @@ class HimpunanController extends Controller
         if ($seminar->mahasiswa->email != '-') {
             AppHelper::instance()->send_mail([
                 'mail' => $seminar->mahasiswa->email,
-                'message' => 'Selamat pendaftaran Seminar Kerja Praktik anda sudah divalidasi oleh Himpunan. Silahkan tunggu jadwal seminar.',
+                'message' => 'Selamat pendaftaran Seminar Kerja Praktek anda sudah divalidasi oleh Himpunan. Silahkan tunggu jadwal seminar.',
             ]);
         }
 
@@ -96,7 +97,10 @@ class HimpunanController extends Controller
     public function seminarRevisi(Request $request)
     {
         $seminar = Seminar::findOrFail($request->id);
-        $seminar->update(['is_valid' => Seminar::REVISI]);
+        $seminar->update([
+            'is_valid' => Seminar::REVISI,
+            'status_seminar' => Seminar::STATUS_REVISI,
+        ]);
 
         RevisiSeminar::create([
             'seminar_id' => $seminar->id,
@@ -107,7 +111,7 @@ class HimpunanController extends Controller
         if ($seminar->mahasiswa->email != '-') {
             AppHelper::instance()->send_mail([
                 'mail' => $seminar->mahasiswa->email,
-                'message' => 'Pendaftaran Seminar Kerja Praktik anda perlu direvisi. Silahkan cek catatan revisi di sistem.',
+                'message' => 'Pendaftaran Seminar Kerja Praktek anda perlu direvisi. Silahkan cek catatan revisi di sistem.',
             ]);
         }
 
@@ -133,7 +137,7 @@ class HimpunanController extends Controller
         if ($seminar->mahasiswa->email != '-') {
             AppHelper::instance()->send_mail([
                 'mail' => $seminar->mahasiswa->email,
-                'message' => 'Jadwal Seminar Kerja Praktik anda sudah ditentukan. <br>Tanggal: <b>' . AppHelper::parse_date($request->tanggal_ujian) . '</b><br>Tempat: <b>' . $request->tempat_ujian . '</b>',
+                'message' => 'Jadwal Seminar Kerja Praktek anda sudah ditentukan. <br>Tanggal: <b>' . AppHelper::parse_date($request->tanggal_ujian) . '</b><br>Tempat: <b>' . $request->tempat_ujian . '</b>',
             ]);
         }
 
@@ -301,32 +305,6 @@ class HimpunanController extends Controller
             'sidebar' => 'partials.sidebarHimpunan',
             'sesi' => $sesi,
         ]);
-    }
-
-    /**
-     * Tolak pendaftaran seminar
-     */
-    public function seminarTolak(Request $request)
-    {
-        $seminar = Seminar::findOrFail($request->id);
-        $seminar->update([
-            'is_valid' => Seminar::DITOLAK,
-            'status_seminar' => Seminar::STATUS_DITOLAK,
-        ]);
-
-        RevisiSeminar::create([
-            'seminar_id' => $seminar->id,
-            'catatan' => $request->catatan ?? 'Pendaftaran ditolak',
-        ]);
-
-        if ($seminar->mahasiswa->email && $seminar->mahasiswa->email != '-') {
-            AppHelper::instance()->send_mail([
-                'mail' => $seminar->mahasiswa->email,
-                'message' => 'Pendaftaran Seminar KP Anda ditolak. Silahkan daftar ulang dengan melengkapi persyaratan.',
-            ]);
-        }
-
-        return back()->with('success', 'Pendaftaran seminar ditolak');
     }
 
     /**

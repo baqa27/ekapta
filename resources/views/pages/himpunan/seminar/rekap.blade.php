@@ -62,8 +62,8 @@
                                             <td>{{ $seminar->tempat_ujian ?? '-' }}</td>
                                             <td>
                                                 <a href="{{ route('seminar.himpunan.review', $seminar->id) }}"
-                                                    class="btn btn-info btn-sm">
-                                                    <i class="fas fa-eye"></i>
+                                                    class="btn btn-primary btn-sm">
+                                                    <i class="fas fa-eye"></i> Detail
                                                 </a>
                                             </td>
                                         </tr>

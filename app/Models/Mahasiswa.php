@@ -14,6 +14,17 @@ class Mahasiswa extends Authenticatable
         'password',
     ];
 
+    // Status KP keseluruhan
+    public const STATUS_KP_BELUM_MULAI = 'belum_mulai';
+    public const STATUS_KP_PENGAJUAN_KERANGKA = 'pengajuan_kerangka';
+    public const STATUS_KP_PENGAJUAN_JUDUL = 'pengajuan_judul';
+    public const STATUS_KP_PENDAFTARAN = 'pendaftaran';
+    public const STATUS_KP_PEMBAYARAN = 'pembayaran';
+    public const STATUS_KP_BIMBINGAN = 'bimbingan';
+    public const STATUS_KP_SEMINAR = 'seminar';
+    public const STATUS_KP_PENGUMPULAN_AKHIR = 'pengumpulan_akhir';
+    public const STATUS_KP_SELESAI = 'selesai';
+
     protected $fillable = [
         'nim',
         'nama',
@@ -29,6 +40,14 @@ class Mahasiswa extends Authenticatable
         'hp',
         'alamat',
         'password',
+        'status_kp',
+        'tanggal_mulai_kp',
+        'tanggal_selesai_kp',
+    ];
+
+    protected $casts = [
+        'tanggal_mulai_kp' => 'date',
+        'tanggal_selesai_kp' => 'date',
     ];
 
     public function dosens()
@@ -48,36 +67,19 @@ class Mahasiswa extends Authenticatable
         return $this->belongsToMany(Bagian::class, 'bimbingans');
     }
 
-    public function pengajuans(){
+    public function pengajuans()
+    {
         return $this->hasMany(Pengajuan::class);
     }
 
-    public function pendaftarans(){
+    public function pendaftarans()
+    {
         return $this->hasMany(Pendaftaran::class);
     }
 
-    public function seminar(){
+    public function seminar()
+    {
         return $this->hasOne(Seminar::class);
-    }
-
-    /**
-     * Relasi untuk Ujian - DEPRECATED untuk sistem KP
-     * KP tidak memiliki ujian pendadaran, hanya seminar
-     * Tetap dipertahankan untuk backward compatibility
-     * @deprecated Gunakan seminar() untuk sistem KP
-     */
-    public function ujians()
-    {
-        return $this->hasMany(Ujian::class);
-    }
-
-    /**
-     * Alias untuk ujians() - untuk backward compatibility
-     * @deprecated
-     */
-    public function ujian()
-    {
-        return $this->hasMany(Ujian::class);
     }
 
     /**
@@ -106,4 +108,31 @@ class Mahasiswa extends Authenticatable
         return $this->hasMany(SeminarCanceled::class);
     }
 
+    /**
+     * Get label status KP
+     */
+    public function getStatusKpLabelAttribute()
+    {
+        $labels = [
+            self::STATUS_KP_BELUM_MULAI => 'Belum Mulai',
+            self::STATUS_KP_PENGAJUAN_KERANGKA => 'Pengajuan Kerangka Pikir',
+            self::STATUS_KP_PENGAJUAN_JUDUL => 'Pengajuan Judul KP',
+            self::STATUS_KP_PENDAFTARAN => 'Pendaftaran KP',
+            self::STATUS_KP_PEMBAYARAN => 'Pembayaran',
+            self::STATUS_KP_BIMBINGAN => 'Bimbingan KP',
+            self::STATUS_KP_SEMINAR => 'Seminar KP',
+            self::STATUS_KP_PENGUMPULAN_AKHIR => 'Pengumpulan Akhir',
+            self::STATUS_KP_SELESAI => 'Selesai KP',
+        ];
+
+        return $labels[$this->status_kp] ?? $this->status_kp;
+    }
+
+    /**
+     * Dosen pembimbing KP (single pembimbing)
+     */
+    public function dosenPembimbing()
+    {
+        return $this->dosens()->where('status', 'pembimbing')->first();
+    }
 }

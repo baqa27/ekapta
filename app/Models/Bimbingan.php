@@ -9,6 +9,9 @@ class Bimbingan extends Model
 {
     use HasFactory;
 
+    // Nama tabel dengan suffix _kp
+    protected $table = 'bimbingan_kps';
+
     public const DITERIMA = 'diterima';
     public const REVIEW = 'review';
     public const REVISI = 'revisi';
@@ -23,6 +26,10 @@ class Bimbingan extends Model
         'tanggal_acc',
         'pembimbing',
         'bukti_bimbingan_offline',
+        'tipe',
+        'status_offline',
+        'lampiran_acc',
+        'tanggal_manual_acc',
     ];
 
     public function mahasiswa()
@@ -42,7 +49,7 @@ class Bimbingan extends Model
 
     public function dosens()
     {
-        return $this->belongsToMany(Dosen::class, 'dosen_bimbingans', 'bimbingan_id', 'dosen_id',)
+        return $this->belongsToMany(Dosen::class, 'dosen_bimbingan_kps', 'bimbingan_id', 'dosen_id',)
             ->withTimestamps();
     }
 

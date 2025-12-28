@@ -9,6 +9,9 @@ class Seminar extends Model
 {
     use HasFactory;
 
+    // Nama tabel dengan suffix _kp
+    protected $table = 'seminar_kps';
+
     // Status is_valid (verifikasi himpunan)
     public const REVIEW = 0;
     public const DITERIMA = 1;
@@ -18,16 +21,14 @@ class Seminar extends Model
     public const VALID = 1;
     public const NOT_VALID = 0;
 
-    // Status seminar (alur keseluruhan)
+    // Status seminar (alur keseluruhan) - KP tidak ada revisi pasca seminar
     public const STATUS_MENUNGGU_VERIFIKASI = 'menunggu_verifikasi';
-    public const STATUS_DITERIMA = 'diterima';
-    public const STATUS_REVISI = 'revisi';
+    public const STATUS_DITERIMA = 'diterima';           // Berkas diterima himpunan
+    public const STATUS_REVISI = 'revisi';               // Revisi berkas pendaftaran
     public const STATUS_DITOLAK = 'ditolak';
-    public const STATUS_DIJADWALKAN = 'dijadwalkan';
-    public const STATUS_SELESAI_SEMINAR = 'selesai_seminar';
-    public const STATUS_REVISI_PASCA = 'revisi_pasca';
-    public const STATUS_REVISI_DISETUJUI = 'revisi_disetujui';
-    public const STATUS_SELESAI = 'selesai';
+    public const STATUS_DIJADWALKAN = 'dijadwalkan';     // Sudah dapat jadwal seminar
+    public const STATUS_SELESAI_SEMINAR = 'selesai_seminar'; // Seminar selesai, tinggal upload nilai instansi
+    public const STATUS_SELESAI = 'selesai';             // Semua selesai, nilai akhir sudah ada
 
     // Metode pembayaran
     public const METODE_CASH = 'Cash';
@@ -46,6 +47,8 @@ class Seminar extends Model
         'metode_bayar',
         'nomor_pembayaran',
         'lampiran_proposal',
+        'link_akses_produk', // Link akses produk KP
+        'dokumen_penilaian', // Dokumen penilaian opsional
         'is_valid',
         'is_lulus',
         'tanggal_acc',
@@ -103,6 +106,11 @@ class Seminar extends Model
         return $this->belongsTo(SesiSeminar::class);
     }
 
+    public function dosenPenguji()
+    {
+        return $this->belongsTo(Dosen::class, 'dosen_penguji_id');
+    }
+
     public static function getMetodeBayarOptions()
     {
         return [
@@ -117,24 +125,42 @@ class Seminar extends Model
         $labels = [
             self::STATUS_MENUNGGU_VERIFIKASI => 'Menunggu Verifikasi',
             self::STATUS_DITERIMA => 'Diterima',
-            self::STATUS_REVISI => 'Revisi',
+            self::STATUS_REVISI => 'Revisi Berkas',
             self::STATUS_DITOLAK => 'Ditolak',
             self::STATUS_DIJADWALKAN => 'Dijadwalkan',
             self::STATUS_SELESAI_SEMINAR => 'Selesai Seminar',
-            self::STATUS_REVISI_PASCA => 'Revisi Pasca Seminar',
-            self::STATUS_REVISI_DISETUJUI => 'Revisi Disetujui',
-            self::STATUS_SELESAI => 'Selesai',
+            self::STATUS_SELESAI => 'Selesai KP',
         ];
 
         return $labels[$this->status_seminar] ?? $this->status_seminar;
     }
 
+    /**
+     * Hitung nilai akhir seminar (sementara)
+     * Nilai akhir KP final dihitung di Pengumpulan Akhir (Jilid)
+     * dengan bobot: Pembimbing 35%, Penguji 35%, Instansi 30%
+     */
     public function hitungNilaiAkhir()
     {
         if ($this->nilai_seminar && $this->nilai_instansi) {
-            // Bobot: Seminar 60%, Instansi 40%
+            // Nilai akhir sementara di seminar (untuk display)
+            // Nilai final akan dihitung di Jilid dengan nilai pembimbing
             $this->nilai_akhir = ($this->nilai_seminar * 0.6) + ($this->nilai_instansi * 0.4);
             $this->save();
         }
+    }
+
+    /**
+     * Get nilai huruf dari nilai akhir
+     */
+    public function getNilaiHurufAttribute()
+    {
+        if (!$this->nilai_akhir) return null;
+        
+        if ($this->nilai_akhir > 85) return 'A';
+        if ($this->nilai_akhir > 69) return 'B';
+        if ($this->nilai_akhir > 55) return 'C';
+        if ($this->nilai_akhir > 45) return 'D';
+        return 'E';
     }
 }

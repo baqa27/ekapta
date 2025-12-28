@@ -19,240 +19,135 @@
 
     <section class="content">
         <div class="container-fluid">
-
             <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header d-flex">
-                            <h3 class="card-title flex-grow-1">Tabel {{ $title }}</h3>
-                            {{-- <div class="card-title flex-shrink-0">
-                                <a href="" class="btn btn-success btn-sm">
-                                    <i class="fas fa-download"></i> Download Laporan Excel
-                                </a>
-                            </div> --}}
+                <div class="col-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header d-flex p-0">
+                            <h3 class="card-title p-3">Tabel {{ $title }}</h3>
+                            <ul class="nav nav-pills ml-auto p-2">
+                                <li class="nav-item">
+                                    <a class="nav-link active" href="#tab_1" data-toggle="tab">Sedang Bimbingan</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="#tab_2" data-toggle="tab">Selesai Bimbingan</a>
+                                </li>
+                            </ul>
                         </div>
-                        <div class="card-body table-responsive">
-
-                            {{-- <span class="badge badge-success"> <i class="fas fa-check-circle mr-1"></i>
-                                Diterima/Acc
-                            </span>
-                            <span class="badge badge-secondary"> <i class="fas fa-circle mr-1"></i>
-                                Review/Belum Di Acc
-                            </span> --}}
-
-                            <table id="examplebutton" class="table table-bordered ">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>NIM</th>
-                                        <th>Nama Mahasiswa</th>
-                                        <th>Kontak</th>
-                                        <th>Prodi</th>
-                                        <th>Judul Kerja Praktik</th>
-                                        <th>Status Bimbingan</th>
-                                        <th>Terakhir Bimbingan</th>
-                                        <th>Tanggal Pendaftaran KP</th>
-                                        <th>Dosen Pembimbing</th>
-                                        <th>Penguji Seminar</th>
-                                        <th>Tanggal Seminar KP</th>
-                                        <th>Tanggal Pengumpulan Akhir</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @php
-                                        $no = 1;
-                                    @endphp
-                                    @foreach ($mahasiswas as $mahasiswa)
-                                        @if (!$mahasiswa->jilid)
-                                            <tr>
-                                                <td>{{ $no++ }}</td>
-                                                <td>
-                                                    {{ $mahasiswa->nim }}
-                                                </td>
-                                                <td>
-                                                    {{ $mahasiswa->nama }}
-                                                </td>
-                                                <td>
-                                                    @if (substr($mahasiswa->hp, 0, 2) === '62')
-                                                        <a href="https://api.whatsapp.com/send?phone={{ $mahasiswa->hp }}"
-                                                            class="btn btn-success btn-sm rounded-pill" target="_blank"><i
-                                                                class="fab fa-whatsapp"></i></a>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    {{ $mahasiswa->prodi }}
-                                                </td>
-                                                <td>
-                                                    @if ($mahasiswa->pengajuans()->where('status', 'diterima')->first())
-                                                        {{ $mahasiswa->pengajuans()->where('status', 'diterima')->first()->judul }}
-                                                    @else
-                                                        <span class="badge bg-secondary">BELUM PENGAJUAN JUDUL</span>
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if (count(
-                                                            $mahasiswa->bimbingans()->whereIn('status', ['revisi', 'review', 'diterima'])->get()) != 0)
-                                                        <span class="badge bg-success">AKTIF</span>
-                                                    @else
-                                                        {{-- <span class="badge bg-danger">TIDAK AKTIF</span> --}}
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if ($mahasiswa->bimbingans()->orderBy('created_at', 'desc')->whereIn('status', ['revisi', 'review', 'diterima'])->first())
-                                                        {{ \App\Helpers\AppHelper::parse_date_export($mahasiswa->bimbingans()->orderBy('tanggal_bimbingan', 'desc')->first()->tanggal_bimbingan) }}
-                                                    @endif
-                                                </td>
-
-                                                <td>
-                                                    @if ($mahasiswa->pendaftarans()->where('status', 'diterima')->first())
-                                                        {{ \App\Helpers\AppHelper::parse_date_export($mahasiswa->pendaftarans()->where('status', 'diterima')->first()->created_at) }}
-                                                    @endif
-                                                </td>
-
-                                                {{-- Dosen Pembimbing KP (1 dosen) --}}
-                                                <td>
+                        <div class="card-body">
+                            <div class="tab-content">
+                                <!-- Tab Sedang Bimbingan -->
+                                <div class="tab-pane active" id="tab_1">
+                                    <div class="table-responsive">
+                                        <table id="example1" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>NIM</th>
+                                                    <th>Nama</th>
+                                                    <th>Judul KP</th>
+                                                    <th>Pembimbing</th>
+                                                    <th>Progress</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @php $no = 1; @endphp
+                                                @foreach ($mahasiswas as $mhs)
                                                     @php
-                                                        $dosen_pembimbing = $mahasiswa->dosens()->where('status', 'pembimbing')->first();
+                                                        $peng = $mhs->pengajuans()->where('status', 'diterima')->first();
+                                                        $pend = $mhs->pendaftarans()->where('status', 'diterima')->first();
+                                                        $dsn = $mhs->dosens()->where('status', 'pembimbing')->first();
+                                                        $done = \App\Helpers\AppHelper::check_bimbingan_is_complete($mhs);
                                                     @endphp
-                                                    @if($dosen_pembimbing)
-                                                        <small><b>{{ $dosen_pembimbing->nama . ', ' . $dosen_pembimbing->gelar }}</b></small>
-                                                        @foreach ($mahasiswa->bimbingans as $bimbingan)
-                                                            <small>
-                                                                @if (\App\Helpers\AppHelper::instance()->cekBagianIsAcc($bimbingan->id))
-                                                                    <span class="text-success">{{ $bimbingan->bagian->bagian }}(ACC)</span>
-                                                                @else
-                                                                    <span>{{ $bimbingan->bagian->bagian }}</span>
+                                                    @if ($pend && !$done && !$mhs->jilid)
+                                                    <tr>
+                                                        <td>{{ $no++ }}</td>
+                                                        <td>{{ $mhs->nim }}</td>
+                                                        <td>{{ $mhs->nama }}</td>
+                                                        <td>{{ $peng ? $peng->judul : '-' }}</td>
+                                                        <td>{{ $dsn ? $dsn->nama : '-' }}</td>
+                                                        <td>
+                                                            @foreach ($mhs->bimbingans as $b)
+                                                                @if ($b->status == 'diterima')
+                                                                    <span class="badge bg-success">{{ $b->bagian->bagian }}</span>
+                                                                @elseif ($b->status == 'review')
+                                                                    <span class="badge bg-secondary">{{ $b->bagian->bagian }}</span>
                                                                 @endif
-                                                            </small>
-                                                        @endforeach
-                                                    @else
-                                                        <span class="badge bg-secondary">BELUM ADA PEMBIMBING</span>
+                                                            @endforeach
+                                                        </td>
+                                                        <td>
+                                                            @if ($pend)
+                                                                <a href="{{ url('cetak/surat-tugas-bimbingan/' . $pend->id) }}" target="_blank" class="btn btn-success btn-sm">
+                                                                    <i class="fas fa-download"></i> Surat Tugas
+                                                                </a>
+                                                            @endif
+                                                        </td>
+                                                    </tr>
                                                     @endif
-                                                </td>
-
-                                                {{-- Penguji Seminar KP --}}
-                                                <td>
-                                                    @if ($mahasiswa->seminar && $mahasiswa->seminar->reviews)
-                                                        @foreach ($mahasiswa->seminar->reviews()->where('dosen_status', 'penguji')->get() as $review)
-                                                            <small>{{ $review->dosen->nama }}</small><br>
-                                                        @endforeach
-                                                    @endif
-                                                </td>
-
-                                                <td>
-                                                    @if ($mahasiswa->seminar)
-                                                        {{ $mahasiswa->seminar->tanggal_ujian ? \App\Helpers\AppHelper::parse_date_export($mahasiswa->seminar->tanggal_ujian) : '' }}
-                                                    @endif
-                                                </td>
-
-                                                <td>
-                                                    @if ($mahasiswa->jilid)
-                                                        {{ \App\Helpers\AppHelper::parse_date_export($mahasiswa->jilid->created_at) }}
-                                                    @endif
-                                                </td>
-
-                                                <td>
-                                                    {{-- @if (count($mahasiswa->bimbingans) != 0)
-                                                    <a href="{{ route('bimbingan.review.admin', $mahasiswa->pengajuans()->where('status', 'diterima')->first()->id) }}"
-                                                        class="btn btn-primary btn-sm"><i class="bi bi-info-circle"></i>
-                                                        Detail Bimbingan</a>
-                                                @endif --}}
-                                                    @if ($mahasiswa->pendaftarans()->where('status', 'diterima')->first())
-                                                        <a href="{{ url('cetak/surat-tugas-bimbingan/' . $mahasiswa->pendaftarans()->where('status', 'diterima')->first()->id) }}"
-                                                            target="_blank" class="btn btn-success btn-sm "><i
-                                                                class="fas fa-download"></i> Surat Tugas Bimbingan KP</a>
-                                                    @endif
-                                                </td>
-
-                                                {{-- <td>
-                                                    @if (count($mahasiswa->bimbingans) != 0)
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <!-- Tab Selesai -->
+                                <div class="tab-pane" id="tab_2">
+                                    <div class="table-responsive">
+                                        <table id="example2" class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>NIM</th>
+                                                    <th>Nama</th>
+                                                    <th>Judul KP</th>
+                                                    <th>Pembimbing</th>
+                                                    <th>Status KP</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @php $no = 1; @endphp
+                                                @foreach ($mahasiswas as $mhs)
                                                     @php
-                                                        $dosen_utama = $mahasiswa
-                                                            ->dosens()
-                                                            ->where('status', 'utama')
-                                                            ->first();
-                                                        $dosen_pendamping = $mahasiswa
-                                                            ->dosens()
-                                                            ->where('status', 'pendamping')
-                                                            ->first();
+                                                        $peng = $mhs->pengajuans()->where('status', 'diterima')->first();
+                                                        $pend = $mhs->pendaftarans()->where('status', 'diterima')->first();
+                                                        $dsn = $mhs->dosens()->where('status', 'pembimbing')->first();
+                                                        $done = \App\Helpers\AppHelper::check_bimbingan_is_complete($mhs);
                                                     @endphp
-                                                    <div class="mt-2 border p-2 rounded">
-                                                        <small>
-                                                            <b>{{ $dosen_utama->nama.', '.$dosen_utama->gelar }}</b>
-                                                        </small>
-                                                        <br>
-                                                        @foreach ($mahasiswa->bimbingans as $bimbingan)
-                                                            @if ($bimbingan->pembimbing == 'utama')
-                                                                @if (\App\Helpers\AppHelper::instance()->cekBagianIsAcc($bimbingan->id))
-                                                                    <span class="badge badge-success">
-                                                                        <i class="fas fa-check-circle mr-1"></i>
-                                                                        {{ $bimbingan->bagian->bagian }}
-                                                                    </span>
-                                                                @else
-                                                                    <span class="badge badge-secondary">
-                                                                        <i class="fas fa-circle mr-1"></i>
-                                                                        {{ $bimbingan->bagian->bagian }}
-                                                                    </span>
-                                                                @endif
+                                                    @if ($done)
+                                                    <tr>
+                                                        <td>{{ $no++ }}</td>
+                                                        <td>{{ $mhs->nim }}</td>
+                                                        <td>{{ $mhs->nama }}</td>
+                                                        <td>{{ $peng ? $peng->judul : '-' }}</td>
+                                                        <td>{{ $dsn ? $dsn->nama : '-' }}</td>
+                                                        <td>
+                                                            @if ($mhs->jilid && $mhs->jilid->status == 'selesai')
+                                                                <span class="badge bg-success">Selesai KP</span>
+                                                            @elseif ($mhs->seminar && $mhs->seminar->is_lulus)
+                                                                <span class="badge bg-info">Lulus Seminar</span>
+                                                            @else
+                                                                <span class="badge bg-warning">Siap Seminar</span>
                                                             @endif
-                                                        @endforeach
-                                                    </div>
-                                                    <div class="mt-2 border p-2 rounded">
-                                                        <small><b>{{ $dosen_pendamping->nama.','.$dosen_pendamping->gelar }}</b>
-                                                        </small>
-                                                        <br>
-                                                        @foreach ($mahasiswa->bimbingans as $bimbingan)
-                                                            @if ($bimbingan->pembimbing == 'pendamping')
-                                                                @if (\App\Helpers\AppHelper::instance()->cekBagianIsAcc($bimbingan->id))
-                                                                    <a
-                                                                        href="{{ route('bimbingan.review.prodi', $bimbingan->id) }}">
-                                                                        <span class="badge badge-success">
-                                                                            <i class="fas fa-check-circle mr-1"></i>
-                                                                            {{ $bimbingan->bagian->bagian }}
-                                                                        </span>
-                                                                    </a>
-                                                                @else
-                                                                    <span class="badge badge-secondary">
-                                                                        <i class="fas fa-circle mr-1"></i>
-                                                                        {{ $bimbingan->bagian->bagian }}
-                                                                    </span>
-                                                                @endif
+                                                        </td>
+                                                        <td>
+                                                            @if ($pend)
+                                                                <a href="{{ url('cetak/surat-tugas-bimbingan/' . $pend->id) }}" target="_blank" class="btn btn-success btn-sm">
+                                                                    <i class="fas fa-download"></i> Surat Tugas
+                                                                </a>
                                                             @endif
-                                                        @endforeach
-                                                    </div>
-                                                    @else
-
+                                                        </td>
+                                                    </tr>
                                                     @endif
-                                                </td> --}}
-                                            </tr>
-                                        @endif
-                                    @endforeach
-
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>NIM</th>
-                                        <th>Nama Mahasiswa</th>
-                                        <th>Kontak</th>
-                                        <th>Prodi</th>
-                                        <th>Judul Kerja Praktik</th>
-                                        <th>Status Bimbingan</th>
-                                        <th>Terakhir Bimbingan</th>
-                                        <th>Tanggal Pendaftaran KP</th>
-                                        <th>Dosen Pembimbing</th>
-                                        <th>Penguji Seminar</th>
-                                        <th>Tanggal Seminar KP</th>
-                                        <th>Tanggal Pengumpulan Akhir</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
     </section>
-    <!-- /.content -->
 @endsection

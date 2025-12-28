@@ -54,17 +54,11 @@ class BagianController extends Controller
 
     public function delete(Request $request)
     {
-        return back();
         $bagian = Bagian::findOrFail($request->id);
 
-        // Nonaktifkan jika ingin mengapus bagian tertentu
+        // Cek apakah bagian sudah dipakai di bimbingan
         if (count($bagian->bimbingans) != 0) {
-            return back()->with('warning', 'Tidak dapat menghapus bagian bimbingan');
-        }
-
-        //Aktifkan jika ingin mengapus bagian tertentu
-        foreach ($bagian->bimbingans as $bimbingan) {
-            $bimbingan->delete();
+            return back()->with('warning', 'Tidak dapat menghapus bagian yang sudah digunakan di bimbingan');
         }
 
         $bagian->delete();

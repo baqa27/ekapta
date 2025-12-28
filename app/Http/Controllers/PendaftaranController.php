@@ -23,7 +23,7 @@ class PendaftaranController extends Controller
         $pendaftarans_acc = Pendaftaran::where('status', Pendaftaran::DITERIMA)->orderBy('created_at', 'desc')->get();
         $pendaftarans_revisi = Pendaftaran::where('status', Pendaftaran::REVISI)->orderBy('created_at', 'desc')->get();
         return view('pages.admin.pendaftaran.pendaftaran', [
-            'title' => 'Pendaftaran Kerja Praktik',
+            'title' => 'Pendaftaran Kerja Praktek',
             'active' => 'pendaftaran',
             'sidebar' => 'partials.sidebarAdmin',
             'pendaftarans' => $pendaftarans,
@@ -38,6 +38,12 @@ class PendaftaranController extends Controller
         if($mahasiswa->email == '-'){
             return redirect()->route('profile');
         }
+        
+        // Cek tahapan: Pengajuan harus ACC dulu
+        if (!AppHelper::canAccessPendaftaran($mahasiswa)) {
+            return redirect()->route('pengajuan.mahasiswa')->with('warning', 'Selesaikan tahap Pengajuan KP terlebih dahulu. Pengajuan harus sudah di-ACC oleh Prodi.');
+        }
+        
         $pengajuan = $mahasiswa->pengajuans()->where('status', Pengajuan::DITERIMA)->first();
 
         // KP workflow: single dosen pembimbing
@@ -49,15 +55,11 @@ class PendaftaranController extends Controller
 
         $pendaftarans = Pendaftaran::orderBy('created_at','desc')->where('mahasiswa_id', $mahasiswa->id)->with(['revisis'])->get();
 
-        if (!$pengajuan) {
-            return back()->with('warning', 'Silahkan melakukan Pengajuan Kerja Praktik terlebih dahulu');
-        }
-
         $pendaftaranIsAcc = Pendaftaran::where('pengajuan_id', $pengajuan->id)->with(['revisis'])->where('status', Pendaftaran::DITERIMA)->get();
         $pendaftarans_review_acc_revisi = Pendaftaran::where('pengajuan_id', $pengajuan->id)->with(['revisis'])->whereIn('status', [Pendaftaran::REVIEW, Pendaftaran::DITERIMA, Pendaftaran::REVISI])->get();
 
         return view('pages.mahasiswa.pendaftaran.pendaftaran', [
-            'title' => 'Pendaftaran Kerja Praktik',
+            'title' => 'Pendaftaran Kerja Praktek',
             'active' => 'pendaftaran',
             'pendaftarans' => $pendaftarans,
             'dosen_pembimbing' => $dosenPembimbing,
@@ -74,7 +76,7 @@ class PendaftaranController extends Controller
         $pendaftarans_review_acc = Pendaftaran::where('pengajuan_id', $pengajuan->id)->whereIn('status', [Pendaftaran::DITERIMA, Pendaftaran::REVIEW])->get();
 
         if (count($pendaftarans_review_acc) != 0) {
-            return redirect('pendaftaran-mahasiswa')->with('warning', 'Anda sudah melakukan pendaftaran kerja praktik');
+            return redirect('pendaftaran-mahasiswa')->with('warning', 'Anda sudah melakukan pendaftaran kerja Praktek');
         } else if (count(Auth::guard('mahasiswa')->user()->dosens) == 0) {
             return back()->with('warning', 'Silahkan tunggu ploting dosen pembimbing oleh Prodi');
         }
@@ -87,7 +89,7 @@ class PendaftaranController extends Controller
         }
 
         return view('pages.mahasiswa.pendaftaran.create', [
-            'title' => 'Form Pendaftaran Kerja Praktik',
+            'title' => 'Form Pendaftaran Kerja Praktek',
             'active' => 'pendaftaran',
             'dosen_pembimbing' => $dosenPembimbing,
             'pengajuan' => $pengajuan,
@@ -115,8 +117,7 @@ class PendaftaranController extends Controller
                 'lampiran_5' => ['required', 'mimes:pdf,png,jpg,jpeg', 'max:5000'],
                 'lampiran_6' => ['required', 'mimes:pdf', 'max:5000'],
                 'lampiran_7' => ['required', 'mimes:pdf', 'max:5000'],
-                'sertifikat_peserta_1' => ['required', 'mimes:pdf', 'max:5000'],
-                'sertifikat_peserta_2' => ['required', 'mimes:pdf', 'max:5000'],
+                'dokumen_pendukung_kp' => ['required', 'mimes:pdf', 'max:5000'],
             ]);
 
             $validatedData['lampiran_1'] = AppHelper::instance()->uploadLampiran($request->file('lampiran_1'), 'lampirans', $mahasiswa->nim, 'pendaftaran');
@@ -126,8 +127,7 @@ class PendaftaranController extends Controller
             $validatedData['lampiran_5'] = AppHelper::instance()->uploadLampiran($request->file('lampiran_5'), 'lampirans', $mahasiswa->nim, 'pendaftaran');
             $validatedData['lampiran_6'] = AppHelper::instance()->uploadLampiran($request->file('lampiran_6'), 'lampirans', $mahasiswa->nim, 'pendaftaran');
             $validatedData['lampiran_7'] = AppHelper::instance()->uploadLampiran($request->file('lampiran_7'), 'lampirans', $mahasiswa->nim, 'pendaftaran');
-            $validatedData['sertifikat_peserta_1'] = AppHelper::instance()->uploadLampiran($request->file('sertifikat_peserta_1'), 'lampirans', $mahasiswa->nim, 'pendaftaran');
-            $validatedData['sertifikat_peserta_2'] = AppHelper::instance()->uploadLampiran($request->file('sertifikat_peserta_2'), 'lampirans', $mahasiswa->nim, 'pendaftaran');
+            $validatedData['dokumen_pendukung_kp'] = AppHelper::instance()->uploadLampiran($request->file('dokumen_pendukung_kp'), 'lampirans', $mahasiswa->nim, 'pendaftaran');
 
             $validatedData['mahasiswa_id'] = $mahasiswa->id;
             $validatedData['pengajuan_id'] = $pengajuan->id;
@@ -165,7 +165,7 @@ class PendaftaranController extends Controller
         }
 
         return view('pages.mahasiswa.pendaftaran.edit', [
-            'title' => 'Form Edit Pendaftaran Kerja Praktik',
+            'title' => 'Form Edit Pendaftaran Kerja Praktek',
             'active' => 'pendaftaran',
             'dosen_pembimbing' => $dosenPembimbing,
             'pendaftaran' => $pendaftaran,
@@ -184,7 +184,7 @@ class PendaftaranController extends Controller
         }
 
         return view('pages.admin.pendaftaran.review', [
-            'title' => 'Review Pendaftaran Kerja Praktik',
+            'title' => 'Review Pendaftaran Kerja Praktek',
             'active' => 'pendaftaran',
             'sidebar' => 'partials.sidebarAdmin',
             'dosen_pembimbing' => $dosenPembimbing,
@@ -214,7 +214,7 @@ class PendaftaranController extends Controller
         }
 
         return view('pages.mahasiswa.pendaftaran.detail', [
-            'title' => 'Detail Pendaftaran Kerja Praktik',
+            'title' => 'Detail Pendaftaran Kerja Praktek',
             'active' => 'pendaftaran',
             'dosen_pembimbing' => $dosenPembimbing,
             'pendaftaran' => $pendaftaran,
@@ -256,12 +256,8 @@ class PendaftaranController extends Controller
                 if (empty($this->request->lampiran_7)) {return false;}
                 return true;
             }), 'mimes:pdf', 'max:5000'],
-            'sertifikat_peserta_1' => [Rule::requiredIf(function () {
-                if (empty($this->request->sertifikat_peserta_1)) {return false;}
-                return true;
-            }), 'mimes:pdf', 'max:5000'],
-            'sertifikat_peserta_2' => [Rule::requiredIf(function () {
-                if (empty($this->request->sertifikat_peserta_2)) {return false;}
+            'dokumen_pendukung_kp' => [Rule::requiredIf(function () {
+                if (empty($this->request->dokumen_pendukung_kp)) {return false;}
                 return true;
             }), 'mimes:pdf', 'max:5000'],
         ]);
@@ -295,13 +291,9 @@ class PendaftaranController extends Controller
              if($pendaftaran->lampiran_7) AppHelper::instance()->deleteLampiran($pendaftaran->lampiran_7);
             $validatedData['lampiran_7'] = AppHelper::instance()->uploadLampiran($request->lampiran_7, 'lampirans', $mahasiswa->nim, 'pendaftaran');
         }
-        if ($request->file('sertifikat_peserta_1')) {
-             if($pendaftaran->sertifikat_peserta_1) AppHelper::instance()->deleteLampiran($pendaftaran->sertifikat_peserta_1);
-            $validatedData['sertifikat_peserta_1'] = AppHelper::instance()->uploadLampiran($request->sertifikat_peserta_1, 'lampirans', $mahasiswa->nim, 'pendaftaran');
-        }
-        if ($request->file('sertifikat_peserta_2')) {
-             if($pendaftaran->sertifikat_peserta_2) AppHelper::instance()->deleteLampiran($pendaftaran->sertifikat_peserta_2);
-            $validatedData['sertifikat_peserta_2'] = AppHelper::instance()->uploadLampiran($request->sertifikat_peserta_2, 'lampirans', $mahasiswa->nim, 'pendaftaran');
+        if ($request->file('dokumen_pendukung_kp')) {
+             if($pendaftaran->dokumen_pendukung_kp) AppHelper::instance()->deleteLampiran($pendaftaran->dokumen_pendukung_kp);
+            $validatedData['dokumen_pendukung_kp'] = AppHelper::instance()->uploadLampiran($request->dokumen_pendukung_kp, 'lampirans', $mahasiswa->nim, 'pendaftaran');
         }
 
         $validatedData['mahasiswa_id'] = $mahasiswa->id;
@@ -376,9 +368,9 @@ class PendaftaranController extends Controller
             if ($pendaftaran->mahasiswa->email != '-') {
                 AppHelper::instance()->send_mail([
                     'mail' => $pendaftaran->mahasiswa->email,
-                    'subject' => 'Pendaftaran Kerja Praktik',
+                    'subject' => 'Pendaftaran Kerja Praktek',
                     'title' => 'EKAPTA',
-                    'message' => 'Selamat Pendaftaran Kerja Praktik Anda Berstatus DITERIMA. Anda bisa memulai Bimbingan Kerja Praktik.',
+                    'message' => 'Selamat Pendaftaran Kerja Praktek Anda Berstatus DITERIMA. Anda bisa memulai Bimbingan Kerja Praktek.',
                 ]);
             }
             return back()->with('success', 'Pendaftaran berhasil diacc');
@@ -425,9 +417,9 @@ class PendaftaranController extends Controller
             if ($pendaftaran->mahasiswa->email != '-') {
                 AppHelper::instance()->send_mail([
                     'mail' => $pendaftaran->mahasiswa->email,
-                    'subject' => 'Pendaftaran Kerja Praktik',
+                    'subject' => 'Pendaftaran Kerja Praktek',
                     'title' => 'EKAPTA',
-                    'message' => 'Pendaftaran Kerja Praktik Anda Berstatus REVISI. Silahkan perbaiki kemudian submit ulang. <br><br> Catatan Revisi: '.$request->catatan,
+                    'message' => 'Pendaftaran Kerja Praktek Anda Berstatus REVISI. Silahkan perbaiki kemudian submit ulang. <br><br> Catatan Revisi: '.$request->catatan,
                 ]);
             }
             return redirect('pendaftaran-admin')->with('success', 'Pendaftaran berhasil direvisi');

@@ -49,8 +49,7 @@ Route::get('/logout-dosen', [LoginController::class, 'logoutDosen'])->name('logo
 Route::get('/logout-himpunan', [LoginController::class, 'logoutHimpunan'])->name('logout.himpunan');
 
 // Dashboard
-Route::get('/dashboard-mahasiswa', [DashboardController::class, 'dashboardMahasiswaTA'])->name('dashboard.mahasiswa')->middleware('isMahasiswa');
-Route::get('/dashboard-mahasiswa-ta', [DashboardController::class, 'dashboardMahasiswaTA'])->name('dashboard.mahasiswa.ta')->middleware('isMahasiswa');
+Route::get('/dashboard-mahasiswa', [DashboardController::class, 'dashboardMahasiswaKP'])->name('dashboard.mahasiswa')->middleware('isMahasiswa');
 Route::get('/dashboard-mahasiswa-kp', [DashboardController::class, 'dashboardMahasiswaKP'])->name('dashboard.mahasiswa.kp')->middleware('isMahasiswa');
 Route::get('/dashboard-mahasiswa-jilid', [DashboardController::class, 'dashboardMahasiswaJilid'])->name('dashboard.mahasiswa.jilid')->middleware('isMahasiswa');
 Route::get('/dashboard-prodi', [DashboardController::class, 'dashboardProdi'])->name('dashboard.prodi')->middleware('isProdi');
@@ -65,7 +64,6 @@ Route::group(['middleware' => 'isHimpunan', 'prefix' => 'himpunan'], function ()
     Route::get('/seminar/review/{id}', [HimpunanController::class, 'seminarReview'])->name('seminar.himpunan.review');
     Route::post('/seminar/acc', [HimpunanController::class, 'seminarAcc'])->name('seminar.himpunan.acc');
     Route::post('/seminar/revisi', [HimpunanController::class, 'seminarRevisi'])->name('seminar.himpunan.revisi');
-    Route::post('/seminar/tolak', [HimpunanController::class, 'seminarTolak'])->name('seminar.himpunan.tolak');
     Route::post('/seminar/toggle-pendaftaran', [HimpunanController::class, 'togglePendaftaranSeminar'])->name('seminar.himpunan.toggle');
     
     // Penjadwalan Sesi Seminar
@@ -137,6 +135,8 @@ Route::get('/bimbingan-dosen', [BimbinganController::class, 'bimbinganDosen'])->
 Route::get('/bimbingan-dosen-progress', [BimbinganController::class, 'bimbinganDosenProgress'])->name('bimbingan.dosen.progress')->middleware('isDosen');
 Route::get('/bimbingan-mahasiswa', [BimbinganController::class, 'bimbinganMahasiswa'])->name('bimbingan.mahasiswa')->middleware('isMahasiswa');
 Route::get('/bimbingan/create', [BimbinganController::class, 'create'])->name('bimbingan.create')->middleware('isMahasiswa');
+Route::get('/bimbingan/create-manual', [BimbinganController::class, 'createManual'])->name('bimbingan.create.manual')->middleware('isMahasiswa');
+Route::post('/bimbingan/store-manual', [BimbinganController::class, 'storeManual'])->name('bimbingan.store.manual')->middleware('isMahasiswa');
 Route::post('/bimbingan/store', [BimbinganController::class, 'store'])->name('bimbingan.store')->middleware('isMahasiswa');
 Route::get('/bimbingan/edit/{id}', [BimbinganController::class, 'edit'])->middleware('isMahasiswa');
 Route::post('/bimbingan/update', [BimbinganController::class, 'update'])->name('bimbingan.update')->middleware('isMahasiswa');
@@ -145,16 +145,26 @@ Route::post('/bimbingan/acc', [BimbinganController::class, 'accBimbingan'])->nam
 Route::post('/bimbingan/revisi/store', [BimbinganController::class, 'revisiBimbingan'])->name('bimbingan.revisi.store')->middleware('isDosen');
 Route::post('/bimbingan/revisi/delete', [BimbinganController::class, 'deleteRevisiBimbingan'])->name('bimbingan.revisi.delete')->middleware('isDosen');
 Route::get('/bimbingan/detail/{id}', [BimbinganController::class, 'bimbinganDetail'])->middleware('isMahasiswa');
+Route::get('/bimbingan/submit-acc-manual/{id}', [BimbinganController::class, 'submitAccManual'])->name('bimbingan.submit.acc.manual')->middleware('isMahasiswa');
+Route::post('/bimbingan/submit-acc-manual-store', [BimbinganController::class, 'submitAccManualStore'])->name('bimbingan.submit.acc.manual.store')->middleware('isMahasiswa');
 Route::get('/bimbingan/review/{id}', [BimbinganController::class, 'bimbinganReview'])->middleware('isDosen');
+
+// Bimbingan Offline (mahasiswa input, prodi verifikasi)
+Route::get('/bimbingan-offline/create', [BimbinganController::class, 'createOffline'])->name('bimbingan-offline.create')->middleware('isMahasiswa');
+Route::post('/bimbingan-offline/store', [BimbinganController::class, 'storeOffline'])->name('bimbingan-offline.store')->middleware('isMahasiswa');
+Route::get('/bimbingan-offline/detail/{id}', [BimbinganController::class, 'detailOffline'])->name('bimbingan-offline.detail')->middleware('isMahasiswa');
+Route::post('/bimbingan-offline/verify', [BimbinganController::class, 'verifyOffline'])->name('bimbingan-offline.verify')->middleware('isProdi');
+Route::post('/bimbingan-offline/reject', [BimbinganController::class, 'rejectOffline'])->name('bimbingan-offline.reject')->middleware('isProdi');
 Route::post('/bimbingan/cancel/acc', [BimbinganController::class, 'cancelAcc'])->name('bimbingan.cancel.acc')->middleware('isDosen');
 Route::post('/bimbingan/cancel/revisi', [BimbinganController::class, 'cancelRevisi'])->name('bimbingan.cancel.revisi')->middleware('isDosen');
 Route::get('/bimbingan/review-prodi/{id}', [BimbinganController::class, 'reviewProdi'])->name('bimbingan.review.prodi')->middleware('isProdi');
 Route::get('/bimbingan/review-admin/{id}', [BimbinganController::class, 'reviewAdmin'])->name('bimbingan.review.admin')->middleware('isAdmin');
 Route::get('/bimbingan/rekap-dosen', [BimbinganController::class, 'rekapDosen'])->name('bimbingan.rekap.dosen')->middleware('isProdi');
-// Route::get('/bimbingan/input', [BimbinganController::class, 'bimbinganAdminInput'])->name('bimbingan.admin.input')->middleware('isAdmin'); // Tidak dipakai - input bimbingan hanya di prodi
 Route::get('/bimbingan/input-prodi', [BimbinganController::class, 'bimbinganAdminInput'])->name('bimbingan.prodi.input')->middleware('isProdi');
 Route::get('/bimbingan/input/{dosen_id}/{mahasiswa_id}', [BimbinganController::class, 'bimbinganAdminInputCreate'])->name('bimbingan.admin.input.create')->middleware('isAdminProdi');
-Route::post('/bimbingan/store', [BimbinganController::class, 'bimbinganAdminInputStore'])->name('bimbingan.admin.input.store')->middleware('isAdminProdi');
+Route::post('/bimbingan/input/store', [BimbinganController::class, 'bimbinganAdminInputStore'])->name('bimbingan.admin.input.store')->middleware('isAdminProdi');
+Route::post('/bimbingan/acc-prodi', [BimbinganController::class, 'accBimbinganProdi'])->name('bimbingan.acc.prodi')->middleware('isAdminProdi');
+Route::post('/bimbingan/revisi-prodi', [BimbinganController::class, 'revisiBimbinganProdi'])->name('bimbingan.revisi.prodi')->middleware('isAdminProdi');
 
 // Route for Seminar KP
 Route::get('seminar/review/{id}', [SeminarController::class,'seminarReviewAdmin'])->name('seminar.review.admin')->middleware('isAdminProdi');
@@ -224,7 +234,9 @@ Route::group(['middleware' => 'isDosen'], function(){
     Route::post('review/seminar/nilai', [ReviewSeminarController::class, 'reviewNilai'])->name('review.seminar.nilai');
     Route::post('review/seminar/cancel/acc', [ReviewSeminarController::class, 'reviewCancelAcc'])->name('review.seminar.cancel.acc');
 
-
+    // Route for Penilaian Pembimbing (setelah seminar selesai)
+    Route::get('penilaian-pembimbing', [\App\Http\Controllers\PenilaianPembimbingController::class, 'index'])->name('penilaian.pembimbing.index');
+    Route::post('penilaian-pembimbing/store', [\App\Http\Controllers\PenilaianPembimbingController::class, 'store'])->name('penilaian.pembimbing.store');
 
     // Route for Setting
     Route::get('dosen/account', [DosenController::class, 'account'])->name('dosen.account');
@@ -295,6 +307,7 @@ Route::post('/dekan/disabled', [DekanController::class, 'disabled'])->name('deka
 Route::get('/himpunans', [App\Http\Controllers\HimpunanMasterController::class, 'index'])->name('himpunans')->middleware('isAdmin');
 Route::post('/himpunan/store', [App\Http\Controllers\HimpunanMasterController::class, 'store'])->name('himpunan.store')->middleware('isAdmin');
 Route::post('/himpunan/update', [App\Http\Controllers\HimpunanMasterController::class, 'update'])->name('himpunan.update')->middleware('isAdmin');
+Route::post('/himpunan/update-payment', [App\Http\Controllers\HimpunanMasterController::class, 'updatePayment'])->name('himpunan.update.payment')->middleware('isAdmin');
 Route::post('/himpunan/delete', [App\Http\Controllers\HimpunanMasterController::class, 'delete'])->name('himpunan.delete')->middleware('isAdmin');
 Route::post('/himpunan/import', [App\Http\Controllers\HimpunanMasterController::class, 'import'])->name('himpunan.import')->middleware('isAdmin');
 
@@ -318,6 +331,7 @@ Route::group(['middleware' => 'isLogin'], function (){
     Route::get('/cetak/surat-tugas-bimbingan/{pendaftaran}', [CetakController::class, 'cetakSuratTugasBimbingan']);
     Route::get('/cetak/berita-acara-seminar-kp/{seminar}', [CetakController::class, 'cetakBeritaAcaraUjianProposal'])->name('cetak.berita.acara.ujian.proposal');
     Route::get('/cetak/berita-acara-seminar-kp-blank/{ujian_or_seminar}/{type}', [CetakController::class, 'cetakBeritaAcaraUjianProposalBlank'])->name('cetak.berita.acara.ujian.proposal.blank');
+    Route::get('/cetak/surat-penolakan/{pengajuan}', [CetakController::class, 'cetakSuratPenolakan'])->name('cetak.surat.penolakan');
 
 
     Route::get('/cetak/surat-riwayat-bimbingan-mahasiswa', [CetakController::class, 'cetakRiwayatBimbinganMahasiswa'])->name('cetak.riwayat.bimbingan.mahasiswa');

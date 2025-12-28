@@ -231,11 +231,24 @@ class AppHelper
     }
 
     public static function check_bimbingan_is_complete($mahasiswa){
-        $bimbingans_acc = $mahasiswa->bimbingans()->where('status', Bimbingan::DITERIMA)->get();
         $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
-        $bagians = $prodi->bagians()->where("tahun_masuk", "LIKE", "%" . $mahasiswa->thmasuk . "%")->get();
+        
+        // Ambil bagian yang wajib untuk seminar (is_seminar = 1)
+        $bagians_seminar = $prodi->bagians()
+            ->where("tahun_masuk", "LIKE", "%" . $mahasiswa->thmasuk . "%")
+            ->where('is_seminar', 1)
+            ->get();
+        
+        // Hitung bimbingan yang sudah di-ACC untuk bagian seminar
+        $bimbingans_acc = $mahasiswa->bimbingans()
+            ->where('status', Bimbingan::DITERIMA)
+            ->whereHas('bagian', function($query) {
+                $query->where('is_seminar', 1);
+            })
+            ->get();
 
-        if (count($bimbingans_acc ) - count($bagians) == count($bagians)){
+        // KP: cukup 1 bimbingan per bagian yang sudah di-ACC
+        if (count($bimbingans_acc) >= count($bagians_seminar)) {
             return true;
         }
         return false;
@@ -295,37 +308,42 @@ class AppHelper
     {
         $reviews = $seminar->reviews;
         $mahasiswa = $seminar->mahasiswa;
-        // Check for Jilid (Final Report) which contains Nilai Instansi
         $jilid = $mahasiswa->jilid;
-        $nilai_instansi = $jilid ? $jilid->nilai_instansi : 0;
+        
+        // Nilai Pembimbing diambil dari Jilid (diinput terpisah oleh dosen pembimbing)
+        $nilai_dosen_pembimbing = $jilid ? ($jilid->nilai_pembimbing ?? 0) : 0;
+        
+        // Nilai Instansi: prioritas dari Seminar, fallback ke Jilid
+        $nilai_instansi = $seminar->nilai_instansi ?? ($jilid ? ($jilid->nilai_instansi ?? 0) : 0);
 
+        // Nilai Penguji diambil dari review seminar (dosen penguji)
         $nilai_penguji = 0;
-        $nilai_pembimbing = 0;
         $count_penguji = 0;
 
         foreach ($reviews as $review) {
-            // Calculate average of 4 criteria (nilai_1..4)
-            // Assuming equal weight for sub-criteria if presentase_1..4 not strictly defined for KP
-            // Or use simple average
-            $avg_review = ($review->nilai_1 + $review->nilai_2 + $review->nilai_3 + $review->nilai_4) / 4;
-
             if($review->dosen_status == 'penguji'){
-                $nilai_penguji += $avg_review;
-                $count_penguji++;
-            }else if($review->dosen_status == 'pembimbing'){
-                $nilai_pembimbing += $avg_review;
+                // Calculate average of 4 criteria (jika ada nilai)
+                $n1 = $review->nilai_1 ?? 0;
+                $n2 = $review->nilai_2 ?? 0;
+                $n3 = $review->nilai_3 ?? 0;
+                $n4 = $review->nilai_4 ?? 0;
+                
+                if ($n1 > 0 || $n2 > 0 || $n3 > 0 || $n4 > 0) {
+                    $avg_review = ($n1 + $n2 + $n3 + $n4) / 4;
+                    $nilai_penguji += $avg_review;
+                    $count_penguji++;
+                }
             }
         }
 
-        $nilai_dosen_pembimbing = round($nilai_pembimbing / 2, 2); // Assumes 2 pembimbing or normalized
         if ($count_penguji > 0) {
             $nilai_dosen_penguji = round($nilai_penguji / $count_penguji, 2);
         } else {
-            $nilai_dosen_penguji = 0;
+            // Fallback: ambil dari nilai_seminar jika ada
+            $nilai_dosen_penguji = $seminar->nilai_seminar ?? 0;
         }
 
-        // WEIGHTS for KP (Assumed Default: 35% Pembimbing, 35% Penguji, 30% Instansi)
-        // Adjust as per requirements if specified later
+        // WEIGHTS for KP: 35% Pembimbing, 35% Penguji, 30% Instansi
         $bobot_pembimbing = 35;
         $bobot_penguji = 35;
         $bobot_instansi = 30;
@@ -361,8 +379,6 @@ class AppHelper
 
     /**
      * Cek apakah Seminar KP sudah selesai
-     * Untuk KP: tidak ada ujian pendadaran, hanya seminar
-     * Syarat: is_lulus = 1 atau tanggal seminar sudah lewat
      * @return bool
      */
     public static function check_ujian_has_done()
@@ -398,5 +414,82 @@ class AppHelper
     public static function instance()
     {
         return new AppHelper();
+    }
+
+    // ==================== CEK TAHAPAN KP ====================
+
+    /**
+     * Cek status tahapan KP mahasiswa
+     * @param Mahasiswa $mahasiswa
+     * @return array
+     */
+    public static function getTahapanKP($mahasiswa)
+    {
+        $pengajuan = $mahasiswa->pengajuans()->where('status', Pengajuan::DITERIMA)->first();
+        $pendaftaran = $mahasiswa->pendaftarans()->where('status', Pendaftaran::DITERIMA)->first();
+        $seminar = $mahasiswa->seminar;
+        $jilid = $mahasiswa->jilid;
+
+        // Cek bimbingan selesai
+        $bimbingan_selesai = false;
+        if ($pendaftaran) {
+            $bimbingan_selesai = self::check_bimbingan_is_complete($mahasiswa);
+        }
+
+        // Cek seminar selesai (lulus)
+        $seminar_selesai = $seminar && $seminar->is_lulus == 1;
+
+        return [
+            'pengajuan_acc' => $pengajuan ? true : false,
+            'pendaftaran_acc' => $pendaftaran ? true : false,
+            'bimbingan_selesai' => $bimbingan_selesai,
+            'seminar_selesai' => $seminar_selesai,
+            'jilid_selesai' => $jilid && $jilid->status == 'selesai',
+            // Data untuk referensi
+            'pengajuan' => $pengajuan,
+            'pendaftaran' => $pendaftaran,
+            'seminar' => $seminar,
+            'jilid' => $jilid,
+        ];
+    }
+
+    /**
+     * Cek apakah mahasiswa bisa akses tahap Pendaftaran
+     * Syarat: Pengajuan sudah ACC
+     */
+    public static function canAccessPendaftaran($mahasiswa)
+    {
+        $tahapan = self::getTahapanKP($mahasiswa);
+        return $tahapan['pengajuan_acc'];
+    }
+
+    /**
+     * Cek apakah mahasiswa bisa akses tahap Bimbingan
+     * Syarat: Pendaftaran sudah ACC
+     */
+    public static function canAccessBimbingan($mahasiswa)
+    {
+        $tahapan = self::getTahapanKP($mahasiswa);
+        return $tahapan['pendaftaran_acc'];
+    }
+
+    /**
+     * Cek apakah mahasiswa bisa akses tahap Seminar
+     * Syarat: Semua bimbingan sudah ACC (is_seminar = 1)
+     */
+    public static function canAccessSeminar($mahasiswa)
+    {
+        $tahapan = self::getTahapanKP($mahasiswa);
+        return $tahapan['bimbingan_selesai'];
+    }
+
+    /**
+     * Cek apakah mahasiswa bisa akses tahap Pengumpulan Akhir (Jilid)
+     * Syarat: Seminar sudah selesai (lulus)
+     */
+    public static function canAccessPengumpulanAkhir($mahasiswa)
+    {
+        $tahapan = self::getTahapanKP($mahasiswa);
+        return $tahapan['seminar_selesai'];
     }
 }

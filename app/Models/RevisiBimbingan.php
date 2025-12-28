@@ -9,9 +9,14 @@ class RevisiBimbingan extends Model
 {
     use HasFactory;
 
+    // Nama tabel dengan suffix _kp
+    protected $table = 'revisi_bimbingan_kps';
+
     protected $fillable = [
         'bimbingan_id',
         'dosen_id',
+        'reviewer_type',
+        'prodi_id',
         'catatan',
         'lampiran',
         'lampiran_revisi',
@@ -26,5 +31,10 @@ class RevisiBimbingan extends Model
     public function dosen()
     {
         return $this->belongsTo(Dosen::class);
+    }
+
+    public function prodi()
+    {
+        return $this->belongsTo(Prodi::class);
     }
 }

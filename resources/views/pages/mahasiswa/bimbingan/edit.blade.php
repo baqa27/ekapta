@@ -41,12 +41,12 @@
                                         disabled>
                                 </div>
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Keterangan</label>
-                                    <textarea id="summernote" name="keterangan" required>
-                                    {{ $bimbingan->keterangan }}
-                                </textarea>
+                                    <label for="keterangan">Keterangan</label>
+                                    <textarea class="form-control @error('keterangan') is-invalid @enderror" 
+                                        name="keterangan" id="keterangan" rows="4" 
+                                        placeholder="Keterangan bimbingan" required>{{ $bimbingan->keterangan }}</textarea>
                                     @error('keterangan')
-                                        <div class="text-danger"><small>{{ $message }}</small></div>
+                                        <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
                                 <div class="form-group">
@@ -59,9 +59,7 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
+                                        
                                     </div>
                                     @error('lampiran')
                                         <small class="text-danger"
@@ -75,7 +73,7 @@
                                                 <b>Lampiran sebelumnya : </b>
                                                 <a href="{{ storage_url($bimbingan->lampiran) }}" class="ml-3 text-primary"
                                                     target="_blank"><i class="fas fa-paperclip mr-2"></i>
-                                                    {{ Str::substr($bimbingan->lampiran, 19) }}</a>
+                                                    {{ basename($bimbingan->lampiran) }}</a>
                                             </small>
                                         </div>
                                     @endif

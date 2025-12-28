@@ -56,48 +56,22 @@
                             </span>
 
                             <div class="row justify-content-center mt-4">
-                                <div class="col-md-6 border rounded p-2">
-                                    Pembimbing Utama : <b>{{ $dosen_utama->nama . ', ' . $dosen_utama->gelar }} </b>
+                                <div class="col-md-12 border rounded p-2">
+                                    Pembimbing KP : <b>{{ $dosen_pembimbing ? $dosen_pembimbing->nama . ', ' . $dosen_pembimbing->gelar : '-' }} </b>
                                     <hr>
                                     @foreach ($mahasiswa->bimbingans as $bimbingan)
-                                        @if ($bimbingan->pembimbing == 'utama')
-                                            @if (\App\Helpers\AppHelper::instance()->cekBagianIsAcc($bimbingan->id))
-                                                <a href="{{ storage_url($bimbingan->lampiran) }}" target="_blank">
-                                                    <span class="badge badge-success">
-                                                        <i class="fas fa-check-circle mr-1"></i>
-                                                        {{ $bimbingan->bagian->bagian . ' [ Di Acc pada ' . \Carbon\Carbon::parse($bimbingan->tanggal_acc)->translatedFormat('d F Y') }}]
-                                                    </span>
-                                                </a>
-                                            @else
-                                                <span class="badge badge-secondary">
-                                                    <i class="fas fa-circle mr-1"></i>
-                                                    {{ $bimbingan->bagian->bagian }}
+                                        @if (\App\Helpers\AppHelper::instance()->cekBagianIsAcc($bimbingan->id))
+                                            <a href="{{ storage_url($bimbingan->lampiran) }}" target="_blank">
+                                                <span class="badge badge-success">
+                                                    <i class="fas fa-check-circle mr-1"></i>
+                                                    {{ $bimbingan->bagian->bagian . ' [ Di Acc pada ' . \Carbon\Carbon::parse($bimbingan->tanggal_acc)->translatedFormat('d F Y') }}]
                                                 </span>
-                                            @endif
-                                        @endif
-                                    @endforeach
-                                </div>
-
-                                <div class="col-md-6 border rounded p-2">
-                                    Pembimbing Pendamping :
-                                    <b>{{ $dosen_pendamping->nama . ', ' . $dosen_pendamping->gelar }}
-                                    </b>
-                                    <hr>
-                                    @foreach ($mahasiswa->bimbingans as $bimbingan)
-                                        @if ($bimbingan->pembimbing == 'pendamping')
-                                            @if (\App\Helpers\AppHelper::instance()->cekBagianIsAcc($bimbingan->id))
-                                                <a href="{{ storage_url($bimbingan->lampiran) }}" target="_blank">
-                                                    <span class="badge badge-success">
-                                                        <i class="fas fa-check-circle mr-1"></i>
-                                                        {{ $bimbingan->bagian->bagian . ' [ Di Acc pada ' . \Carbon\Carbon::parse($bimbingan->tanggal_acc)->translatedFormat('d F Y') }}]
-                                                    </span>
-                                                </a>
-                                            @else
-                                                <span class="badge badge-secondary">
-                                                    <i class="fas fa-circle mr-1"></i>
-                                                    {{ $bimbingan->bagian->bagian }}
-                                                </span>
-                                            @endif
+                                            </a>
+                                        @else
+                                            <span class="badge badge-secondary">
+                                                <i class="fas fa-circle mr-1"></i>
+                                                {{ $bimbingan->bagian->bagian }}
+                                            </span>
                                         @endif
                                     @endforeach
                                 </div>

@@ -6,7 +6,7 @@
         <div class="container">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Form Pendaftaran Kerja Praktik</h1>
+                    <h1 class="m-0">Form Pendaftaran Kerja Praktek</h1>
                 </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
@@ -26,7 +26,7 @@
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title">Form Pendaftaran Kerja Praktik</h3>
+                            <h3 class="card-title">Form Pendaftaran Kerja Praktek</h3>
                         </div>
                         <div class="card-body">
                             @if ($errors->any())
@@ -60,13 +60,13 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Dosen Pembimbing Kerja Praktik</label>
+                                    <label for="exampleInputEmail1">Dosen Pembimbing Kerja Praktek</label>
                                     <input type="text" class="form-control"
                                         value="{{ $dosen_pembimbing ? $dosen_pembimbing->nama . ', ' . $dosen_pembimbing->gelar : 'Belum ditentukan' }}" disabled>
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">Judul Kerja Praktik</label>
+                                    <label for="exampleInputEmail1">Judul Kerja Praktek</label>
                                     <input type="text" class="form-control" value="{{ $pengajuan->judul }}" disabled>
                                 </div>
 
@@ -83,9 +83,6 @@
                                                 name="lampiran_1" required>
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
                                         </div>
                                     </div>
                                     @error('lampiran_1')
@@ -105,9 +102,6 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
                                     </div>
                                     @error('lampiran_2')
                                         <small class="text-danger"
@@ -124,9 +118,6 @@
                                                 name="lampiran_3" required>
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
                                         </div>
                                     </div>
                                     @error('lampiran_3')
@@ -145,9 +136,6 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
                                     </div>
                                     @error('lampiran_4')
                                         <small class="text-danger"
@@ -156,8 +144,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Bukti Pembayaran Kerja Praktik <br>
-                                        <small>Pembayaran Kerja Praktik (KP) ke Juru bayar FASTIKOM (Mas Harri) di kantor FASTIKOM atau bisa transfer melalui Bank BRI No. <b>011201103039505</b> a.n. <b>Harri Kurniawan R</b>.</small> </label>
+                                    <label for="exampleInputFile">Bukti Pembayaran Kerja Praktek <br>
+                                        <small>Pembayaran Kerja Praktek (KP) ke Juru bayar FASTIKOM (Mas Harri) di kantor FASTIKOM atau bisa transfer melalui Bank BRI No. <b>011201103039505</b> a.n. <b>Harri Kurniawan R</b>.</small> </label>
                                     <div class="input-group mb-3">
                                         <div class="custom-file">
                                             <input type="file"
@@ -165,9 +153,6 @@
                                                 name="lampiran_5" required>
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
                                         </div>
                                     </div>
                                     @error('lampiran_5')
@@ -186,9 +171,6 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
                                     </div>
                                     @error('lampiran_6')
                                         <small class="text-danger"
@@ -206,9 +188,6 @@
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
                                     </div>
                                     @error('lampiran_7')
                                         <small class="text-danger"
@@ -217,44 +196,19 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="exampleInputFile">Sertifikat Peserta KP #1 (Seminar/Pelatihan) <br>
-                                        <small>Upload sertifikat keikutsertaan seminar atau pelatihan</small>
+                                    <label for="exampleInputFile">Dokumen Pendukung KP <br>
+                                        <small>Upload 2 sertifikat peserta seminar KP (dijadikan 1 file PDF)</small>
                                     </label>
                                     <div class="input-group mb-3">
                                         <div class="custom-file">
                                             <input type="file"
-                                                class="custom-file-input @error('sertifikat_peserta_1') is-invalid @enderror"
-                                                name="sertifikat_peserta_1" required>
+                                                class="custom-file-input @error('dokumen_pendukung_kp') is-invalid @enderror"
+                                                name="dokumen_pendukung_kp" required>
                                             <label class="custom-file-label" for="exampleInputFile">Choose
                                                 file</label>
                                         </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
                                     </div>
-                                    @error('sertifikat_peserta_1')
-                                        <small class="text-danger"
-                                            style="position:relative;top:-15px;left:5px">{{ $message }}</small>
-                                    @enderror
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="exampleInputFile">Sertifikat Peserta KP #2 (Seminar/Pelatihan) <br>
-                                        <small>Upload sertifikat keikutsertaan seminar atau pelatihan</small>
-                                    </label>
-                                    <div class="input-group mb-3">
-                                        <div class="custom-file">
-                                            <input type="file"
-                                                class="custom-file-input @error('sertifikat_peserta_2') is-invalid @enderror"
-                                                name="sertifikat_peserta_2" required>
-                                            <label class="custom-file-label" for="exampleInputFile">Choose
-                                                file</label>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <span class="input-group-text">Dokumen</span>
-                                        </div>
-                                    </div>
-                                    @error('sertifikat_peserta_2')
+                                    @error('dokumen_pendukung_kp')
                                         <small class="text-danger"
                                             style="position:relative;top:-15px;left:5px">{{ $message }}</small>
                                     @enderror
@@ -285,7 +239,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="exampleInputEmail1">BIAYA KERJA PRAKTIK (KP)
+                                    <label for="exampleInputEmail1">BIAYA KERJA Praktek (KP)
                                     </label>
                                     <div class="form-check mb-2">
                                         <input class="form-check-input @error('biaya') is-invalid @enderror"

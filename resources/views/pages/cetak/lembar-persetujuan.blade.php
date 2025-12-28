@@ -31,7 +31,7 @@
         <center>
             <b class="f-14">{{ $title }}</b>
             <br><br><br>
-            <b class="f-14">LAPORAN KERJA PRAKTIK</b>
+            <b class="f-14">LAPORAN KERJA Praktek</b>
             <br><br><br>
             <div style="margin: 0px 50px 0px 50px;">
                 <b style="text-transform: uppercase;">{{ $pengajuan->judul }}</b>
@@ -43,7 +43,7 @@
             <br>
             <b>{{ $mahasiswa->nim }}</b>
             <br><br><br><br><br>
-            <span>Telah disetujui untuk dapat diujikan pada Pengumpulan Akhir Kerja Praktik</span>
+            <span>Telah disetujui untuk dapat diujikan pada Pengumpulan Akhir Kerja Praktek</span>
             <br><br><br><br>
             <span>Wonosobo, {{ $date }}</span>
             <br><br><br>

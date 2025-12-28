@@ -84,7 +84,7 @@
                     @endif">
                         <i class="nav-icon fas fa-th"></i>
                         <p>
-                            Menu Kerja Praktik
+                            Menu Kerja Praktek
                             <i class="fas fa-angle-right right"></i>
                         </p>
                     </a>
@@ -104,7 +104,7 @@
                                class="nav-link {{ $active == 'bimbingan-input' ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
-                                    Input Bimbingan KP
+                                    Validasi Bimbingan KP
                                 </p>
                             </a>
                         </li>

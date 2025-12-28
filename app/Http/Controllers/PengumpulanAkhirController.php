@@ -32,20 +32,25 @@ class PengumpulanAkhirController extends Controller
      */
     public function mahasiswaIndex()
     {
-        $mahasiswa = Mahasiswa::with(['jilid'])->findOrFail(Auth::guard('mahasiswa')->user()->id);
-        $check_seminar_selesai = AppHelper::check_ujian_has_done();
+        $mahasiswa = Mahasiswa::with(['jilid', 'seminar'])->findOrFail(Auth::guard('mahasiswa')->user()->id);
+        
+        // Cek tahapan: Seminar harus selesai dulu
+        if (!AppHelper::canAccessPengumpulanAkhir($mahasiswa)) {
+            return redirect()->route('seminar.mahasiswa')->with('warning', 'Selesaikan tahap Seminar KP terlebih dahulu. Anda harus lulus seminar untuk mengakses Pengumpulan Akhir.');
+        }
 
-        if (!$check_seminar_selesai) {
-            return back()->with('warning', 'Menu pengumpulan akhir aktif setelah seminar KP selesai');
-        } else if (!$mahasiswa->jilid) {
-            return redirect()->route('pengumpulan-akhir.create');
+        // Hitung nilai KP
+        $nilai_kp = null;
+        if ($mahasiswa->seminar) {
+            $nilai_kp = AppHelper::hitung_nilai_kp($mahasiswa->seminar);
         }
 
         return view('pages.pengumpulan-akhir.index', [
             'title' => 'Pengumpulan Akhir KP',
             'active' => 'pengumpulan-akhir',
-            'jilids' => [$mahasiswa->jilid],
+            'jilids' => $mahasiswa->jilid ? [$mahasiswa->jilid] : [],
             'jilid' => $mahasiswa->jilid,
+            'nilai_kp' => $nilai_kp,
         ]);
     }
 
@@ -56,13 +61,15 @@ class PengumpulanAkhirController extends Controller
     public function create()
     {
         $mahasiswa = Mahasiswa::with(['seminar','pendaftarans'])->findOrFail(Auth::guard('mahasiswa')->user()->id);
-        $check_seminar_selesai = AppHelper::check_ujian_has_done(); // Mengecek seminar KP selesai
         $pendaftaran = $mahasiswa->pendaftarans()->where('status', Pendaftaran::DITERIMA)->first();
 
+        // Cek tahapan: Seminar harus selesai dulu
+        if (!AppHelper::canAccessPengumpulanAkhir($mahasiswa)) {
+            return redirect()->route('seminar.mahasiswa')->with('warning', 'Selesaikan tahap Seminar KP terlebih dahulu. Anda harus lulus seminar untuk mengakses Pengumpulan Akhir.');
+        }
+        
         if ($mahasiswa->jilid) {
             return redirect()->route('pengumpulan-akhir.mahasiswa')->with('warning','Sudah melakukan pengajuan pengumpulan akhir KP. Tunggu validasi oleh Admin');
-        } else if (!$check_seminar_selesai) {
-            return back()->with('warning', 'Menu pengumpulan akhir aktif setelah seminar KP selesai');
         }
 
         return view('pages.pengumpulan-akhir.create', [
@@ -148,8 +155,14 @@ class PengumpulanAkhirController extends Controller
     public function detail($id)
     {
         $jilid = Jilid::with(['mahasiswa','revisis'])->findOrFail($id);
-        $mahasiswa = $jilid->mahasiswa()->with(['bimbingans'])->first();
+        $mahasiswa = $jilid->mahasiswa()->with(['bimbingans', 'seminar'])->first();
         $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+
+        // Hitung nilai KP jika ada seminar
+        $nilai_kp = null;
+        if ($mahasiswa->seminar) {
+            $nilai_kp = AppHelper::hitung_nilai_kp($mahasiswa->seminar);
+        }
 
         return view('pages.pengumpulan-akhir.detail', [
             'title' => 'Detail Pengumpulan Akhir KP',
@@ -160,17 +173,24 @@ class PengumpulanAkhirController extends Controller
             'prodi' => $prodi,
             'is_admin' => true,
             'revisis' => $jilid->revisis()->paginate(5),
+            'nilai_kp' => $nilai_kp,
         ]);
     }
 
     public function detailMahasiswa($id)
     {
         $jilid = Jilid::with(['mahasiswa','revisis'])->findOrFail($id);
-        $mahasiswa = $jilid->mahasiswa()->with(['bimbingans'])->first();
+        $mahasiswa = $jilid->mahasiswa()->with(['bimbingans', 'seminar'])->first();
         $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
 
         if (Auth::guard('mahasiswa')->user()->id != $mahasiswa->id) {
             return back();
+        }
+
+        // Hitung nilai KP jika ada seminar
+        $nilai_kp = null;
+        if ($mahasiswa->seminar) {
+            $nilai_kp = AppHelper::hitung_nilai_kp($mahasiswa->seminar);
         }
 
         return view('pages.pengumpulan-akhir.detail', [
@@ -181,6 +201,7 @@ class PengumpulanAkhirController extends Controller
             'prodi' => $prodi,
             'is_admin' => false,
             'revisis' => $jilid->revisis()->paginate(5),
+            'nilai_kp' => $nilai_kp,
         ]);
     }
 
@@ -310,31 +331,41 @@ class PengumpulanAkhirController extends Controller
             $jilid->revisis()->save($revisi);
         }
 
-        $jilid->update([
-            'total_pembayaran' => $request->total_pembayaran,
+        $updateData = [
             'status' => $request->status,
-        ]);
+        ];
+
+        // Tambahkan total_pembayaran jika ada (dari fotokopian)
+        if ($request->total_pembayaran) {
+            $updateData['total_pembayaran'] = $request->total_pembayaran;
+        }
+
+        $jilid->update($updateData);
 
         if ($request->status == Jilid::JILID_SELESAI) {
+            $message = 'Pengumpulan Akhir KP Anda Berstatus SELESAI. Selamat!';
+            if ($request->total_pembayaran) {
+                $message .= ' Silahkan ambil di FOTOKOPIAN FASTIKOM dan lakukan pembayaran sebesar Rp ' . number_format($request->total_pembayaran, 0, ',', '.');
+            }
             AppHelper::instance()->send_mail([
                 'mail' => $jilid->mahasiswa->email,
                 'subject' => 'Pengumpulan Akhir KP',
                 'title' => 'EKAPTA',
-                'message' => 'Pengumpulan Akhir KP Anda Berstatus SELESAI. Silahkan lakukan pembayaran sebesar Rp ' . number_format($request->total_pembayaran, 0, ',', '.'),
+                'message' => $message,
             ]);
         } elseif ($request->status == Jilid::JILID_VALID) {
             AppHelper::instance()->send_mail([
                 'mail' => $jilid->mahasiswa->email,
                 'subject' => 'Pengumpulan Akhir KP',
                 'title' => 'EKAPTA',
-                'message' => 'Dokumen Kerja Praktik sudah dikonfirmasi oleh admin. Silahkan konfirmasi dan melakukan pembayaran dengan membawa dokumen-dokumen asli.',
+                'message' => 'Dokumen Kerja Praktek sudah dikonfirmasi oleh admin dan siap untuk dijilid. Silahkan konfirmasi dan melakukan pembayaran ke Fotocopy Fastikom dengan membawa dokumen-dokumen asli.',
             ]);
         } elseif ($request->status == Jilid::JILID_REVISI) {
             AppHelper::instance()->send_mail([
                 'mail' => $jilid->mahasiswa->email,
                 'subject' => 'Pengumpulan Akhir KP',
                 'title' => 'EKAPTA',
-                'message' => 'Dokumen Kerja Praktik Berstatus REVISI. Silahkan submit ulang! <br>Ket: '. $request->catatan,
+                'message' => 'Dokumen Kerja Praktek Berstatus REVISI. Silahkan submit ulang! <br>Ket: '. $request->catatan,
             ]);
         }
 

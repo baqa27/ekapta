@@ -21,20 +21,16 @@
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
+                <div class="col-12">
+                    <div class="card card-primary card-outline">
                         <div class="card-header">
                             <h3 class="card-title">Tabel {{ $title }}</h3>
+                            <div class="card-tools">
+                                <span class="badge badge-success mr-2"><i class="fas fa-check-circle mr-1"></i> Diterima/Acc</span>
+                                <span class="badge badge-secondary"><i class="fas fa-circle mr-1"></i> Review/Belum Di Acc</span>
+                            </div>
                         </div>
                         <div class="card-body">
-
-                            <span class="badge badge-success"> <i class="fas fa-check-circle mr-1"></i>
-                                Diterima/Acc
-                            </span>
-                            <span class="badge badge-secondary"> <i class="fas fa-circle mr-1"></i>
-                                Review/Belum Di Acc
-                            </span>
-
                             <table id="example1" class="table table-bordered">
                                 <thead>
                                     <tr>
@@ -42,7 +38,7 @@
                                         <th>Mahasiswa</th>
                                         <th>Kontak</th>
                                         <th>Prodi</th>
-                                        <th>Judul Kerja Praktik</th>
+                                        <th>Judul Kerja Praktek</th>
                                         <th>Status Bimbingan</th>
                                         <th>Terakhir Bimbingan</th>
                                         <th>Bagian</th>
@@ -102,10 +98,33 @@
                                             <td>
                                                 @if (count($mahasiswa->bimbingans) != 0)
                                                     <div>
-                                                        <span>Sebagai Pembimbing {{ $mahasiswa->pivot->status == 'utama' ? '1' : '2' }}</span> <br>
-                                                        @foreach ($mahasiswa->bimbingans as $bimbingan)
-                                                            @if ($bimbingan->pembimbing == $mahasiswa->pivot->status)
-                                                                @if (\App\Helpers\AppHelper::instance()->cekBagianIsAcc($bimbingan->id))
+                                                        @php
+                                                            // Support both old (utama/pendamping) and new (pembimbing) status
+                                                            $pivotStatus = $mahasiswa->pivot->status;
+                                                            $pembimbingLabel = match($pivotStatus) {
+                                                                'utama' => '1',
+                                                                'pendamping' => '2',
+                                                                'pembimbing' => '',
+                                                                default => ''
+                                                            };
+                                                            
+                                                            // Group bimbingan by bagian_id to avoid duplicates
+                                                            // For each bagian, get the latest/best status (diterima > review > revisi)
+                                                            $bimbinganByBagian = $mahasiswa->bimbingans->groupBy('bagian_id')->map(function($items) use ($pivotStatus) {
+                                                                // Filter by pembimbing status for old system
+                                                                if ($pivotStatus != 'pembimbing') {
+                                                                    $items = $items->where('pembimbing', $pivotStatus);
+                                                                }
+                                                                // Get the one with best status (prioritize diterima)
+                                                                return $items->sortByDesc(function($item) {
+                                                                    return $item->status == 'diterima' ? 2 : ($item->status == 'review' ? 1 : 0);
+                                                                })->first();
+                                                            })->filter();
+                                                        @endphp
+                                                        <span>Sebagai Pembimbing {{ $pembimbingLabel }}</span> <br>
+                                                        @foreach ($bimbinganByBagian as $bimbingan)
+                                                            @if ($bimbingan)
+                                                                @if ($bimbingan->status == 'diterima')
                                                                     <a href="{{ storage_url($bimbingan->lampiran) }}" target="_blank">
                                                                         <span class="badge badge-success">
                                                                             <i class="fas fa-check-circle mr-1"></i>
@@ -126,9 +145,11 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                @if($mahasiswa->pendaftarans()->where('status','diterima')->first())
-                                                <a href="{{ url('cetak/surat-tugas-bimbingan/' . $mahasiswa->pendaftarans()->where('status','diterima')->first()->id) }}"
-                                                    target="_blank" class="btn btn-success btn-sm "><i class="fas fa-download"></i> Surat Tugas Bimbingan KP</a>
+                                                @if ($mahasiswa->pengajuans()->where('status', 'diterima')->first())
+                                                    <a href="{{ route('bimbingan.review.admin', $mahasiswa->pengajuans()->where('status', 'diterima')->first()->id) }}"
+                                                        class="btn btn-primary btn-sm shadow">
+                                                        <i class="fas fa-info-circle mr-1"></i> Detail Bimbingan
+                                                    </a>
                                                 @endif
                                             </td>
                                         </tr>
@@ -142,7 +163,7 @@
                                         <th>Mahasiswa</th>
                                         <th>Kontak</th>
                                         <th>Prodi</th>
-                                        <th>Judul Kerja Praktik</th>
+                                        <th>Judul Kerja Praktek</th>
                                         <th>Status Bimbingan</th>
                                         <th>Terakhir Bimbingan</th>
                                         <th>Bagian</th>
@@ -150,10 +171,13 @@
                                     </tr>
                                 </tfoot>
                             </table>
-                        </div>
+                        </div><!-- /.card-body -->
                     </div>
+                    <!-- ./card -->
                 </div>
+                <!-- /.col -->
             </div>
+        </div>
     </section>
     <!-- /.content -->
 @endsection

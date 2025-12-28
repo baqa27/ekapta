@@ -54,18 +54,13 @@ class Dosen extends Authenticatable
 
     public function bimbingans()
     {
-        return $this->belongsToMany(Bimbingan::class, 'dosen_bimbingans', 'dosen_id', 'bimbingan_id')
+        return $this->belongsToMany(Bimbingan::class, 'dosen_bimbingan_kps', 'dosen_id', 'bimbingan_id')
             ->withTimestamps();
     }
 
     public function seminars()
     {
         return $this->hasMany(ReviewSeminar::class);
-    }
-
-    public function ujians()
-    {
-        return $this->hasMany(ReviewUjian::class);
     }
 
     public function bimbingan_canceleds()

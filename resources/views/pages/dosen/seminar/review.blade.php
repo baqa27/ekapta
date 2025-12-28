@@ -21,10 +21,15 @@
     <!-- /.content-header -->
 
     <!-- Main content -->
-    <div class="content">
-        <div class="container">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="mb-3">
+                <a href="{{ route('seminar.dosen') }}" class="btn btn-secondary shadow">
+                    <i class="fas fa-arrow-left mr-2"></i> Kembali
+                </a>
+            </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="card card-primary card-outline">
                         @if($review_seminar->dosen_status == 'penguji')
                             <div class="ribbon-wrapper ribbon-lg">
@@ -241,7 +246,7 @@
                                             @if ($revisi->lampiran)
                                                 <a href="{{ storage_url($seminar->lampiran) }}" class="ml-3" target="_blank"><i
                                                         class="fas fa-paperclip"></i>
-                                                    {{ Str::substr($revisi->lampiran, 40) }}</a>
+                                                    {{ basename($revisi->lampiran) }}</a>
                                             @endif
                                         </small>
                                     </div>
@@ -278,10 +283,10 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="" class="form-label">Catatan</label>
-                            <textarea id="summernote" name="catatan" required></textarea>
+                            <label for="catatan">Catatan</label>
+                            <textarea class="form-control @error('catatan') is-invalid @enderror" name="catatan" id="catatan" rows="4" placeholder="Catatan revisi" required></textarea>
                             @error('catatan')
-                                <small class="text-danger">{{ $message }}</small>
+                                <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
                         </div>
                         {{--<div class="form-group">
@@ -293,9 +298,7 @@
                                     <label class="custom-file-label" for="exampleInputFile">Choose
                                         file</label>
                                 </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">Dokumen</span>
-                                </div>
+                                
                             </div>
                             @error('lampiran')
                                 <small class="text-danger"
@@ -343,9 +346,7 @@
                                     <label class="custom-file-label" for="exampleInputFile">Choose
                                         file</label>
                                 </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">Dokumen</span>
-                                </div>
+                                
                             </div>
                             @error('lampiran')
                                 <small class="text-danger"

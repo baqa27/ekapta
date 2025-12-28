@@ -13,12 +13,14 @@
             <div class="card p-3 col-md-5">
                 <h5 class="fw-bold">Login Himpunan</h5>
                 <hr>
+                
                 @if (session('error'))
                     <div class="alert alert-danger alert-dismissible fade show" role="alert">
                         {{ session('error') }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                     </div>
                 @endif
+
                 <form action="{{ route('cek.himpunan') }}" method="post">
                     @csrf
                     <div class="form-group mb-3">

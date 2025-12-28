@@ -21,10 +21,10 @@
         <div class="container-fluid">
 
             <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-header d-flex">
-                            <h3 class="card-title flex-grow-1">Tabel {{ $title }}</h3>
+                <div class="col-12">
+                    <div class="card card-primary card-outline">
+                        <div class="card-header d-flex p-0">
+                            <h3 class="card-title p-3">Tabel {{ $title }}</h3>
                             <ul class="nav nav-pills ml-auto p-2">
                                 <li class="nav-item"><a class="nav-link active" href="#tab_1" data-toggle="tab">Bimbingan
                                         Aktif</a>
@@ -45,7 +45,7 @@
                                                 <th>Nama Mahasiswa</th>
                                                 <th>Kontak</th>
                                                 <th>Prodi</th>
-                                                <th>Judul Kerja Praktik</th>
+                                                <th>Judul Kerja Praktek</th>
                                                 <th>Status Bimbingan</th>
                                                 <th>Terakhir Bimbingan</th>
                                                 <th>Tanggal Pendaftaran KP</th>
@@ -203,7 +203,7 @@
                                                 <th>Nama Mahasiswa</th>
                                                 <th>Kontak</th>
                                                 <th>Prodi</th>
-                                                <th>Judul Kerja Praktik</th>
+                                                <th>Judul Kerja Praktek</th>
                                                 <th>Status Bimbingan</th>
                                                 <th>Terakhir Bimbingan</th>
                                                 <th>Tanggal Pendaftaran KP</th>
@@ -226,7 +226,7 @@
                                                 <th>Nama Mahasiswa</th>
                                                 <th>Kontak</th>
                                                 <th>Prodi</th>
-                                                <th>Judul Kerja Praktik</th>
+                                                <th>Judul Kerja Praktek</th>
                                                 <th>Status Bimbingan</th>
                                                 <th>Terakhir Bimbingan</th>
                                                 <th>Tanggal Pendaftaran KP</th>
@@ -381,7 +381,7 @@
                                                 <th>Nama Mahasiswa</th>
                                                 <th>Kontak</th>
                                                 <th>Prodi</th>
-                                                <th>Judul Kerja Praktik</th>
+                                                <th>Judul Kerja Praktek</th>
                                                 <th>Status Bimbingan</th>
                                                 <th>Terakhir Bimbingan</th>
                                                 <th>Tanggal Pendaftaran KP</th>

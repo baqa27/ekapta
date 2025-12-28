@@ -55,7 +55,7 @@
                             @endif
                             <hr>
                             <p class="mt-3"><b>Lampiran : </b> <a href="{{ storage_url($bimbingan->lampiran) }}" class="ml-3"
-                                    target="_blank"><i class="fas fa-paperclip"></i> {{ Str::substr($bimbingan\->lampiran, 40) }}</a></p>
+                                    target="_blank"><i class="fas fa-paperclip"></i> {{ basename($bimbingan->lampiran) }}</a></p>
                         </div>
                         <!-- /.card-body -->
                     </div>
@@ -81,8 +81,12 @@
                                 @foreach ($revisis as $revisi)
                                     <div class="direct-chat-msg">
                                         <div class="direct-chat-infos clearfix">
-                                            <span
-                                                class="direct-chat-name float-left">{{ $revisi->dosen->nama . ', ' . $revisi->dosen->gelar }}
+                                            <span class="direct-chat-name float-left">
+                                                @if ($revisi->reviewer_type == 'prodi' && $revisi->prodi)
+                                                    <span class="badge bg-info">Prodi {{ $revisi->prodi->namaprodi }}</span>
+                                                @else
+                                                    {{ $revisi->dosen->nama . ', ' . $revisi->dosen->gelar }}
+                                                @endif
                                             </span>
                                             <span class="direct-chat-timestamp float-right">
                                                 {{ $revisi->created_at->format('d M Y H:m a') }}
@@ -98,25 +102,25 @@
                                                     <small><i class="fas fa-calendar"></i> Tanggal bimbingan: {{ \Carbon\Carbon::parse($revisi->tanggal_bimbingan)->format('d M Y H:m a') }}</small>
                                                 </div>
                                             @endif
-                                            @if ($revisi\->lampiran || $revisi\\->lampiran_revisi)
+                                            @if ($revisi->lampiran || $revisi->lampiran_revisi)
                                                 <div class="p-1 mt-3 bg-light rounded">
-                                                    @if ($revisi\\->lampiran_revisi)
+                                                    @if ($revisi->lampiran_revisi)
                                                         <div>
                                                             <small>
                                                                 <span class="text-secondary ml-2"><b>Lampiran revisi: </b></span>
-                                                                <a href="{{ storage_url($bimbingan->lampiran_revisi) }}" target="_blank">
+                                                                <a href="{{ storage_url($revisi->lampiran_revisi) }}" target="_blank">
                                                                     <i class="fas fa-paperclip ml-1"></i>
-                                                                    {{ Str::substr($revisi\\->lampiran_revisi, 40) }}
+                                                                    {{ basename($revisi->lampiran_revisi) }}
                                                                 </a>
                                                             </small>
                                                         </div>
                                                     @endif
-                                                    @if ($revisi\->lampiran)
+                                                    @if ($revisi->lampiran)
                                                         <small>
                                                             <span class="text-secondary ml-2"><b>Lampiran bimbingan sebelumnya: </b></span>
-                                                            <a href="{{ storage_url($bimbingan->lampiran) }}" target="_blank">
+                                                            <a href="{{ storage_url($revisi->lampiran) }}" target="_blank">
                                                                 <i class="fas fa-paperclip ml-1"></i>
-                                                                {{ Str::substr($revisi\->lampiran, 40) }}
+                                                                {{ basename($revisi->lampiran) }}
                                                             </a>
                                                         </small>
                                                     @endif

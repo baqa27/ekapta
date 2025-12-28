@@ -37,10 +37,10 @@
                             </div>
                         </div>
                         <div class="card-header">
-                            <h3 class="card-title"><strong>Judul Kerja Praktik : </strong>{{ $pengajuan->judul }}</h3>
+                            <h3 class="card-title"><strong>Judul Kerja Praktek : </strong>{{ $pengajuan->judul }}</h3>
                         </div>
                         <div class="card-body">
-                            <p><b>Gambaran Masalah + Solusi</b></p>
+                            <p><b>Gambaran Singkat</b></p>
                             {!! nl2br($pengajuan->deskripsi) !!}
                             <hr>
                             <strong>Lokasi KP</strong> <br>
@@ -49,10 +49,17 @@
                             <strong>Alamat Instansi</strong> <br>
                             {{ $pengajuan->alamat_instansi }}
                             <br><br>
+                            @if ($pengajuan->lampiran)
+                                <strong>Bukti Diterima Instansi</strong> <br>
+                                <a href="{{ storage_url($pengajuan->lampiran) }}" target="_blank">
+                                    <i class="fas fa-paperclip"></i> {{ basename($pengajuan->lampiran) }}
+                                </a>
+                                <br><br>
+                            @endif
                             @if ($pengajuan->files_pendukung)
                                 <strong>File Pendukung</strong> <br>
                                 <a href="{{ storage_url($pengajuan->files_pendukung) }}" target="_blank">
-                                    <i class="fas fa-paperclip"></i> Lihat File Pendukung
+                                    <i class="fas fa-paperclip"></i> {{ basename($pengajuan->files_pendukung) }}
                                 </a>
                                 <br><br>
                             @endif
@@ -99,10 +106,6 @@
                                     </a>
                                 </div>
                             @endif
-                            <hr>
-                            <p class="mt-3"><b>Lampiran : </b> <a href="{{ storage_url($pengajuan->lampiran) }}" class="ml-3"
-                                    target="_blank"><i class="fas fa-paperclip"></i>
-                                    {{ basename($pengajuan->lampiran) }}</a></p>
                         </div>
 
                     </div>

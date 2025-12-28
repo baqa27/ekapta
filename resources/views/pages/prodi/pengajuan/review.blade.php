@@ -19,10 +19,15 @@
         </div>
     </div>
 
-    <div class="content">
-        <div class="container">
+    <section class="content">
+        <div class="container-fluid">
+            <div class="mb-3">
+                <a href="{{ route('pengajuan.prodi') }}" class="btn btn-secondary shadow">
+                    <i class="fas fa-arrow-left mr-2"></i> Kembali
+                </a>
+            </div>
             <div class="row">
-                <div class="col-md-12">
+                <div class="col-12">
                     <div class="card card-primary card-outline">
                         <div class="ribbon-wrapper ribbon-lg">
                             <div
@@ -78,17 +83,24 @@
                             {{ $pengajuan->lokasi_kp }}
                             <br><br>
                             <strong>Alamat Instansi</strong> <br>
-                            {{ $pengajuan->alamat_instansi }} }
+                            {{ $pengajuan->alamat_instansi }}
                             <br><br>
+                            @if ($pengajuan->lampiran)
+                                <strong>Bukti Diterima Instansi</strong> <br>
+                                <a href="{{ storage_url($pengajuan->lampiran) }}" target="_blank">
+                                    <i class="fas fa-paperclip"></i> {{ basename($pengajuan->lampiran) }}
+                                </a>
+                                <br><br>
+                            @endif
                             @if ($pengajuan->files_pendukung)
                                 <strong>File Pendukung</strong> <br>
                                 <a href="{{ storage_url($pengajuan->files_pendukung) }}" target="_blank">
-                                    <i class="fas fa-paperclip"></i> Lihat File Pendukung
+                                    <i class="fas fa-paperclip"></i> {{ basename($pengajuan->files_pendukung) }}
                                 </a>
                                 <br><br>
                             @endif
                             <hr>
-                            <p><b>Gambaran Masalah + Solusi</b></p>
+                            <p><b>Gambaran Singkat</b></p>
                             {!! nl2br($pengajuan->deskripsi) !!}
                             <div class="mt-3 text-secondary"><i class="fas fa-calendar mr-2"></i>
                                 {{ $pengajuan->created_at->format('d M Y H:m') }}
@@ -98,10 +110,6 @@
                                     {{ date('d M Y H:m', strtotime($pengajuan->tanggal_acc)) }}
                                 </div>
                             @endif
-                            <hr>
-                            <p class="mt-3"><b>Lampiran : </b> <a href="{{ storage_url($pengajuan->lampiran) }}" class="ml-3"
-                                    target="_blank"><i class="fas fa-paperclip"></i>
-                                    {{ Str::substr($pengajuan->lampiran, 40) }}</a></p>
                         </div>
                         <div class="card-footer">
                             <div class="d-flex">
@@ -150,7 +158,7 @@
 
                                     <button type="button" class="btn btn-secondary mr-2" data-toggle="modal"
                                         data-target="#modal-edit-judul">
-                                        <i class="bi bi-pencil-square mr-2"></i> Edit Judul Kerja Praktik
+                                        <i class="bi bi-pencil-square mr-2"></i> Edit Judul Kerja Praktek
                                     </button>
                                 @endif
                             </div>
@@ -198,7 +206,7 @@
                                             @if ($revisi->lampiran)
                                                 <a href="{{ storage_url($revisi->lampiran) }}" class="ml-3"
                                                     target="_blank"><i class="fas fa-paperclip"></i>
-                                                    {{ Str::substr($revisi->lampiran, 40) }}</a>
+                                                    {{ basename($revisi->lampiran) }}</a>
                                             @endif
                                         </small>
                                     </div>
@@ -229,13 +237,13 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <b> Judul Pengajuan Kerja Praktik :</b> <br>
+                    <b> Judul Pengajuan Kerja Praktek :</b> <br>
                     <span
                         class="text-{{ count($pengajuanCekIsPlagiat) <= 1 ? 'success' : 'warning' }}">{{ $pengajuan->judul }}
                         <i
                             class="bi bi-{{ count($pengajuanCekIsPlagiat) <= 1 ? 'check' : 'info' }}-circle ml-1"></i></span>
                     <hr>
-                    <b> Semua judul pengajuan kerja praktik yang sudah digunakan :</b> <br>
+                    <b> Semua judul pengajuan kerja Praktek yang sudah digunakan :</b> <br>
                     @php
                         $no = 1;
                     @endphp
@@ -282,9 +290,8 @@
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="" class="form-label">Catatan</label>
-                                <textarea id="summernote" name="catatan" required>
-                    </textarea>
+                                <label for="catatan">Catatan</label>
+                                <textarea class="form-control" name="catatan" id="catatan" rows="4" placeholder="Catatan revisi" required></textarea>
                             </div>
                             <div class="form-group">
                                 <label for="" class="form-label">Lampiran</label>
@@ -296,9 +303,7 @@
                                         <label class="custom-file-label" for="exampleInputFile">Choose
                                             file</label>
                                     </div>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">Dokumen</span>
-                                    </div>
+                                    
                                 </div>
                                 @error('lampiran')
                                     <small class="text-danger"
@@ -347,9 +352,7 @@
                                         <label class="custom-file-label" for="exampleInputFile">Choose
                                             file</label>
                                     </div>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">Dokumen</span>
-                                    </div>
+                                    
                                 </div>
                                 @error('lampiran')
                                     <small class="text-danger"
@@ -419,7 +422,7 @@
                             <div class="modal-body">
                                 <div class="alert alert-info">
                                     <i class="fas fa-info-circle mr-2"></i>
-                                    Pilih 1 dosen pembimbing untuk Kerja Praktik mahasiswa ini.
+                                    Pilih 1 dosen pembimbing untuk Kerja Praktek mahasiswa ini.
                                 </div>
                                 <div class="mb-3">
                                     <a href="{{ route('bimbingan.rekap.dosen') }}" class="btn btn-primary btn-sm" target="_blank">
@@ -506,14 +509,14 @@
                         @csrf
 
                         <div class="modal-header">
-                            <h4 class="modal-title">Edit Judul Kerja Praktik</h4>
+                            <h4 class="modal-title">Edit Judul Kerja Praktek</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div class="modal-body">
                             <div class="form-group">
-                                <label for="" class="form-label">Judul Kerja Praktik</label>
+                                <label for="" class="form-label">Judul Kerja Praktek</label>
                                 <div class="input-group mb-3">
                                     <input type="text" name="judul" class="form-control"
                                         value="{{ $pengajuan->judul }}" required>

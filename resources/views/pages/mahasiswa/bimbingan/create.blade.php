@@ -8,17 +8,16 @@
         <div class="row mb-2">
             <div class="col-sm-6">
                 <h1 class="m-0">{{ $title }}</h1>
-            </div><!-- /.col -->
+            </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="#">Bimbingan KP</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('bimbingan.mahasiswa') }}">Bimbingan KP</a></li>
                     <li class="breadcrumb-item active">{{ $title }}</li>
                 </ol>
-            </div><!-- /.col -->
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+            </div>
+        </div>
+    </div>
 </div>
-<!-- /.content-header -->
 
 <!-- Main content -->
 <div class="content">
@@ -27,89 +26,49 @@
             <div class="col-md-12">
                 <div class="card card-primary card-outline">
                     <div class="card-header">
-                        <h3 class="card-title">Form Pengajuan Kerja Praktik</h3>
+                        <h3 class="card-title">Form Bimbingan - {{ $bagian->bagian }}</h3>
                     </div>
                     <div class="card-body">
                         <form action="{{ route('bimbingan.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
+                            <input type="hidden" name="bagian_id" value="{{ $bagian->id }}">
+
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Bagian Bimbingan</label>
-                                <select class="form-control @error('bagian_id') is-invalid @enderror" name="bagian_id"
-                                    required>
-                                    <option value="">Pilih</option>
-                                    @foreach ($bagians as $bagian)
-                                    <option value="{{ $bagian->id }}" {{ $bagian->id == old('bagian_id') ? 'selected' :
-                                        '' }}>{{ $bagian->bagian }}</option>
-                                    @endforeach
-                                </select>
-                                @error('bagian_id')
+                                <label>Bagian Bimbingan</label>
+                                <input type="text" class="form-control" value="{{ $bagian->bagian }}" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="keterangan">Keterangan</label>
+                                <textarea class="form-control @error('keterangan') is-invalid @enderror" 
+                                    name="keterangan" rows="4" placeholder="Keterangan bimbingan" required>{{ old('keterangan') }}</textarea>
+                                @error('keterangan')
                                 <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleInputEmail1">Keterangan</label>
-                                <textarea id="summernote" name="keterangan" required>
-                                    {{ old('keterangan') }}
-                                </textarea>
-                                @error('keterangan')
-                                <div class="text-danger"><small>{{ $message }}</small></div>
-                                @enderror
-                            </div>
-
-                            </div>
-
-                            <div class="form-group">
-                                <label for="bukti_bimbingan_offline">Bukti Bimbingan Offline</label>
-                                <div class="input-group mb-3">
-                                    <div class="custom-file">
-                                        <input type="file"
-                                            class="custom-file-input @error('bukti_bimbingan_offline') is-invalid @enderror"
-                                            name="bukti_bimbingan_offline">
-                                        <label class="custom-file-label" for="bukti_bimbingan_offline">Choose
-                                            file</label>
-                                    </div>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">Bukti</span>
-                                    </div>
-                                </div>
-                                @error('bukti_bimbingan_offline')
-                                <small class="text-danger" style="position:relative;top:-15px;left:5px">{{ $message
-                                    }}</small>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label for="exampleInputFile">Dokumen</label>
-                                <div class="input-group mb-3">
-                                    <div class="custom-file">
-                                        <input type="file"
-                                            class="custom-file-input @error('lampiran') is-invalid @enderror"
-                                            name="lampiran" required>
-                                        <label class="custom-file-label" for="exampleInputFile">Choose
-                                            file</label>
-                                    </div>
-                                    <div class="input-group-append">
-                                        <span class="input-group-text">Dokumen</span>
-                                    </div>
+                                <label for="lampiran">Dokumen Bimbingan (.pdf)</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input @error('lampiran') is-invalid @enderror"
+                                        name="lampiran" accept=".pdf" required>
+                                    <label class="custom-file-label" for="lampiran">Choose file</label>
                                 </div>
                                 @error('lampiran')
-                                <small class="text-danger" style="position:relative;top:-15px;left:5px">{{ $message
-                                    }}</small>
+                                <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+
                             <div class="form-group mt-4">
+                                <a href="{{ route('bimbingan.mahasiswa') }}" class="btn btn-secondary">Kembali</a>
                                 <button type="submit" class="btn btn-success">Submit</button>
                             </div>
                         </form>
                     </div>
-                    <!-- /.card-body -->
                 </div>
-                <!-- /.card -->
             </div>
         </div>
     </div>
 </div>
-<!-- /.content -->
 
 @endsection

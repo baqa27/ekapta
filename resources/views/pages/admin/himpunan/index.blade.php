@@ -86,6 +86,18 @@
                                                     data-prodi_id="{{ $himpunan->prodi_id }}">
                                                     <i class="bi bi-gear mr-1"></i> Edit
                                                 </button>
+                                                <button type="button" class="btn btn-warning btn-sm shadow"
+                                                    data-toggle="modal" data-target="#modal-payment"
+                                                    data-id="{{ $himpunan->id }}"
+                                                    data-nama="{{ $himpunan->nama }}"
+                                                    data-biaya_seminar="{{ $himpunan->biaya_seminar }}"
+                                                    data-nama_rekening="{{ $himpunan->nama_rekening }}"
+                                                    data-nomor_rekening="{{ $himpunan->nomor_rekening }}"
+                                                    data-bank="{{ $himpunan->bank }}"
+                                                    data-nomor_dana="{{ $himpunan->nomor_dana }}"
+                                                    data-nomor_seabank="{{ $himpunan->nomor_seabank }}">
+                                                    <i class="bi bi-credit-card mr-1"></i> Pembayaran
+                                                </button>
                                                 <button type="button" class="btn btn-danger btn-sm shadow"
                                                     data-toggle="modal" data-target="#modal-hapus"
                                                     data-id="{{ $himpunan->id }}"
@@ -263,9 +275,7 @@
                                         name="file" required>
                                     <label class="custom-file-label" for="exampleInputFile">Choose file</label>
                                 </div>
-                                <div class="input-group-append">
-                                    <span class="input-group-text">Dokumen</span>
-                                </div>
+                                
                             </div>
                             @error('file')
                                 <small class="text-danger" style="position:relative;top:-15px;left:5px">{{ $message }}</small>
@@ -275,6 +285,84 @@
                     <div class="modal-footer justify-content-between">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                         <button type="submit" class="btn btn-success">Import</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Info Pembayaran -->
+    <div class="modal fade" id="modal-payment">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <form action="{{ route('himpunan.update.payment') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="id" id="payment-id">
+                    <div class="modal-header bg-warning">
+                        <h4 class="modal-title"><i class="bi bi-credit-card mr-2"></i>Setting Info Pembayaran Seminar</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            Setting info pembayaran untuk <strong id="payment-nama"></strong>. Info ini akan ditampilkan di form pendaftaran seminar mahasiswa.
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Biaya Seminar <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Rp</span>
+                                </div>
+                                <input type="number" name="biaya_seminar" id="payment-biaya_seminar" class="form-control" required min="0">
+                            </div>
+                        </div>
+
+                        <hr>
+                        <h6 class="text-muted mb-3"><i class="fas fa-university mr-2"></i>Transfer Bank</h6>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Nama Bank</label>
+                                    <input type="text" name="bank" id="payment-bank" class="form-control" placeholder="Contoh: BRI, BCA, Mandiri">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Nomor Rekening</label>
+                                    <input type="text" name="nomor_rekening" id="payment-nomor_rekening" class="form-control" placeholder="Contoh: 1234567890">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Nama Pemilik Rekening</label>
+                            <input type="text" name="nama_rekening" id="payment-nama_rekening" class="form-control" placeholder="Contoh: HIMATIF UNSIQ">
+                        </div>
+
+                        <hr>
+                        <h6 class="text-muted mb-3"><i class="fas fa-wallet mr-2"></i>E-Wallet</h6>
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Nomor DANA</label>
+                                    <input type="text" name="nomor_dana" id="payment-nomor_dana" class="form-control" placeholder="Contoh: 081234567890">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Nomor SeaBank</label>
+                                    <input type="text" name="nomor_seabank" id="payment-nomor_seabank" class="form-control" placeholder="Contoh: 081234567890">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-warning">Simpan Info Pembayaran</button>
                     </div>
                 </form>
             </div>
@@ -300,6 +388,19 @@ $(document).ready(function() {
         var button = $(e.relatedTarget);
         $('#hapus-id').val(button.data('id'));
         $('#hapus-nama').text(button.data('nama'));
+    });
+
+    // Payment modal
+    $('#modal-payment').on('show.bs.modal', function(e) {
+        var button = $(e.relatedTarget);
+        $('#payment-id').val(button.data('id'));
+        $('#payment-nama').text(button.data('nama'));
+        $('#payment-biaya_seminar').val(button.data('biaya_seminar') || 25000);
+        $('#payment-nama_rekening').val(button.data('nama_rekening') || '');
+        $('#payment-nomor_rekening').val(button.data('nomor_rekening') || '');
+        $('#payment-bank').val(button.data('bank') || '');
+        $('#payment-nomor_dana').val(button.data('nomor_dana') || '');
+        $('#payment-nomor_seabank').val(button.data('nomor_seabank') || '');
     });
 });
 </script>
