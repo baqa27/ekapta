@@ -27,6 +27,7 @@ class ReviewSeminar extends Model
         'nilai_2',
         'nilai_3',
         'nilai_4',
+        'nilai_angka', // Nilai langsung (digunakan di KP)
         'tanggal_acc',
         'dosen_status',
         'lampiran',
@@ -35,6 +36,9 @@ class ReviewSeminar extends Model
         'tanggal_acc_manual',
         'lampiran_lembar_revisi',
         'token',
+        'status_hasil',
+        'catatan_penguji',
+        'is_dinilai',
     ];
 
     public function revisis(){

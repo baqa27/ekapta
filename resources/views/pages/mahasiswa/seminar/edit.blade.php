@@ -91,7 +91,7 @@
                                                 <div class="form-group">
                                                     <label>Upload Laporan Final PDF</label>
                                                     <div class="custom-file">
-                                                        <input type="file" class="custom-file-input @error('file_laporan') is-invalid @enderror" 
+                                                        <input type="file" class="custom-file-input @error('file_laporan') is-invalid @enderror"
                                                             name="file_laporan" accept=".pdf">
                                                         <label class="custom-file-label">Pilih file baru (opsional)</label>
                                                     </div>
@@ -100,7 +100,7 @@
                                                     @enderror
                                                     @if($seminar->file_laporan)
                                                     <div class="mt-2 bg-light p-2 rounded">
-                                                        <small>File sebelumnya: 
+                                                        <small>File sebelumnya:
                                                             <a href="{{ storage_url($seminar->file_laporan) }}" target="_blank">
                                                                 <i class="fas fa-paperclip"></i> {{ basename($seminar->file_laporan) }}
                                                             </a>
@@ -113,7 +113,7 @@
                                                 <div class="form-group">
                                                     <label>Upload Lembar Pengesahan PDF</label>
                                                     <div class="custom-file">
-                                                        <input type="file" class="custom-file-input @error('file_pengesahan') is-invalid @enderror" 
+                                                        <input type="file" class="custom-file-input @error('file_pengesahan') is-invalid @enderror"
                                                             name="file_pengesahan" accept=".pdf">
                                                         <label class="custom-file-label">Pilih file baru (opsional)</label>
                                                     </div>
@@ -122,7 +122,7 @@
                                                     @enderror
                                                     @if($seminar->file_pengesahan)
                                                     <div class="mt-2 bg-light p-2 rounded">
-                                                        <small>File sebelumnya: 
+                                                        <small>File sebelumnya:
                                                             <a href="{{ storage_url($seminar->file_pengesahan) }}" target="_blank">
                                                                 <i class="fas fa-paperclip"></i> {{ basename($seminar->file_pengesahan) }}
                                                             </a>
@@ -151,7 +151,7 @@
                                                     </div>
                                                     @if($seminar->lampiran_1)
                                                     <div class="mt-2 bg-light p-2 rounded">
-                                                        <small>File sebelumnya: 
+                                                        <small>File sebelumnya:
                                                             <a href="{{ storage_url($seminar->lampiran_1) }}" target="_blank">
                                                                 <i class="fas fa-paperclip"></i> {{ basename($seminar->lampiran_1) }}
                                                             </a>
@@ -169,7 +169,7 @@
                                                     </div>
                                                     @if($seminar->lampiran_2)
                                                     <div class="mt-2 bg-light p-2 rounded">
-                                                        <small>File sebelumnya: 
+                                                        <small>File sebelumnya:
                                                             <a href="{{ storage_url($seminar->lampiran_2) }}" target="_blank">
                                                                 <i class="fas fa-paperclip"></i> {{ basename($seminar->lampiran_2) }}
                                                             </a>
@@ -189,7 +189,7 @@
                                                     </div>
                                                     @if($seminar->lampiran_3)
                                                     <div class="mt-2 bg-light p-2 rounded">
-                                                        <small>File sebelumnya: 
+                                                        <small>File sebelumnya:
                                                             <a href="{{ storage_url($seminar->lampiran_3) }}" target="_blank">
                                                                 <i class="fas fa-paperclip"></i> {{ basename($seminar->lampiran_3) }}
                                                             </a>
@@ -207,7 +207,7 @@
                                                     </div>
                                                     @if($seminar->lampiran_4)
                                                     <div class="mt-2 bg-light p-2 rounded">
-                                                        <small>File sebelumnya: 
+                                                        <small>File sebelumnya:
                                                             <a href="{{ storage_url($seminar->lampiran_4) }}" target="_blank">
                                                                 <i class="fas fa-paperclip"></i> {{ basename($seminar->lampiran_4) }}
                                                             </a>
@@ -230,10 +230,31 @@
                                         <div class="form-group">
                                             <label>Link Akses Produk <span class="text-danger">*</span></label>
                                             <input type="url" class="form-control @error('link_akses_produk') is-invalid @enderror"
-                                                name="link_akses_produk" placeholder="https://..." 
+                                                name="link_akses_produk" placeholder="https://..."
                                                 value="{{ old('link_akses_produk', $seminar->link_akses_produk) }}" required>
                                             <small class="text-muted">Masukkan link untuk mengakses produk KP (Google Drive, GitHub, dll)</small>
                                             @error('link_akses_produk')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Dokumen Penilaian <small class="text-muted">(Opsional)</small></label>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input @error('dokumen_penilaian') is-invalid @enderror"
+                                                    name="dokumen_penilaian" accept=".pdf,.jpg,.jpeg,.png">
+                                                <label class="custom-file-label">Pilih file baru (opsional)</label>
+                                            </div>
+                                            @if($seminar->dokumen_penilaian)
+                                            <div class="mt-2 bg-light p-2 rounded">
+                                                <small>File sebelumnya:
+                                                    <a href="{{ storage_url($seminar->dokumen_penilaian) }}" target="_blank">
+                                                        <i class="fas fa-paperclip"></i> {{ basename($seminar->dokumen_penilaian) }}
+                                                    </a>
+                                                </small>
+                                            </div>
+                                            @endif
+                                            <small class="text-muted">Upload dokumen penilaian tambahan jika ada</small>
+                                            @error('dokumen_penilaian')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -270,7 +291,7 @@
                                                 <div class="form-group">
                                                     <label>Upload Bukti Pembayaran</label>
                                                     <div class="custom-file">
-                                                        <input type="file" class="custom-file-input @error('bukti_bayar') is-invalid @enderror" 
+                                                        <input type="file" class="custom-file-input @error('bukti_bayar') is-invalid @enderror"
                                                             name="bukti_bayar" accept=".pdf,.jpg,.jpeg,.png">
                                                         <label class="custom-file-label">Pilih file baru (opsional)</label>
                                                     </div>
@@ -279,7 +300,7 @@
                                                     @enderror
                                                     @if($seminar->bukti_bayar)
                                                     <div class="mt-2 bg-light p-2 rounded">
-                                                        <small>File sebelumnya: 
+                                                        <small>File sebelumnya:
                                                             <a href="{{ storage_url($seminar->bukti_bayar) }}" target="_blank">
                                                                 <i class="fas fa-paperclip"></i> {{ basename($seminar->bukti_bayar) }}
                                                             </a>

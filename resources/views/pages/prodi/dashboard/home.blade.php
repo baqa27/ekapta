@@ -76,7 +76,7 @@
                         <span class="info-box-icon bg-success elevation-1"><i class="fas fa-check"></i></span>
 
                         <div class="info-box-content">
-                            <span class="info-box-text">Pengumpulan Akhir</span>
+                            <span class="info-box-text">Jilid KP</span>
                             <span class="info-box-number">{{ count($pengumpulan_akhir) }} Mahasiswa</span>
                         </div>
                     </div>
@@ -241,12 +241,12 @@
                 <div class="col-md-6">
                     <div class="card" style="min-height: 16rem">
                         <div class="card-header bg-success">
-                            Pengumpulan Akhir Berdasarkan Status
+                            Jilid KP Berdasarkan Status
                         </div>
                         <div class="card-body">
 
                             <div class="progress-group">
-                                Pengumpulan Akhir Diterima
+                                Jilid KP Diterima
                                 <span class="float-right"><b>{{ count($pengumpulan_akhir_diterima) }}</b>/{{ count($pengumpulan_akhir) }}</span>
                                 <div class="progress progress-sm">
                                     <div class="progress-bar bg-success" style="width: {{ count($pengumpulan_akhir_diterima) != 0 ? (count($pengumpulan_akhir_diterima) / count($pengumpulan_akhir)) * 100 : 0 }}%">
@@ -255,7 +255,7 @@
                             </div>
 
                             <div class="progress-group">
-                                Pengumpulan Akhir Review
+                                Jilid KP Review
                                 <span class="float-right"><b>{{ count($pengumpulan_akhir_review) }}</b>/{{ count($pengumpulan_akhir) }}</span>
                                 <div class="progress progress-sm">
                                     <div class="progress-bar bg-secondary" style="width: {{ count($pengumpulan_akhir_review) != 0 ? (count($pengumpulan_akhir_review) / count($pengumpulan_akhir)) * 100 : 0 }}%">
@@ -264,7 +264,7 @@
                             </div>
 
                             <div class="progress-group">
-                                Pengumpulan Akhir Revisi
+                                Jilid KP Revisi
                                 <span class="float-right"><b>{{ count($pengumpulan_akhir_revisi) }}</b>/{{ count($pengumpulan_akhir) }}</span>
                                 <div class="progress progress-sm">
                                     <div class="progress-bar bg-warning" style="width: {{ count($pengumpulan_akhir_revisi) != 0 ? (count($pengumpulan_akhir_revisi) / count($pengumpulan_akhir)) * 100 : 0 }}%">

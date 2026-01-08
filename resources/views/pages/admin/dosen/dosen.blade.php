@@ -156,7 +156,7 @@
                                     <label class="custom-file-label" for="exampleInputFile">Choose
                                         file</label>
                                 </div>
-                                
+
                             </div>
                             @error('file')
                                 <small class="text-danger"
@@ -199,7 +199,7 @@
                                     <label class="custom-file-label" for="exampleInputFile">Choose
                                         file</label>
                                 </div>
-                                
+
                             </div>
                             @error('file')
                                 <small class="text-danger"
@@ -259,6 +259,14 @@
                                 <div class="form-group">
                                     <label>No HP</label>
                                     <input type="text" name="hp" class="form-control" placeholder="08xxxxxxxxxx">
+                                </div>
+                                <div class="form-group">
+                                    <label>Mode Bimbingan</label>
+                                    <select name="mode_bimbingan" class="form-control">
+                                        <option value="both">Offline & Online</option>
+                                        <option value="offline">Offline Saja</option>
+                                        <option value="online">Online Saja</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label>Password <span class="text-danger">*</span> <small class="text-muted">(default: NIDN)</small></label>

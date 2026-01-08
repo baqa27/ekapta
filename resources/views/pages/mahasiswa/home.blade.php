@@ -31,7 +31,7 @@
                             <a href="{{ route('dashboard.mahasiswa.kp') }}" class="btn btn-primary col-md-12 p-3 btn-lg">📕 MENU KERJA Praktek</a>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <a href="{{ route('pengumpulan-akhir.mahasiswa') }}" class="btn btn-secondary col-md-12 p-3 btn-lg">📋 MENU PENGUMPULAN AKHIR KP</a>
+                            <a href="{{ route('pengumpulan-akhir.mahasiswa') }}" class="btn btn-secondary col-md-12 p-3 btn-lg">📋 MENU JILID KP</a>
                         </div>
                     </div>
                 </div>

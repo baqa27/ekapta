@@ -131,28 +131,14 @@
                                                         {{ date('d M Y H:i', strtotime($seminar->created_at)) }}
                                                     </td>
                                                     <td>
-                                                        {{ $seminar->tanggal_ujian ? \App\Helpers\AppHelper::parse_date_short($seminar->tanggal_ujian) : null }}
+                                                        {{ $seminar->tanggal_ujian ? \App\Helpers\AppHelper::parse_date_short($seminar->tanggal_ujian) : '-' }}
                                                     </td>
-                                                    <td>{{ $seminar->tempat_ujian }}</td>
+                                                    <td>{{ $seminar->tempat_ujian ?? '-' }}</td>
                                                     <td>
-                                                        <div class="d-flex">
-                                                            <a href="{{ url('/seminar/review/' . $seminar->id) }}"
-                                                                class="btn btn-primary btn-sm shadow mr-2">
-                                                                <i class="fas fa-info-circle mr-1"></i> Detail
-                                                            </a>
-
-                                                            @if(count($seminar->reviews) != 5)
-                                                                <div onclick="return confirmCancel()">
-                                                                    <form action="{{ route('seminar.cancel.acc') }}" method="post">
-                                                                        @csrf
-                                                                        <input type="hidden" name="id" value="{{ $seminar->id }}"/>
-                                                                        <button type="submit" class="btn btn-danger btn-sm"><i class="bi bi-x-circle mr-1"></i> Batalkan Acc
-                                                                        </button>
-                                                                    </form>
-                                                                </div>
-                                                            @endif
-
-                                                        </div>
+                                                        <a href="{{ url('/seminar/review/' . $seminar->id) }}"
+                                                            class="btn btn-primary btn-sm shadow">
+                                                            <i class="fas fa-info-circle mr-1"></i> Detail
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             @endforeach

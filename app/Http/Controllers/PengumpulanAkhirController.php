@@ -19,10 +19,13 @@ class PengumpulanAkhirController extends Controller
     public function index()
     {
         return view('pages.pengumpulan-akhir.admin-index', [
-            'title' => 'Pengumpulan Akhir KP',
+            'title' => 'Jilid KP',
             'active' => 'pengumpulan-akhir',
             'sidebar' => Auth::guard('admin')->user()->type == Admin::TYPE_SUPER_ADMIN ? 'partials.sidebarAdmin' : null,
-            'jilids' => Auth::guard('admin')->user()->type == Admin::TYPE_SUPER_ADMIN ? Jilid::orderBy('created_at','desc')->get() : Jilid::orderBy('created_at','desc')->where('status', Jilid::JILID_VALID)->get(),
+            // Super Admin bisa lihat semua, Fotokopi hanya lihat yang VALID dan SELESAI
+            'jilids' => Auth::guard('admin')->user()->type == Admin::TYPE_SUPER_ADMIN
+                ? Jilid::orderBy('created_at','desc')->get()
+                : Jilid::orderBy('created_at','desc')->whereIn('status', [Jilid::JILID_VALID, Jilid::JILID_SELESAI])->get(),
         ]);
     }
 
@@ -33,7 +36,7 @@ class PengumpulanAkhirController extends Controller
     public function mahasiswaIndex()
     {
         $mahasiswa = Mahasiswa::with(['jilid', 'seminar'])->findOrFail(Auth::guard('mahasiswa')->user()->id);
-        
+
         // Cek tahapan: Seminar harus selesai dulu
         if (!AppHelper::canAccessPengumpulanAkhir($mahasiswa)) {
             return redirect()->route('seminar.mahasiswa')->with('warning', 'Selesaikan tahap Seminar KP terlebih dahulu. Anda harus lulus seminar untuk mengakses Pengumpulan Akhir.');
@@ -67,7 +70,7 @@ class PengumpulanAkhirController extends Controller
         if (!AppHelper::canAccessPengumpulanAkhir($mahasiswa)) {
             return redirect()->route('seminar.mahasiswa')->with('warning', 'Selesaikan tahap Seminar KP terlebih dahulu. Anda harus lulus seminar untuk mengakses Pengumpulan Akhir.');
         }
-        
+
         if ($mahasiswa->jilid) {
             return redirect()->route('pengumpulan-akhir.mahasiswa')->with('warning','Sudah melakukan pengajuan pengumpulan akhir KP. Tunggu validasi oleh Admin');
         }
@@ -155,17 +158,21 @@ class PengumpulanAkhirController extends Controller
     public function detail($id)
     {
         $jilid = Jilid::with(['mahasiswa','revisis'])->findOrFail($id);
-        $mahasiswa = $jilid->mahasiswa()->with(['bimbingans', 'seminar'])->first();
+        $mahasiswa = $jilid->mahasiswa()->with(['bimbingans', 'seminar.sesiSeminar.dosenPenguji', 'seminar.dosenPenguji'])->first();
         $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
 
         // Hitung nilai KP jika ada seminar
         $nilai_kp = null;
+        $review_pembimbing = null;
+        $review_penguji = null;
         if ($mahasiswa->seminar) {
             $nilai_kp = AppHelper::hitung_nilai_kp($mahasiswa->seminar);
+            $review_pembimbing = $mahasiswa->seminar->reviews()->where('dosen_status', 'pembimbing')->first();
+            $review_penguji = $mahasiswa->seminar->reviews()->where('dosen_status', 'penguji')->first();
         }
 
         return view('pages.pengumpulan-akhir.detail', [
-            'title' => 'Detail Pengumpulan Akhir KP',
+            'title' => 'Detail Jilid KP',
             'sidebar' => Auth::guard('admin')->user()->type == Admin::TYPE_SUPER_ADMIN ? 'partials.sidebarAdmin' : null,
             'active' => Auth::guard('admin')->user()->type == Admin::TYPE_SUPER_ADMIN ? 'pengumpulan-akhir' : null,
             'jilid' => $jilid,
@@ -174,13 +181,15 @@ class PengumpulanAkhirController extends Controller
             'is_admin' => true,
             'revisis' => $jilid->revisis()->paginate(5),
             'nilai_kp' => $nilai_kp,
+            'review_pembimbing' => $review_pembimbing,
+            'review_penguji' => $review_penguji,
         ]);
     }
 
     public function detailMahasiswa($id)
     {
         $jilid = Jilid::with(['mahasiswa','revisis'])->findOrFail($id);
-        $mahasiswa = $jilid->mahasiswa()->with(['bimbingans', 'seminar'])->first();
+        $mahasiswa = $jilid->mahasiswa()->with(['bimbingans', 'seminar.sesiSeminar.dosenPenguji', 'seminar.dosenPenguji'])->first();
         $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
 
         if (Auth::guard('mahasiswa')->user()->id != $mahasiswa->id) {
@@ -189,12 +198,16 @@ class PengumpulanAkhirController extends Controller
 
         // Hitung nilai KP jika ada seminar
         $nilai_kp = null;
+        $review_pembimbing = null;
+        $review_penguji = null;
         if ($mahasiswa->seminar) {
             $nilai_kp = AppHelper::hitung_nilai_kp($mahasiswa->seminar);
+            $review_pembimbing = $mahasiswa->seminar->reviews()->where('dosen_status', 'pembimbing')->first();
+            $review_penguji = $mahasiswa->seminar->reviews()->where('dosen_status', 'penguji')->first();
         }
 
         return view('pages.pengumpulan-akhir.detail', [
-            'title' => 'Detail Pengumpulan Akhir KP',
+            'title' => 'Detail Jilid KP',
             'active' => 'pengumpulan-akhir',
             'jilid' => $jilid,
             'mahasiswa' => $mahasiswa,
@@ -202,6 +215,8 @@ class PengumpulanAkhirController extends Controller
             'is_admin' => false,
             'revisis' => $jilid->revisis()->paginate(5),
             'nilai_kp' => $nilai_kp,
+            'review_pembimbing' => $review_pembimbing,
+            'review_penguji' => $review_penguji,
         ]);
     }
 

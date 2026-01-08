@@ -49,7 +49,7 @@
 
     <div class="margin-left margin-right mt-3">
         <p>Yang bertanda tangan di bawah ini, Ketua Program Studi {{ $prodi->namaprodi }} Fakultas Teknik dan Ilmu Komputer (FASTIKOM) Universitas Sains Al-Qur'an (UNSIQ) Jawa Tengah di Wonosobo, menerangkan bahwa:</p>
-        
+
         <table class="info-table mt-3" style="margin-left: 20px;">
             <tr>
                 <td>Nama</td>
@@ -85,19 +85,6 @@
         <p>Demikian surat keterangan ini dibuat untuk dapat dipergunakan sebagaimana mestinya.</p>
     </div>
 
-    @if ($sisa_kesempatan > 0)
-    <div class="footer-note">
-        <strong><i class="fas fa-info-circle"></i> Informasi:</strong><br>
-        Anda masih memiliki kesempatan untuk mengajukan Kerja Praktek sebanyak <strong>{{ $sisa_kesempatan }}x</strong> lagi.
-        Silahkan perbaiki pengajuan sesuai catatan di atas dan ajukan kembali melalui sistem EKAPTA.
-    </div>
-    @else
-    <div class="footer-note" style="background-color: #f8d7da; border-color: #f5c6cb;">
-        <strong>Perhatian:</strong><br>
-        Anda sudah mencapai batas maksimal pengajuan (2x ditolak). Silahkan hubungi Program Studi untuk informasi lebih lanjut.
-    </div>
-    @endif
-
     <table style="margin-top: 30px;">
         <tr>
             <td width="400"></td>
@@ -105,8 +92,13 @@
                 <p>Wonosobo, {{ $tanggal_tolak }}</p>
                 <p>Ketua Program Studi {{ $prodi->namaprodi }}</p>
                 <br><br><br><br>
+                @if (\App\Helpers\AppHelper::instance()->getDosen($prodi->kodekaprodi))
+                <p><u><strong>{{ \App\Helpers\AppHelper::instance()->getDosen($prodi->kodekaprodi)->nama }}, {{ \App\Helpers\AppHelper::instance()->getDosen($prodi->kodekaprodi)->gelar }}</strong></u></p>
+                <p>NIDN. {{ \App\Helpers\AppHelper::instance()->getDosen($prodi->kodekaprodi)->nidn }}</p>
+                @else
                 <p><u><strong>____________________</strong></u></p>
                 <p>NIDN. ____________________</p>
+                @endif
             </td>
         </tr>
     </table>

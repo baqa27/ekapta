@@ -154,12 +154,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- Pengumpulan Akhir -->
+                                <!-- Jilid KP -->
                                 <div class="card card-primary">
                                     <div class="card-header">
                                         <h4 class="card-title w-100">
                                             <a class="d-block w-100" data-toggle="collapse" href="#collapseFive">
-                                                <span class="badge bg-white textprimary">5</span> Pengumpulan Akhir KP
+                                                <span class="badge bg-white textprimary">5</span> Jilid KP
                                             </a>
                                         </h4>
                                     </div>
@@ -185,15 +185,7 @@
                                                     </ol>
                                                 </li>
                                             </ul>
-                                            <p class="fw-semibold" style="margin-left: 18px;">Penetapan Nilai Akhir:</p>
-                                            <ul>
-                                                <li>
-                                                    Nilai Akhir = Gabungan Nilai Seminar + Pembimbing + Instansi.
-                                                </li>
-                                                <li>
-                                                    Status KP = Selesai.
-                                                </li>
-                                            </ul>
+                                            <p class="fw-semibold" style="margin-left: 18px;">Status KP Selesai setelah dokumen divalidasi Admin.</p>
                                         </div>
                                     </div>
                                 </div>
@@ -284,7 +276,7 @@
                                         data-content="And here's some amazing content. It's very engaging. Right?"
                                         data-original-title="2020">
                                         <div class="inner-circle"></div>
-                                        <p class="h6 mt-3 mb-1">Pengumpulan Akhir</p>
+                                        <p class="h6 mt-3 mb-1">Jilid KP</p>
                                         @if($is_pengumpulan_akhir_completed === true)
                                             <div class="bg-soft-success text-success rounded mt-3">Selesai</div>
                                         @else

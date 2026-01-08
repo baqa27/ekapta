@@ -374,18 +374,34 @@ class BimbinganController extends Controller
 
     public function bimbinganDetail($id)
     {
-        $bimbingan = Bimbingan::with(['revisis','mahasiswa'])->findOrFail($id);
+        $bimbingan = Bimbingan::with(['revisis','mahasiswa', 'bagian', 'dosens'])->findOrFail($id);
         if ($bimbingan->mahasiswa->id != Auth::guard('mahasiswa')->user()->id) {
             return back()->with('warning', 'Bimbingan tidak ditemukan');
         }
         if ($bimbingan->status == null) {
             return back()->with('warning', 'Harap edit Bimbingan terlebih dahulu');
         }
+        
+        $mahasiswa = $bimbingan->mahasiswa;
+        
+        // Ambil dosen pembimbing
+        $dosen_pembimbing = $mahasiswa->dosens()->where('status', 'pembimbing')->first();
+        if (!$dosen_pembimbing) {
+            $dosen_pembimbing = $mahasiswa->dosens()->where('status', 'utama')->first();
+        }
+        
+        // Ambil pengajuan untuk judul KP
+        $pengajuan = Pengajuan::where('mahasiswa_id', $mahasiswa->id)
+            ->where('status', 'diterima')
+            ->first();
+        
         return view('pages.mahasiswa.bimbingan.detail', [
             'title' => 'Detail Bimbingan Kerja Praktek',
             'bimbingan' => $bimbingan,
             'active' => 'bimbingan',
             'revisis' => $bimbingan->revisis()->orderBy('created_at', 'desc')->paginate(5),
+            'dosen_pembimbing' => $dosen_pembimbing,
+            'pengajuan' => $pengajuan,
         ]);
     }
 

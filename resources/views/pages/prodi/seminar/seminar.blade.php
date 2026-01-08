@@ -122,7 +122,6 @@
                                                 <th>Mahasiswa</th>
                                                 <th>Judul KP</th>
                                                 <th>Tanggal Seminar</th>
-                                                <th>Nilai</th>
                                                 <th>Status</th>
                                                 <th>Aksi</th>
                                             </tr>
@@ -136,9 +135,6 @@
                                                     <td>{{ $seminar->mahasiswa->nama }}<br><small class="text-muted">{{ $seminar->mahasiswa->nim }}</small></td>
                                                     <td>{{ $seminar->pengajuan->judul }}</td>
                                                     <td>{{ $seminar->tanggal_ujian ? \App\Helpers\AppHelper::parse_date_short($seminar->tanggal_ujian) : '-' }}</td>
-                                                    <td class="text-center">
-                                                        <b>{{ $seminar->nilai_akhir ?? '-' }}</b>
-                                                    </td>
                                                     <td><span class="badge bg-success">Selesai</span></td>
                                                     <td>
                                                         <a href="{{ route('seminar.prodi.detail', $seminar->id) }}" class="btn btn-primary btn-sm shadow">

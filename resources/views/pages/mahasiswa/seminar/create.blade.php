@@ -28,7 +28,7 @@
                         <div class="card-body">
                             <div class="alert alert-info">
                                 <i class="fas fa-info-circle mr-2"></i>
-                                <strong>Informasi:</strong> Setelah submit, pendaftaran akan diverifikasi oleh <strong>Himpunan</strong>. 
+                                <strong>Informasi:</strong> Setelah submit, pendaftaran akan diverifikasi oleh <strong>Himpunan</strong>.
                                 Pastikan semua dokumen lengkap dan pembayaran sudah sesuai (Rp 25.000).
                             </div>
 
@@ -91,7 +91,7 @@
                                                 <div class="form-group">
                                                     <label>Upload Laporan Final PDF <span class="text-danger">*</span></label>
                                                     <div class="custom-file">
-                                                        <input type="file" class="custom-file-input @error('file_laporan') is-invalid @enderror" 
+                                                        <input type="file" class="custom-file-input @error('file_laporan') is-invalid @enderror"
                                                             name="file_laporan" accept=".pdf" required>
                                                         <label class="custom-file-label">Pilih file (maks 10 MB)</label>
                                                     </div>
@@ -104,7 +104,7 @@
                                                 <div class="form-group">
                                                     <label>Upload Lembar Pengesahan PDF <span class="text-danger">*</span></label>
                                                     <div class="custom-file">
-                                                        <input type="file" class="custom-file-input @error('file_pengesahan') is-invalid @enderror" 
+                                                        <input type="file" class="custom-file-input @error('file_pengesahan') is-invalid @enderror"
                                                             name="file_pengesahan" accept=".pdf" required>
                                                         <label class="custom-file-label">Pilih file (maks 10 MB)</label>
                                                     </div>
@@ -167,7 +167,7 @@
                                     </div>
                                 </div>
 
-                                {{-- BAGIAN 4: PEMBAYARAN --}}
+                                {{-- BAGIAN 4: LINK PRODUK --}}
                                 <div class="card card-secondary">
                                     <div class="card-header py-2">
                                         <h5 class="card-title mb-0">4. Link Akses Produk KP</h5>
@@ -176,10 +176,22 @@
                                         <div class="form-group">
                                             <label>Link Akses Produk <span class="text-danger">*</span></label>
                                             <input type="url" class="form-control @error('link_akses_produk') is-invalid @enderror"
-                                                name="link_akses_produk" placeholder="https://..." 
+                                                name="link_akses_produk" placeholder="https://..."
                                                 value="{{ old('link_akses_produk') }}" required>
                                             <small class="text-muted">Masukkan link untuk mengakses produk KP (Google Drive, GitHub, dll)</small>
                                             @error('link_akses_produk')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Dokumen Penilaian <small class="text-muted">(Opsional)</small></label>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input @error('dokumen_penilaian') is-invalid @enderror"
+                                                    name="dokumen_penilaian" accept=".pdf,.jpg,.jpeg,.png">
+                                                <label class="custom-file-label">Pilih file (opsional)</label>
+                                            </div>
+                                            <small class="text-muted">Upload dokumen penilaian tambahan jika ada</small>
+                                            @error('dokumen_penilaian')
                                                 <div class="invalid-feedback">{{ $message }}</div>
                                             @enderror
                                         </div>
@@ -196,7 +208,7 @@
                                             <i class="fas fa-info-circle text-primary mr-2"></i>
                                             Nominal pembayaran: <strong>Rp {{ number_format($himpunan->biaya_seminar ?? 25000, 0, ',', '.') }}</strong>
                                         </div>
-                                        
+
                                         @if($himpunan && ($himpunan->bank || $himpunan->nomor_dana || $himpunan->nomor_seabank))
                                         <div class="card bg-light mb-3">
                                             <div class="card-body py-2">
@@ -215,7 +227,7 @@
                                             </div>
                                         </div>
                                         @endif
-                                        
+
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group">
@@ -238,7 +250,7 @@
                                                 <div class="form-group">
                                                     <label>Upload Bukti Pembayaran <span class="text-danger">*</span></label>
                                                     <div class="custom-file">
-                                                        <input type="file" class="custom-file-input @error('bukti_bayar') is-invalid @enderror" 
+                                                        <input type="file" class="custom-file-input @error('bukti_bayar') is-invalid @enderror"
                                                             name="bukti_bayar" accept=".pdf,.jpg,.jpeg,.png" required>
                                                         <label class="custom-file-label">Pilih file (maks 10 MB)</label>
                                                     </div>

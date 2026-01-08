@@ -202,17 +202,6 @@ $bulan = 'XII';
         </tr>
         <tr>
             <td>
-                <p class="margin-left">Judul Kerja Praktek</p>
-            </td>
-            <td>
-                <p class="titik-dua">:</p>
-            </td>
-            <td>
-                <p class="margin-right"><b>{{ $pendaftaran->pengajuan->judul }}</b></p>
-            </td>
-        </tr>
-        <tr>
-            <td>
                 <p class="margin-left">Tanggal Pembayaran</p>
             </td>
             <td>
@@ -220,6 +209,17 @@ $bulan = 'XII';
             </td>
             <td>
                 <p>{{ $pendaftaran->tanggal_pembayaran }}</p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p class="margin-left">Judul Kerja Praktek</p>
+            </td>
+            <td>
+                <p class="titik-dua">:</p>
+            </td>
+            <td>
+                <p class="margin-right"><b>{{ $pendaftaran->pengajuan->judul }}</b></p>
             </td>
         </tr>
         <tr>

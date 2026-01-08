@@ -155,7 +155,11 @@
             var link = document.getElementById('linkPenilaian');
             link.select();
             document.execCommand('copy');
-            alert('Link berhasil disalin!');
+            $(document).Toasts('create', {
+                class: 'bg-success mt-5 mr-3',
+                title: 'Berhasil',
+                body: 'Link berhasil disalin!'
+            });
         }
     </script>
 @endsection

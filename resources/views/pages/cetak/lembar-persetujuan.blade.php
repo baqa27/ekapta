@@ -43,7 +43,7 @@
             <br>
             <b>{{ $mahasiswa->nim }}</b>
             <br><br><br><br><br>
-            <span>Telah disetujui untuk dapat diujikan pada Pengumpulan Akhir Kerja Praktek</span>
+            <span>Telah disetujui untuk dapat diujikan pada Jilid Kerja Praktek</span>
             <br><br><br><br>
             <span>Wonosobo, {{ $date }}</span>
             <br><br><br>

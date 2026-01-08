@@ -66,6 +66,7 @@ class Pendaftaran extends Model
         'tanggal_perpanjangan_terakhir',
         'sertifikat_peserta_1',
         'sertifikat_peserta_2',
+        'dokumen_pendukung', // Dokumen pendukung KP (menggantikan 2 sertifikat)
         'dokumen_pendukung_kp', // Dokumen pendukung KP (gabungan 2 sertifikat)
         'masa_berlaku_surat', // Masa berlaku surat tugas
     ];
@@ -122,10 +123,10 @@ class Pendaftaran extends Model
      */
     public function getBiayaPerpanjangan()
     {
-        $biayaAwal = $this->jenis_mahasiswa === self::JENIS_KARYAWAN 
-            ? self::BIAYA_KARYAWAN 
+        $biayaAwal = $this->jenis_mahasiswa === self::JENIS_KARYAWAN
+            ? self::BIAYA_KARYAWAN
             : self::BIAYA_REGULER;
-        
+
         return $biayaAwal * (self::BIAYA_PERPANJANGAN_PERSEN / 100);
     }
 
@@ -134,8 +135,8 @@ class Pendaftaran extends Model
      */
     public static function getBiayaPendaftaran($jenisMahasiswa)
     {
-        return $jenisMahasiswa === self::JENIS_KARYAWAN 
-            ? self::BIAYA_KARYAWAN 
+        return $jenisMahasiswa === self::JENIS_KARYAWAN
+            ? self::BIAYA_KARYAWAN
             : self::BIAYA_REGULER;
     }
 }

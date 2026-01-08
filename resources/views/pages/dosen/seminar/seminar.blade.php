@@ -41,6 +41,10 @@
                         <div class="card-body">
                             <div class="tab-content">
                                 <div class="tab-pane active" id="tab_1">
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle mr-2"></i>
+                                        Penilaian seminar KP dilakukan oleh Dosen Penguji melalui form penilaian yang disediakan Himpunan saat pelaksanaan seminar.
+                                    </div>
                                     <table id="example1" class="table table-bordered">
                                         <thead>
                                             <tr>
@@ -49,7 +53,6 @@
                                                 <th>Prodi</th>
                                                 <th>Judul KP</th>
                                                 <th>Status</th>
-                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -72,19 +75,6 @@
                                                     <td>
                                                         <span class="badge bg-secondary">{{ $review->status }}</span>
                                                     </td>
-                                                    <td>
-                                                        @if($review->dosen_status == 'penguji')
-                                                            <a href="{{ route('review.seminar.dosen', $review->id) }}"
-                                                               class="btn btn-primary btn-sm shadow">
-                                                                <i class="fas fa-star mr-1"></i> Review
-                                                            </a>
-                                                        @elseif($review->dosen_status == 'pembimbing')
-                                                            <a href="{{ route('review.seminar.dosen', $review->id) }}"
-                                                               class="btn btn-primary btn-sm shadow">
-                                                                <i class="fas fa-star mr-1"></i>Input Nilai
-                                                            </a>
-                                                        @endif
-                                                    </td>
                                                 </tr>
                                             @endforeach
 
@@ -96,13 +86,16 @@
                                                 <th>Prodi</th>
                                                 <th>Judul KP</th>
                                                 <th>Status</th>
-                                                <th>Aksi</th>
                                             </tr>
                                         </tfoot>
                                     </table>
                                 </div>
 
                                 <div class="tab-pane" id="tab_2">
+                                    <div class="alert alert-info">
+                                        <i class="fas fa-info-circle mr-2"></i>
+                                        Penilaian seminar KP dilakukan oleh Dosen Penguji melalui form penilaian yang disediakan Himpunan saat pelaksanaan seminar.
+                                    </div>
                                     <table id="example2" class="table table-bordered">
                                         <thead>
                                             <tr>
@@ -111,7 +104,6 @@
                                                 <th>Prodi</th>
                                                 <th>Judul KP</th>
                                                 <th>Status</th>
-                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -134,27 +126,6 @@
                                                     <td>
                                                         <span class="badge bg-success">{{ $review->status }}</span>
                                                     </td>
-                                                    <td>
-                                                        <div class="d-flex">
-                                                            <a href="{{ route('review.seminar.dosen', $review->id) }}"
-                                                                class="btn btn-primary btn-sm shadow mr-2">
-                                                                <i class="fas fa-star mr-1"></i> Input Nilai
-                                                            </a>
-                                                            @if($review->dosen_status == 'penguji' && $review->seminar->lampiran_laporan == null)
-                                                                <div onclick="return confirmCancel()">
-                                                                    <form action="{{ route('review.seminar.cancel.acc') }}"
-                                                                          method="post">
-                                                                        @csrf
-                                                                        <input type="hidden" name="id"
-                                                                               value="{{ $review->id }}">
-                                                                        <button class="btn btn-danger btn-sm shadow" type="submit">
-                                                                            <i class="bi bi-x-circle"></i> Batalkan
-                                                                        </button>
-                                                                    </form>
-                                                                </div>
-                                                            @endif
-                                                        </div>
-                                                    </td>
                                                 </tr>
                                             @endforeach
 
@@ -166,7 +137,6 @@
                                                 <th>Prodi</th>
                                                 <th>Judul KP</th>
                                                 <th>Status</th>
-                                                <th>Aksi</th>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -181,7 +151,6 @@
                                                 <th>Prodi</th>
                                                 <th>Judul KP</th>
                                                 <th>Status</th>
-                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -204,14 +173,6 @@
                                                     <td>
                                                         <span class="badge bg-warning">{{ $review->status }}</span>
                                                     </td>
-                                                    <td>
-                                                        <div class="d-flex">
-                                                            <a href="{{ route('review.seminar.dosen', $review->id) }}"
-                                                                class="btn btn-primary btn-sm shadow mr-2">
-                                                                <i class="fas fa-info-circle mr-1"></i> Detail
-                                                            </a>
-                                                        </div>
-                                                    </td>
                                                 </tr>
                                             @endforeach
 
@@ -223,7 +184,6 @@
                                                 <th>Prodi</th>
                                                 <th>Judul KP</th>
                                                 <th>Status</th>
-                                                <th>Aksi</th>
                                             </tr>
                                         </tfoot>
                                     </table>

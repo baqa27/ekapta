@@ -131,7 +131,7 @@
                                class="nav-link {{ $active == 'pengumpulan-akhir' ? 'active' : '' }}">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>
-                                    Pengumpulan Akhir KP
+                                    Jilid KP
                                 </p>
                             </a>
                         </li>

@@ -86,7 +86,7 @@
                 <div class="card" style="min-height: 12rem;">
                     <div class="car-body text-center">
                         <img src=" {{ asset('ekapta') }}/assets/img/img-5.png" width="150" alt="Ekapta">
-                        <p class="fs-6 fw-semibold">Pengumpulan Akhir</p>
+                        <p class="fs-6 fw-semibold">Jilid KP</p>
                     </div>
                 </div>
             </a>
@@ -225,7 +225,7 @@
         <div class="modal-content">
             <div class="modal-header d-flex justify-content-between">
                 <div>
-                    <h5 class="modal-title" id="exampleModalToggleLabel">Pengumpulan Akhir</h5>
+                    <h5 class="modal-title" id="exampleModalToggleLabel">Jilid KP</h5>
                 </div>
                 <div>
                     <button type="button" class="btn-close float-end" data-bs-dismiss="modal"
@@ -235,13 +235,13 @@
             <div class="modal-body">
                 <ul>
                     <li>
-                        Syarat untuk mendaftar Pengumpulan Akhir, harus sudah acc semua bab, produk, dan artikel
+                        Syarat untuk mendaftar Jilid KP, harus sudah acc semua bab, produk, dan artikel
                     </li>
                     <li>
-                        Mahasiswa mendaftar Pengumpulan Akhir dengan mengisi form pendaftaran
+                        Mahasiswa mendaftar Jilid KP dengan mengisi form pendaftaran
                     </li>
                 </ul>
-                <p class="fw-semibold" style="margin-left: 18px;">Setelah Pengumpulan Akhir :</p>
+                <p class="fw-semibold" style="margin-left: 18px;">Setelah Jilid KP :</p>
                 <ul>
                     <li>
                         Mahasiswa upload bimbingan revisi Seminar KP ditujukan ke dosen penguji

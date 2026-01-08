@@ -28,6 +28,7 @@ class Dosen extends Authenticatable
         'password',
         'ttd',
         'is_manual',
+        'mode_bimbingan',
     ];
 
     protected $hidden = [

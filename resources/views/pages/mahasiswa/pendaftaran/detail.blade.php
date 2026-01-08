@@ -70,7 +70,7 @@
 
                             <div class="row">
                                 <div class="col-md-4">
-                                    Dosen Pembimbing Kerja Praktek
+                                    Dosen Pembimbing Kerja Praktik
                                 </div>
                                 <div class="col-md-8">
                                     <b>{{ $dosen_pembimbing ? $dosen_pembimbing->nama . ', ' . $dosen_pembimbing->gelar : 'Belum ditentukan' }}</b>
@@ -80,7 +80,7 @@
 
                             <div class="row">
                                 <div class="col-md-4">
-                                    Judul Kerja Praktek
+                                    Judul Kerja Praktik
                                 </div>
                                 <div class="col-md-8">
                                     <b>{{ $pendaftaran->pengajuan->judul }}</b>
@@ -101,7 +101,7 @@
 
                             <div class="row">
                                 <div class="col-md-4">
-                                    Bukti Lembar Pernyataan Keaslian Hasil Kerja Praktek
+                                    Bukti Lembar Pernyataan Keaslian Hasil Kerja Praktik
                                 </div>
                                 <div class="col-md-8">
                                     <a href="{{ storage_url($pendaftaran->lampiran_2) }}" target="_blank"><i
@@ -134,7 +134,7 @@
 
                             <div class="row">
                                 <div class="col-md-4">
-                                    Bukti Pembayaran Kerja Praktek
+                                    Bukti Pembayaran Kerja Praktik
                                 </div>
                                 <div class="col-md-8">
                                     <a href="{{ storage_url($pendaftaran->lampiran_5) }}" target="_blank"><i
@@ -175,15 +175,12 @@
 
                             <div class="row">
                                 <div class="col-md-4">
-                                    Dokumen Pendukung KP
+                                    Dokumen Pendukung
                                 </div>
                                 <div class="col-md-8">
-                                    @if($pendaftaran->dokumen_pendukung_kp)
-                                    <a href="{{ storage_url($pendaftaran->dokumen_pendukung_kp) }}" target="_blank"><i
-                                            class="fas fa-paperclip"></i> {{ basename($pendaftaran->dokumen_pendukung_kp) }}</a>
-                                    @elseif($pendaftaran->sertifikat_peserta_1)
-                                    <a href="{{ storage_url($pendaftaran->sertifikat_peserta_1) }}" target="_blank"><i
-                                            class="fas fa-paperclip"></i> {{ Str::substr($pendaftaran->sertifikat_peserta_1, 40) }}</a>
+                                    @if($pendaftaran->dokumen_pendukung)
+                                    <a href="{{ storage_url($pendaftaran->dokumen_pendukung) }}" target="_blank"><i
+                                            class="fas fa-paperclip"></i> {{ Str::substr($pendaftaran->dokumen_pendukung, 40) }}</a>
                                     @else
                                     -
                                     @endif
@@ -291,7 +288,7 @@
                                                         <span class="text-secondary ml-2"><b>Lampiran : </b></span>
                                                         <a href="{{ storage_url($revisi->lampiran) }}" target="_blank">
                                                             <i class="fas fa-paperclip ml-1"></i>
-                                                            {{ basename($revisi->lampiran) }}
+                                                            {{ Str::substr($revisi->lampiran, 40) }}
                                                         </a>
                                                     </small>
                                                 </div>

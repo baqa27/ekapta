@@ -34,15 +34,10 @@
                 @endif
             @else
                 {{-- Alert Status --}}
-                @if ($seminar->status_seminar == 'selesai')
+                @if ($seminar->status_seminar == 'selesai' || $seminar->status_seminar == 'selesai_seminar')
                     <div class="alert alert-success alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        Selamat! Seminar KP anda sudah selesai. Silahkan lanjut ke <b><a href="{{ route('pengumpulan-akhir.create') }}">Pengumpulan Akhir KP.</a></b>
-                    </div>
-                @elseif ($seminar->status_seminar == 'selesai_seminar')
-                    <div class="alert alert-info alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                        Seminar KP selesai! Silahkan upload <strong>Nilai KP dari Instansi</strong> di bawah untuk menyelesaikan proses.
+                        Selamat! Seminar KP anda sudah selesai. Silahkan lanjut ke <b><a href="{{ route('pengumpulan-akhir.create') }}">Jilid KP.</a></b>
                     </div>
                 @elseif ($seminar->status_seminar == 'revisi')
                     <div class="alert alert-warning alert-dismissible">
@@ -109,17 +104,12 @@
                                                     @case('revisi')
                                                         <span class="badge bg-warning">Revisi Berkas</span>
                                                         @break
-                                                    @case('ditolak')
-                                                        <span class="badge bg-danger">Ditolak</span>
-                                                        @break
                                                     @case('dijadwalkan')
                                                         <span class="badge bg-info">Dijadwalkan</span>
                                                         @break
                                                     @case('selesai_seminar')
-                                                        <span class="badge bg-primary">Selesai Seminar</span>
-                                                        @break
                                                     @case('selesai')
-                                                        <span class="badge bg-success">Selesai KP</span>
+                                                        <span class="badge bg-success">Selesai</span>
                                                         @break
                                                     @default
                                                         <span class="badge bg-secondary">{{ $seminar->status_label ?? 'Review' }}</span>
@@ -134,13 +124,6 @@
                                                 @if ($seminar->status_seminar == 'revisi' || $seminar->is_valid == 2)
                                                     <a href="{{ route('seminar.edit', $seminar->id) }}" class="btn btn-success btn-sm mb-1">
                                                         <i class="fas fa-upload mr-1"></i> Submit Revisi
-                                                    </a>
-                                                @endif
-
-                                                {{-- Tombol Lihat Nilai --}}
-                                                @if (in_array($seminar->status_seminar, ['selesai_seminar', 'selesai']))
-                                                    <a href="{{ route('seminar.reviews', $seminar->id) }}" class="btn btn-primary btn-sm mb-1">
-                                                        <i class="fas fa-star mr-1"></i> Lihat Nilai
                                                     </a>
                                                 @endif
                                             </td>

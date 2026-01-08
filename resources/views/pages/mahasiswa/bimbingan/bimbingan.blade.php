@@ -40,7 +40,7 @@
                         <b><a href="{{ route('seminar.create') }}">Pendaftaran Seminar KP</a></b>
                     @endif
                     @if ($check_ujian_has_done)
-                        , <b><a href="{{ route('pengumpulan-akhir.create') }}">Pengumpulan Akhir KP</a></b>
+                        , <b><a href="{{ route('pengumpulan-akhir.create') }}">Jilid KP</a></b>
                     @endif
                 </div>
 
@@ -109,14 +109,10 @@
                                             @if ($bimbingan && $bimbingan->status)
                                                 {{-- Sudah ada bimbingan --}}
                                                 @if ($bimbingan->status == 'review')
+                                                    {{-- Status review: tampilkan tombol Detail saja (baik dosen manual maupun online) --}}
                                                     <a href="{{ url('/bimbingan/detail/' . $bimbingan->id) }}" class="btn btn-primary btn-sm shadow">
                                                         <i class="fas fa-info-circle mr-1"></i> Detail
                                                     </a>
-                                                    @if ($dosen_utama && $dosen_utama->is_manual)
-                                                        <a href="{{ route('bimbingan.submit.acc.manual', $bimbingan->id) }}" class="btn btn-warning btn-sm shadow">
-                                                            <i class="fas fa-upload"></i> Input Acc Manual
-                                                        </a>
-                                                    @endif
                                                 @elseif ($bimbingan->status == 'revisi')
                                                     <a href="{{ url('/bimbingan/detail/' . $bimbingan->id) }}" class="btn btn-primary btn-sm shadow">
                                                         <i class="fas fa-info-circle mr-1"></i> Detail

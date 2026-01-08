@@ -214,7 +214,11 @@
     <script>
         function copyLink(link) {
             navigator.clipboard.writeText(link).then(function() {
-                alert('Link penilaian berhasil disalin!');
+                $(document).Toasts('create', {
+                    class: 'bg-success mt-5 mr-3',
+                    title: 'Berhasil',
+                    body: 'Link penilaian berhasil disalin!'
+                });
             });
         }
     </script>

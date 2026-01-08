@@ -89,18 +89,25 @@
                                     <p class="text-muted mb-1">NIM: {{ $seminar->mahasiswa->nim }}</p>
                                     <small class="text-secondary">{{ Str::limit($seminar->judul_laporan ?? $seminar->pengajuan->judul, 60) }}</small>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-7">
                                     <div class="row">
-                                        <div class="col-md-4">
-                                            <label class="small text-muted">Nilai Seminar (0-100) <span class="text-danger">*</span></label>
+                                        <div class="col-md-3">
+                                            <label class="small text-muted">Nilai (0-100) <span class="text-danger">*</span></label>
                                             <input type="number" name="penilaian[{{ $seminar->id }}][nilai]" 
                                                    class="form-control nilai-input" min="0" max="100" step="0.01"
                                                    data-id="{{ $seminar->id }}" required placeholder="0-100">
                                         </div>
-                                        <div class="col-md-8">
+                                        <div class="col-md-5">
                                             <label class="small text-muted">Catatan (opsional)</label>
                                             <input type="text" name="penilaian[{{ $seminar->id }}][catatan]" 
-                                                   class="form-control" placeholder="Catatan untuk mahasiswa...">
+                                                   class="form-control" placeholder="Catatan...">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="small text-muted">Dokumen (opsional)</label>
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" name="penilaian[{{ $seminar->id }}][dokumen]" accept=".pdf,.jpg,.jpeg,.png">
+                                                <label class="custom-file-label" style="font-size: 0.85rem;">Pilih file...</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -113,39 +120,6 @@
                         </div>
                     </div>
                     @endforeach
-                </div>
-            </div>
-
-            <!-- Upload Dokumen Opsional -->
-            <div class="card card-primary card-outline mb-4">
-                <div class="card-header">
-                    <h3 class="card-title"><strong>Upload Dokumen (Opsional)</strong></h3>
-                </div>
-                <div class="card-body">
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle mr-2"></i>
-                        Upload dokumen pendukung jika diperlukan (berita acara, catatan, dll). Format: PDF/JPG/PNG, maks 10 MB.
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Dokumen 1</label>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="dokumen_1" accept=".pdf,.jpg,.jpeg,.png">
-                                    <label class="custom-file-label">Pilih file...</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label>Dokumen 2</label>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="dokumen_2" accept=".pdf,.jpg,.jpeg,.png">
-                                    <label class="custom-file-label">Pilih file...</label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
 

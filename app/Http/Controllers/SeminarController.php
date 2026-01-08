@@ -26,12 +26,12 @@ class SeminarController extends Controller
         if ($mahasiswa->email == '-') {
             return redirect()->route('profile');
         }
-        
+
         // Cek tahapan: Bimbingan harus selesai dulu
         if (!AppHelper::canAccessSeminar($mahasiswa)) {
             return redirect()->route('bimbingan.mahasiswa')->with('warning', 'Selesaikan tahap Bimbingan KP terlebih dahulu. Semua bagian bimbingan harus sudah di-ACC oleh Dosen Pembimbing.');
         }
-        
+
         $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
         $bagians_is_seminar = $prodi->bagians()->where("tahun_masuk", "LIKE", "%" . $mahasiswa->thmasuk . "%")->where('is_seminar', 1)->get();
 
@@ -55,7 +55,7 @@ class SeminarController extends Controller
         }
 
         $seminar = $mahasiswa->seminar;
-        
+
         // Cek status pendaftaran seminar
         $is_pendaftaran_open = \App\Models\Himpunan::isPendaftaranSeminarOpen();
 
@@ -220,12 +220,12 @@ class SeminarController extends Controller
         // Ambil biaya seminar dari himpunan
         $himpunan = Himpunan::first();
         $validatedData['jumlah_bayar'] = $himpunan ? $himpunan->biaya_seminar : 25000;
-        
+
         // Judul laporan otomatis dari pengajuan
         $validatedData['judul_laporan'] = $pengajuan->judul;
 
         $mahasiswa = Mahasiswa::findOrFail(Auth::guard('mahasiswa')->user()->id);
-        
+
         // Upload semua file
         $validatedData['file_laporan'] = AppHelper::instance()->uploadLampiran($request->file('file_laporan'), 'lampirans', $mahasiswa->nim, 'seminar');
         $validatedData['file_pengesahan'] = AppHelper::instance()->uploadLampiran($request->file('file_pengesahan'), 'lampirans', $mahasiswa->nim, 'seminar');
@@ -301,7 +301,7 @@ class SeminarController extends Controller
         ]);
 
         $mahasiswa = $seminar->mahasiswa;
-        
+
         // Upload file jika ada yang baru
         if ($request->file('file_laporan')) {
             AppHelper::instance()->deleteLampiran($seminar->file_laporan);
@@ -503,7 +503,7 @@ class SeminarController extends Controller
 
     public function detail($id)
     {
-        $seminar = Seminar::findOrFail($id);
+        $seminar = Seminar::with(['sesiSeminar.dosenPenguji', 'dosenPenguji'])->findOrFail($id);
         $mahasiswa = $seminar->mahasiswa;
 
         $pendaftaran_acc = Pendaftaran::orderBy('created_at', 'desc')->where('mahasiswa_id', $mahasiswa->id)->where('status', 'diterima')->first();
@@ -523,12 +523,18 @@ class SeminarController extends Controller
             $dosen_pembimbing = $mahasiswa->dosens()->where('status', 'utama')->first();
         }
 
+        // Get reviews untuk nilai dosen
+        $review_pembimbing = $seminar->reviews()->where('dosen_status', 'pembimbing')->first();
+        $review_penguji = $seminar->reviews()->where('dosen_status', 'penguji')->first();
+
         $data = [
             'title' => 'Detail Seminar KP',
             'active' => 'seminar',
             'dosen_pembimbing' => $dosen_pembimbing,
             'seminar' => $seminar,
             'revisis' => $seminar->revisis()->orderBy('created_at', 'desc')->get(),
+            'review_pembimbing' => $review_pembimbing,
+            'review_penguji' => $review_penguji,
         ];
 
         return view('pages.mahasiswa.seminar.detail', $data);
@@ -577,6 +583,7 @@ class SeminarController extends Controller
                 'message' => 'Selamat seminar Kerja Praktek anda sudah dijadwalkan. Berikut detail seminar Kerja Praktek Anda: <br>Tanggal Seminar: <b>' . AppHelper::parse_date($request->tanggal_ujian) . '</b><br>Tempat Seminar: <b>' . $request->tempat_ujian . '</b>',
             ]);
         }
+        // Kirim email ke dosen penguji
         foreach ($seminar->reviews()->where('dosen_status', 'penguji')->with(['dosen'])->get() as $review) {
             if ($review->dosen->email) {
                 AppHelper::instance()->send_mail([
@@ -585,21 +592,50 @@ class SeminarController extends Controller
                 ]);
             }
         }
+        // Kirim email ke dosen pembimbing
+        foreach ($seminar->reviews()->where('dosen_status', 'pembimbing')->with(['dosen'])->get() as $review) {
+            if ($review->dosen && $review->dosen->email) {
+                AppHelper::instance()->send_mail([
+                    'mail' => $review->dosen->email,
+                    'message' => 'Kepada Yth Bapak/Ibu <b>' . $review->dosen->nama . ', ' . $review->dosen->gelar . '</b> sebagai dosen pembimbing untuk seminar Kerja Praktek. Berikut detail dan jadwal seminar Kerja Praktek: <br>NIM/Nama Mahasiswa: <b>' . $seminar->mahasiswa->nim . '/' . $seminar->mahasiswa->nama . '</b><br>Judul KP: <b>' . $seminar->pengajuan->judul . '</b><br>Tanggal Seminar: <b>' . AppHelper::parse_date($request->tanggal_ujian) . '</b><br>Tempat Seminar: <b>' . $request->tempat_ujian . '</b><br><br>Silahkan klik link berikut untuk melakukan penilaian: <a href="' . route('review.seminar.public', $review->token) . '">Link Penilaian</a>',
+                ]);
+            }
+        }
         return back()->with('success', 'Jadwal dan Tempat Seminar Kerja Praktek berhasil disimpan');
     }
 
     public function seminarProdiDetail($id)
     {
-        $seminar = Seminar::with(['mahasiswa', 'reviews'])->where('id', $id)->first();
-
-        $prodi = Prodi::where('namaprodi', $seminar->mahasiswa->prodi)->first();
-        $presentase_nilai = $prodi->presentase_nilai;
-
-        if (count($seminar->reviews) < 4 || !$presentase_nilai) {
-            return back();
+        $seminar = Seminar::with(['mahasiswa', 'reviews', 'revisis'])->where('id', $id)->first();
+        
+        if (!$seminar) {
+            return back()->with('warning', 'Seminar tidak ditemukan');
         }
 
-        $nilai = AppHelper::hitung_nilai_mahasiswa($seminar);
+        $prodi = Prodi::where('namaprodi', $seminar->mahasiswa->prodi)->first();
+        
+        // KP: Tidak menggunakan presentase_nilai seperti TA
+        // Cek apakah tabel presentase_nilais ada dan prodi punya relasi
+        $presentase_nilai = null;
+        $nilai = null;
+        $nilai_penguji = null;
+        $nilai_pembimbing = null;
+        
+        try {
+            if ($prodi && method_exists($prodi, 'presentase_nilai')) {
+                $presentase_nilai = $prodi->presentase_nilai;
+            }
+            
+            // Hitung nilai jika ada cukup review dan presentase nilai
+            if (count($seminar->reviews) >= 4 && $presentase_nilai) {
+                $nilaiData = AppHelper::hitung_nilai_mahasiswa($seminar);
+                $nilai = $nilaiData['nilai'] ?? null;
+                $nilai_penguji = $nilaiData['nilai_penguji'] ?? null;
+                $nilai_pembimbing = $nilaiData['nilai_pembimbing'] ?? null;
+            }
+        } catch (\Exception $e) {
+            // Abaikan error jika tabel tidak ada
+        }
 
         $data = [
             'title' => 'Detail Seminar Mahasiswa',
@@ -607,9 +643,9 @@ class SeminarController extends Controller
             'sidebar' => 'partials.sidebarProdi',
             'seminar' => $seminar,
             'revisis' => $seminar->revisis()->paginate(5),
-            'nilai' => $nilai['nilai'],
-            'nilai_dosen_penguji' => $nilai['nilai_penguji'],
-            'nilai_dosen_pembimbing' => $nilai['nilai_pembimbing'],
+            'nilai' => $nilai,
+            'nilai_dosen_penguji' => $nilai_penguji,
+            'nilai_dosen_pembimbing' => $nilai_pembimbing,
         ];
 
         return view('pages.prodi.seminar.detail', $data);
@@ -652,7 +688,7 @@ class SeminarController extends Controller
     public function uploadNilaiInstansi(Request $request, $id)
     {
         $seminar = Seminar::findOrFail($id);
-        
+
         // Pastikan seminar milik mahasiswa yang login
         if ($seminar->mahasiswa_id != Auth::guard('mahasiswa')->user()->id) {
             abort(403);
@@ -669,16 +705,16 @@ class SeminarController extends Controller
         ]);
 
         $mahasiswa = $seminar->mahasiswa;
-        
+
         $seminar->nilai_instansi = $request->nilai_instansi;
         $seminar->file_nilai_instansi = AppHelper::instance()->uploadLampiran($request->file('file_nilai_instansi'), 'lampirans', $mahasiswa->nim, 'seminar');
-        
+
         // Hitung nilai akhir jika nilai seminar sudah ada
         if ($seminar->nilai_seminar) {
             $seminar->hitungNilaiAkhir();
             $seminar->status_seminar = Seminar::STATUS_SELESAI;
         }
-        
+
         $seminar->save();
 
         return back()->with('success', 'Nilai instansi berhasil diupload. Nilai akhir KP: ' . $seminar->nilai_akhir);

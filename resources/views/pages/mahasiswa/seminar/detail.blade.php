@@ -140,12 +140,30 @@
                             @endif
                             @endif
 
-                            {{-- Nilai --}}
+                            {{-- Nilai Seminar (dari form public himpunan) --}}
+                            @if($seminar->nilai_seminar)
                             <div class="row">
                                 <div class="col-md-4">Nilai Seminar</div>
-                                <div class="col-md-8"><b>{{ $seminar->nilai_seminar ?? '-' }}</b></div>
+                                <div class="col-md-8">
+                                    <b>{{ number_format($seminar->nilai_seminar, 2) }}</b>
+                                    @if($seminar->sesiSeminar && $seminar->sesiSeminar->dosenPenguji)
+                                    <small class="text-muted">(Penguji: {{ $seminar->sesiSeminar->dosenPenguji->nama ?? '-' }})</small>
+                                    @endif
+                                </div>
                             </div>
                             <hr>
+                            @endif
+
+                            {{-- Nilai Instansi --}}
+                            @if($seminar->nilai_instansi)
+                            <div class="row">
+                                <div class="col-md-4">Nilai Instansi</div>
+                                <div class="col-md-8">
+                                    <b>{{ number_format($seminar->nilai_instansi, 2) }}</b>
+                                </div>
+                            </div>
+                            <hr>
+                            @endif
 
                             {{-- Lampiran --}}
                             @if($seminar->file_laporan)

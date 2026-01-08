@@ -80,10 +80,6 @@
                                                     class="btn btn-primary btn-sm shadow">
                                                     <i class="fas fa-plus mr-1"></i> Bagian Bimbingan
                                                 </a>
-                                                <a href="{{ route('prodi.presentase.nilai' , $prodi->id) }}"
-                                                    class="btn btn-warning btn-sm shadow">
-                                                    <i class="fas fa-star"></i> Presentase Nilai
-                                                </a>
                                                 <a href="{{ route('prodi.reset.password' , $prodi->id) }}"
                                                     class="btn btn-danger btn-sm shadow" onclick="return confirm('Yakin ingin reset password?')">
                                                     <i class="fas fa-history"></i> Reset Password
@@ -143,8 +139,9 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Kode Kaprodi</label>
-                            <input type="text" name="kodekaprodi" class="form-control" placeholder="Contoh: KAPRODI-TI">
+                            <label>NIDN Kaprodi</label>
+                            <input type="text" name="kodekaprodi" class="form-control" placeholder="Masukkan NIDN Kaprodi (misal: 0601018501)">
+                            <small class="text-muted">NIDN dosen yang menjadi Kaprodi untuk ditampilkan di surat</small>
                         </div>
                         <div class="form-group">
                             <label>Password <span class="text-danger">*</span></label>
@@ -193,7 +190,7 @@
                                     <label class="custom-file-label" for="exampleInputFile">Choose
                                         file</label>
                                 </div>
-                                
+
                             </div>
                             @error('file')
                                 <small class="text-danger"

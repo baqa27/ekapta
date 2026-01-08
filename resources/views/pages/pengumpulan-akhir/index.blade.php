@@ -1,49 +1,58 @@
 @extends('layouts.dashboardMahasiswa')
 
 @section('content')
+    <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container">
             <div class="row mb-2">
                 <div class="col-sm-6">
-                    <h1 class="m-0">Pengumpulan Akhir KP</h1>
-                </div>
+                    <h1 class="m-0">Jilid KP</h1>
+                </div><!-- /.col -->
                 <div class="col-sm-6">
                     <ol class="breadcrumb float-sm-right">
                         <li class="breadcrumb-item"><a href="#">Jilid KP</a></li>
                         <li class="breadcrumb-item active">Home</li>
                     </ol>
-                </div>
-            </div>
-        </div>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
     </div>
+    <!-- /.content-header -->
 
+    <!-- Main content -->
     <div class="content">
         <div class="container">
 
             @if (!$jilid)
                 <a href="{{ route('pengumpulan-akhir.create') }}" class="btn btn-primary mb-4">
-                    <i class="fas fa-plus mr-2"></i> Submit Pengumpulan Akhir KP
+                    <i class="fas fa-plus mr-2"></i> Submit Jilid KP
                 </a>
             @else
                 @if ($jilid->status == 4)
-                    <div class="alert alert-success alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <i class="fas fa-check-circle mr-2"></i> Selamat! Pengumpulan Akhir KP sudah <strong>SELESAI</strong>.
+                    <div class="alert alert-success">
+                        <h5><i class="fas fa-check-circle mr-2"></i> JILID KP SELESAI</h5>
+                        Proses jilid KP Anda sudah selesai. Silahkan ambil ke Fotokopi dan bayar sebesar
+                        <strong>Rp {{ number_format($jilid->total_pembayaran ?? 0, 0, ',', '.') }}</strong>
                     </div>
                 @elseif ($jilid->status == 3)
-                    <div class="alert alert-success alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <i class="fas fa-check-circle mr-2"></i> Dokumen sudah <strong>VALID</strong>. Menunggu verifikasi akhir.
+                    <div class="alert alert-primary">
+                        <h5><i class="fas fa-info-circle mr-2"></i> DOKUMEN VALID - MENUNGGU PROSES JILID</h5>
+                        Dokumen KP sudah dikonfirmasi oleh admin dan siap untuk dijilid. Silahkan konfirmasi dan
+                        melakukan pembayaran ke <strong>Fotokopi FASTIKOM</strong> dengan membawa dokumen-dokumen asli
+                        yang akan disertakan dalam penjilidan KP seperti lembar keaslian KP, lembar pengesahan, lembar
+                        bimbingan, lampiran-lampiran, dll.
+                        <br><small class="text-muted">Tunggu sampai proses jilid selesai oleh petugas fotokopi.</small>
                     </div>
                 @elseif ($jilid->status == 2)
-                    <div class="alert alert-warning alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <i class="fas fa-exclamation-triangle mr-2"></i> Dokumen perlu <strong>REVISI</strong>. Silakan submit ulang.
+                    <div class="alert alert-warning">
+                        <h5><i class="fas fa-exclamation-triangle mr-2"></i> DOKUMEN PERLU REVISI</h5>
+                        Dokumen Anda perlu diperbaiki. Silakan submit ulang dengan mengklik tombol "Submit Revisi".
                     </div>
                 @elseif ($jilid->status == 1)
-                    <div class="alert alert-info alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        <i class="fas fa-hourglass-half mr-2"></i> Dokumen sedang <strong>direview</strong> oleh Admin.
+                    <div class="alert alert-secondary">
+                        <h5><i class="fas fa-hourglass-half mr-2"></i> MENUNGGU REVIEW ADMIN</h5>
+                        Dokumen Anda sedang direview oleh Admin. Tunggu konfirmasi melalui halaman ini.
+                        <br><small class="text-muted">Pastikan file upload Google Drive akses dibuat PUBLIC!</small>
                     </div>
                 @endif
             @endif
@@ -52,10 +61,10 @@
                 <div class="col-md-12">
                     <div class="card card-primary card-outline">
                         <div class="card-header">
-                            <h3 class="card-title">Pengumpulan Akhir Anda</h3>
+                            <h3 class="card-title">Jilid KP Anda</h3>
                         </div>
                         <div class="card-body">
-                            <table id="example1" class="table table-bordered">
+                            <table id="example1" class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -88,16 +97,22 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <div class="d-flex">
-                                                    <a href="{{ route('pengumpulan-akhir.detail.mahasiswa', $j->id) }}" class="btn btn-primary btn-sm shadow mr-2">
+                                                @if ($j->status == 1)
+                                                    <a href="{{ route('pengumpulan-akhir.detail.mahasiswa', $j->id) }}"
+                                                        class="btn btn-primary btn-sm">
                                                         <i class="fas fa-info-circle mr-1"></i> Detail
                                                     </a>
-                                                    @if ($j->status == 2)
-                                                        <a href="{{ route('pengumpulan-akhir.edit', $j->id) }}" class="btn btn-success btn-sm shadow">
-                                                            <i class="fas fa-upload mr-1"></i> Submit Revisi
-                                                        </a>
-                                                    @endif
-                                                </div>
+                                                @elseif ($j->status == 2)
+                                                    <a href="{{ route('pengumpulan-akhir.edit', $j->id) }}"
+                                                        class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-upload mr-1"></i> Submit Revisi
+                                                    </a>
+                                                @elseif ($j->status == 3 || $j->status == 4)
+                                                    <a href="{{ route('pengumpulan-akhir.detail.mahasiswa', $j->id) }}"
+                                                        class="btn btn-primary btn-sm">
+                                                        <i class="fas fa-info-circle mr-1"></i> Detail
+                                                    </a>
+                                                @endif
                                             </td>
                                         </tr>
                                     @endforeach
@@ -113,9 +128,12 @@
                                 </tfoot>
                             </table>
                         </div>
+                        <!-- /.card-body -->
                     </div>
+                    <!-- /.card -->
                 </div>
             </div>
         </div>
     </div>
+    <!-- /.content -->
 @endsection

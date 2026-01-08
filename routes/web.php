@@ -55,6 +55,7 @@ Route::get('/dashboard-mahasiswa-jilid', [DashboardController::class, 'dashboard
 Route::get('/dashboard-prodi', [DashboardController::class, 'dashboardProdi'])->name('dashboard.prodi')->middleware('isProdi');
 Route::get('/dashboard-dosen', [DashboardController::class, 'dashboardDosen'])->name('dashboard.dosen')->middleware('isDosen');
 Route::get('/dashboard-admin', [DashboardController::class, 'dashboardAdmin'])->name('dashboard.admin')->middleware('isAdmin');
+Route::get('/dashboard-fotokopi', [PengumpulanAkhirController::class, 'index'])->name('dashboard.fotokopi')->middleware('isAdminFotokopi');
 Route::get('/dashboard-himpunan', [DashboardController::class, 'dashboardHimpunan'])->name('dashboard.himpunan')->middleware('isHimpunan');
 
 // Routes Himpunan - Verifikasi Seminar KP
@@ -65,16 +66,16 @@ Route::group(['middleware' => 'isHimpunan', 'prefix' => 'himpunan'], function ()
     Route::post('/seminar/acc', [HimpunanController::class, 'seminarAcc'])->name('seminar.himpunan.acc');
     Route::post('/seminar/revisi', [HimpunanController::class, 'seminarRevisi'])->name('seminar.himpunan.revisi');
     Route::post('/seminar/toggle-pendaftaran', [HimpunanController::class, 'togglePendaftaranSeminar'])->name('seminar.himpunan.toggle');
-    
+
     // Penjadwalan Sesi Seminar
     Route::get('/jadwal', [HimpunanController::class, 'jadwalIndex'])->name('jadwal.himpunan');
     Route::post('/jadwal/create-sesi', [HimpunanController::class, 'createSesi'])->name('jadwal.himpunan.create');
     Route::get('/jadwal/sesi/{id}', [HimpunanController::class, 'detailSesi'])->name('jadwal.himpunan.detail');
-    
+
     // Pasca Seminar
     Route::post('/seminar/validasi-revisi', [HimpunanController::class, 'validasiRevisiPasca'])->name('seminar.himpunan.validasi.revisi');
     Route::post('/seminar/finalisasi-nilai', [HimpunanController::class, 'finalisasiNilai'])->name('seminar.himpunan.finalisasi');
-    
+
     // Rekap
     Route::get('/seminar/rekap', [HimpunanController::class, 'rekapSeminar'])->name('seminar.himpunan.rekap');
 });
@@ -166,14 +167,12 @@ Route::post('/bimbingan/input/store', [BimbinganController::class, 'bimbinganAdm
 Route::post('/bimbingan/acc-prodi', [BimbinganController::class, 'accBimbinganProdi'])->name('bimbingan.acc.prodi')->middleware('isAdminProdi');
 Route::post('/bimbingan/revisi-prodi', [BimbinganController::class, 'revisiBimbinganProdi'])->name('bimbingan.revisi.prodi')->middleware('isAdminProdi');
 
-// Route for Seminar KP
+// Route for Seminar KP - Admin/Prodi hanya bisa lihat, yang kelola adalah Himpunan
 Route::get('seminar/review/{id}', [SeminarController::class,'seminarReviewAdmin'])->name('seminar.review.admin')->middleware('isAdminProdi');
-Route::post('seminar/acc', [SeminarController::class, 'accSeminar'])->name('seminar.acc')->middleware('isAdminProdi');
-Route::post('seminar/revisi', [SeminarController::class, 'revisiSeminar'])->name('seminar.revisi')->middleware('isAdminProdi');
-Route::post('seminar/cancel-acc', [SeminarController::class, 'cancelAcc'])->name('seminar.cancel.acc')->middleware('isAdminProdi');
-Route::post('/seminar/revisi/delete', [SeminarController::class, 'deleteRevisi'])->name('seminar.revisi.delete')->middleware('isAdminProdi');
-Route::post('/seminar/set/date-exam', [SeminarController::class, 'setDateExam'])->name('seminar.set.date.exam')->middleware('isAdminProdi');
 Route::get('seminar/rekap', [SeminarController::class,'rekapSeminar'])->name('seminar.rekap')->middleware('isAdminProdi');
+// Action routes HANYA untuk Himpunan - Admin/Prodi tidak bisa ACC/Revisi
+// Route::post('seminar/acc', ...
+// Route::post('seminar/revisi', ...
 
 
 

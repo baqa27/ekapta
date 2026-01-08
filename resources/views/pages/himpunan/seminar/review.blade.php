@@ -188,17 +188,13 @@
                                 </a>
 
                                 @if ($seminar->is_valid == 0 || $seminar->is_valid == 2)
-                                    <button type="button" class="btn btn-primary mr-2" data-toggle="modal" data-target="#modal-revisi">
+                                    <button type="button" class="btn btn-warning mr-2" data-toggle="modal" data-target="#modal-revisi">
                                         <i class="fas fa-edit mr-1"></i> Revisi Pendaftaran
                                     </button>
                                     
-                                    <form action="{{ route('seminar.himpunan.acc') }}" method="post" class="mr-2">
-                                        @csrf
-                                        <input type="hidden" name="id" value="{{ $seminar->id }}">
-                                        <button type="submit" class="btn btn-success" onclick="return confirm('ACC pendaftaran seminar ini?')">
-                                            <i class="fas fa-check mr-1"></i> Acc Pendaftaran
-                                        </button>
-                                    </form>
+                                    <button type="button" class="btn btn-success mr-2" data-toggle="modal" data-target="#modal-acc">
+                                        <i class="fas fa-check mr-1"></i> Acc Pendaftaran
+                                    </button>
                                 @endif
 
                                 @if ($seminar->is_valid == 1)
@@ -254,6 +250,31 @@
                         <div class="form-group">
                             <label>Catatan</label>
                             <textarea name="catatan" class="form-control" rows="4" required placeholder="Catatan revisi"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer justify-content-between">
+                        <button type="submit" class="btn btn-warning">Simpan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal ACC -->
+    <div class="modal fade" id="modal-acc">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="{{ route('seminar.himpunan.acc') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="id" value="{{ $seminar->id }}">
+                    <div class="modal-header">
+                        <h4 class="modal-title">ACC Pendaftaran</h4>
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Catatan</label>
+                            <textarea name="catatan" class="form-control" rows="4" placeholder="Catatan ACC (opsional)"></textarea>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
