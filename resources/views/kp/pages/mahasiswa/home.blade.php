@@ -1,0 +1,46 @@
+@extends('kp.layouts.dashboardMahasiswa')
+
+@section('content')
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+        <div class="container">
+            <div class="row mb-3 mt-5">
+                <div class="col-sm-12">
+                    <h1 class="mb-3"> Hai! {{ Auth::guard('mahasiswa')->user()->nama }}</h1>
+                    <p>Selamat Datang di {{ config('app.name') }}, {{ env("APP_DESCRIPTION") }}</p>
+                </div>
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <div class="content">
+        <div class="container">
+
+            <div class="card mb-5">
+                <div class="card-header">
+                    <b>Silahkan Pilih Menu dibawah ini:</b>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {{-- <div class="col-md-4 mb-3">
+                            <a href="{{ route('kp.dashboard.mahasiswa') }}" class="btn btn-info col-md-12 p-3 btn-lg">📙 MENU KERJA PRAKTEK</a>
+                        </div> --}}
+                        <div class="col-md-4 mb-3">
+                            <a href="{{ route('kp.dashboard.mahasiswa') }}" class="btn btn-primary col-md-12 p-3 btn-lg">📕 MENU KERJA Praktek</a>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <a href="{{ route('kp.pengumpulan-akhir.mahasiswa') }}" class="btn btn-secondary col-md-12 p-3 btn-lg">📋 MENU JILID KP</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.content -->
+    @endsection
+
+
+
+
