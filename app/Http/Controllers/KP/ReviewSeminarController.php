@@ -70,7 +70,7 @@ class ReviewSeminarController extends \App\Http\Controllers\Controller
         $data = [
             'title' => 'Review Seminar TA',
             'active' => 'seminar-kp',
-            'sidebar' => 'kp.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'kp',
             'review_seminar' => $review_seminar,
             'revisis' => $review_seminar->revisis()->orderBy('created_at','desc')->paginate(5),

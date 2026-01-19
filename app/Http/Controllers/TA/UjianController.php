@@ -26,7 +26,7 @@ class UjianController extends \App\Http\Controllers\Controller
             return redirect()->route('profile');
         }
         $ujians = $mahasiswa->ujians()->orderBy('created_at','desc')->get();
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         $bagians_is_ujian = $prodi->bagians()->where("tahun_masuk", "LIKE", "%" . $mahasiswa->thmasuk . "%")->where('is_pendadaran', 1)->get();
 
         $bimbingans_is_acc = $mahasiswa->bimbingans()->where('status', Bimbingan::DITERIMA)
@@ -102,7 +102,7 @@ class UjianController extends \App\Http\Controllers\Controller
             'title' => 'Validasi Ujian TA',
             'active' => 'ujian-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'ujians_review' => $ujians_review,
             'ujians_revisi' => $ujians_revisi,
@@ -120,7 +120,7 @@ class UjianController extends \App\Http\Controllers\Controller
             'title' => 'Review Ujian TA',
             'active' => 'ujian-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'ta',
             'ujians_review' => $dosen->ujians()->where('status', ReviewUjian::REVIEW)
             ->whereHas('ujian', function($query) {
@@ -155,7 +155,7 @@ public function ujianProdi()
             'title' => 'Daftar Ujian Pendadaran Mahasiswa',
             'active' => 'ujian-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'ta',
             'ujians' => $ujians_prodi,
         ];
@@ -166,7 +166,7 @@ public function ujianProdi()
     public function create()
     {
         $mahasiswa = Mahasiswa::with(['bimbingans','ujians'])->findOrFail(Auth::guard('mahasiswa')->user()->id);
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         $pengajuan_acc = $mahasiswa->pengajuans()->where('status', Pengajuan::DITERIMA)->first();
 
         $pendaftaran_acc = Pendaftaran::orderBy('created_at', 'desc')->where('mahasiswa_id', $mahasiswa->id)->where('status', 'diterima')->first();
@@ -446,7 +446,7 @@ public function ujianProdi()
         }
         $ujian = Ujian::findOrFail($id);
         $mahasiswa = $ujian->mahasiswa;
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
 
         $dosens = $prodi->dosens;
 
@@ -476,7 +476,7 @@ public function ujianProdi()
     {
         $ujian = Ujian::findOrFail($request->id);
         $revisi = new RevisiUjian();
-        $revisi->catatan = $request->catatan;
+        $revisi->keterangan = $request->catatan; // Database uses 'keterangan' column
         $request->validate([
             'lampiran' => [
                 Rule::requiredIf(function () use($request) {
@@ -526,7 +526,7 @@ public function ujianProdi()
 
         if($request->catatan){
             $revisi = new RevisiUjian();
-            $revisi->catatan = $request->catatan;
+            $revisi->keterangan = $request->catatan; // Database uses 'keterangan' column
             $ujian->revisis()->save($revisi);
         }
 
@@ -664,7 +664,7 @@ public function ujianProdi()
     {
         $ujian = Ujian::findOrFail($id);
 
-        $prodi = Prodi::where('namaprodi', $ujian->mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $ujian->mahasiswa->prodi)->first();
         $presentase_nilai = $prodi->presentase_nilai;
 
         if (count($ujian->reviews) != 5 || !$presentase_nilai) {
@@ -677,7 +677,7 @@ public function ujianProdi()
             'title' => 'Detail Ujian Mahasiswa',
             'active' => 'ujian-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'ta',
             'ujian' => $ujian,
             'revisis' => $ujian->revisis()->paginate(5),

@@ -26,6 +26,7 @@ class ReviewSeminar extends Model
         'seminar_id',
         'dosen_id',
         'status',
+        'dosen_status',
         'nilai',
         'catatan',
     ];

@@ -54,6 +54,7 @@
                                     <li class="list-group-item text-secondary {{ count($bagianKP->bimbingans) != 0 ? 'border-info' : '' }}">
                                         <span class="badge {{ count($bagianKP->bimbingans) != 0 ? 'badge-info' : 'badge-secondary' }} mr-2">{{ $noKP++ }}</span>
                                         <span style="position: relative;top:2px;">{{ $bagianKP->bagian }}</span>
+                                        <small class="text-muted">({{ count($bagianKP->bimbingans) }} bimbingan)</small>
 
                                         @php $tahuns = explode(',', $bagianKP->tahun_masuk); @endphp
                                         @foreach ($tahuns as $tahun)
@@ -79,15 +80,13 @@
                                                     <i class="bi bi-pencil-square"></i>
                                                 </button>
                                                 @if (count($bagianKP->bimbingans) == 0)
-                                                    <div onclick="confirmDelete()">
-                                                        <form action="{{ route('kp.bagian.delete') }}" method="post">
-                                                            @csrf
-                                                            <input type="hidden" name="id" value="{{ $bagianKP->id }}">
-                                                            <button class="btn btn-danger btn-sm float-right" type="submit">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
+                                                    <form action="{{ route('kp.bagian.delete') }}" method="post" onsubmit="return confirmDelete()">
+                                                        @csrf
+                                                        <input type="hidden" name="id" value="{{ $bagianKP->id }}">
+                                                        <button class="btn btn-danger btn-sm float-right" type="submit">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 @endif
                                             </div>
                                         </div>
@@ -136,6 +135,7 @@
                                     <li class="list-group-item text-secondary {{ count($bagian->bimbingans) != 0 ? 'border-success' : '' }}">
                                         <span class="badge {{ count($bagian->bimbingans) != 0 ? 'badge-success' : 'badge-secondary' }} mr-2">{{ $noTA++ }}</span>
                                         <span style="position: relative;top:2px;">{{ $bagian->bagian }}</span>
+                                        <small class="text-muted">({{ count($bagian->bimbingans) }} bimbingan)</small>
 
                                         @php $tahuns = explode(',', $bagian->tahun_masuk); @endphp
                                         @foreach ($tahuns as $tahun)
@@ -161,15 +161,13 @@
                                                     <i class="bi bi-pencil-square"></i>
                                                 </button>
                                                 @if (count($bagian->bimbingans) == 0)
-                                                    <div onclick="confirmDelete()">
-                                                        <form action="{{ route('bagian.delete') }}" method="post">
-                                                            @csrf
-                                                            <input type="hidden" name="id" value="{{ $bagian->id }}">
-                                                            <button class="btn btn-danger btn-sm float-right" type="submit">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    </div>
+                                                    <form action="{{ route('bagian.delete') }}" method="post" onsubmit="return confirmDelete()">
+                                                        @csrf
+                                                        <input type="hidden" name="id" value="{{ $bagian->id }}">
+                                                        <button class="btn btn-danger btn-sm float-right" type="submit">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 @endif
                                             </div>
                                         </div>
@@ -503,5 +501,9 @@
                 })
                 .trigger('change');
         });
+
+        function confirmDelete() {
+            return confirm('Apakah Anda yakin ingin menghapus bagian bimbingan ini?');
+        }
     </script>
 @endsection

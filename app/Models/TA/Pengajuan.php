@@ -67,11 +67,11 @@ class Pengajuan extends Model
 
     public function bimbingan_canceleds()
     {
-        return $this->hasMany(BimbinganCanceled::class, 'pengajuan_id');
+        return $this->hasMany(BimbinganCanceled::class, 'mahasiswa_id', 'mahasiswa_id');
     }
 
     public function seminar_canceleds()
     {
-        return $this->hasMany(SeminarCanceled::class, 'pengajuan_id');
+        return $this->hasMany(SeminarCanceled::class, 'mahasiswa_id', 'mahasiswa_id');
     }
 }

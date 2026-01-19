@@ -24,7 +24,7 @@ class CetakController extends \App\Http\Controllers\Controller
     {
         $mahasiswa = Mahasiswa::findOrFail(Auth::guard('mahasiswa')->user()->id);
         $pengajuan = Pengajuan::where('mahasiswa_id', $mahasiswa->id)->where('status', 'diterima')->first();
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         $dosenUtama = $mahasiswa->dosens()->where('status', 'utama')->first();
         $dosenPendamping = $mahasiswa->dosens()->where('status', 'pendamping')->first();
 
@@ -62,7 +62,7 @@ class CetakController extends \App\Http\Controllers\Controller
         $pendaftaran = Pendaftaran::findOrFail($pendaftaran);
         $mahasiswa = $pendaftaran->pengajuan->mahasiswa;
         $pengajuan = $mahasiswa->pengajuans()->where('status', Pengajuan::DITERIMA)->first();
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         $dosenUtama = $mahasiswa->dosens()->where('status', 'utama')->first();
         $dosenPendamping = $mahasiswa->dosens()->where('status', 'pendamping')->first();
 
@@ -120,7 +120,7 @@ class CetakController extends \App\Http\Controllers\Controller
         $mahasiswa = Mahasiswa::where('nim', Auth::guard('mahasiswa')->user()->nim)->first();
         $pengajuan = $mahasiswa->pengajuans()->where('status', Pengajuan::DITERIMA)->first();
         $pendaftaran = Pendaftaran::where('pengajuan_id', $pengajuan->id)->first();
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         $dosenUtama = $mahasiswa->dosens()->where('status', 'utama')->first();
         $dosenPendamping = $mahasiswa->dosens()->where('status', 'pendamping')->first();
 
@@ -267,7 +267,7 @@ class CetakController extends \App\Http\Controllers\Controller
         $mahasiswa = Mahasiswa::where('nim', Auth::guard('mahasiswa')->user()->nim)->first();
         $pengajuan = $mahasiswa->pengajuans()->where('status', Pengajuan::DITERIMA)->first();
         $pendaftaran = Pendaftaran::where('pengajuan_id', $pengajuan->id)->first();
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         $dosenUtama = $mahasiswa->dosens()->where('status', 'utama')->first();
         $dosenPendamping = $mahasiswa->dosens()->where('status', 'pendamping')->first();
 
@@ -321,7 +321,7 @@ class CetakController extends \App\Http\Controllers\Controller
         $mahasiswa = Mahasiswa::with(['ujians','pengajuans','dosens'])->where('nim', Auth::guard('mahasiswa')->user()->nim)->first();
         $pengajuan = $mahasiswa->pengajuans()->where('status', Pengajuan::DITERIMA)->first();
         $pendaftaran = Pendaftaran::where('pengajuan_id', $pengajuan->id)->first();
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         $dosenUtama = $mahasiswa->dosens()->where('status', 'utama')->first();
         $dosenPendamping = $mahasiswa->dosens()->where('status', 'pendamping')->first();
         $ujian = $mahasiswa->ujians()->whereNotIn('is_lulus', [Ujian::NOT_VALID_LULUS])->where('is_valid', Ujian::VALID_LULUS)->first();
@@ -356,7 +356,7 @@ class CetakController extends \App\Http\Controllers\Controller
         $mahasiswa = Mahasiswa::with(['ujians','pengajuans','dosens'])->where('nim', Auth::guard('mahasiswa')->user()->nim)->first();
         $pengajuan = $mahasiswa->pengajuans()->where('status', Pengajuan::DITERIMA)->first();
         $pendaftaran = Pendaftaran::where('pengajuan_id', $pengajuan->id)->first();
-        $prodi = Prodi::with(['fakultas', 'fakultas.dekans'])->where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::with(['fakultas', 'fakultas.dekans'])->where('kode', $mahasiswa->prodi)->first();
         $dekan = $prodi->fakultas->dekans()->where(function($q) {
             $q->where('status', 'active')->orWhere('status', '1');
         })->first();

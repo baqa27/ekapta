@@ -46,7 +46,7 @@
 
             <!-- Pilih Sistem Cards -->
             <div class="row">
-                <!-- Kerja Praktik Card -->
+                <!-- Kerja Praktik Card (KIRI) -->
                 <div class="col-lg-6 col-md-6">
                     <div class="card card-primary card-outline card-outline-tabs h-100">
                         <div class="card-header bg-primary">
@@ -100,7 +100,7 @@
                     </div>
                 </div>
 
-                <!-- Tugas Akhir Card -->
+                <!-- Tugas Akhir Card (KANAN) -->
                 <div class="col-lg-6 col-md-6">
                     <div class="card card-primary card-outline card-outline-tabs h-100">
                         <div class="card-header bg-primary">

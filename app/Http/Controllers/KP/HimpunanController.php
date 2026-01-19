@@ -35,7 +35,7 @@ class HimpunanController extends \App\Http\Controllers\Controller
         return view('kp.pages.himpunan.seminar.index', [
             'title' => 'Verifikasi Seminar KP',
             'active' => 'seminar-kp',
-            'sidebar' => 'kp.partials.sidebarHimpunan',
+            'sidebar' => 'partials.sidebarHimpunan',
             'seminars_review' => $seminars_review,
             'seminars_revisi' => $seminars_revisi,
             'seminars_acc' => $seminars_acc,
@@ -67,7 +67,7 @@ class HimpunanController extends \App\Http\Controllers\Controller
         return view('kp.pages.himpunan.seminar.review', [
             'title' => 'Review Seminar KP',
             'active' => 'seminar-kp',
-            'sidebar' => 'kp.partials.sidebarHimpunan',
+            'sidebar' => 'partials.sidebarHimpunan',
             'seminar' => $seminar,
             'revisis' => $revisis,
         ]);
@@ -207,7 +207,7 @@ class HimpunanController extends \App\Http\Controllers\Controller
         return view('kp.pages.himpunan.seminar.rekap', [
             'title' => 'Rekap Seminar KP',
             'active' => 'rekap-kp',
-            'sidebar' => 'kp.partials.sidebarHimpunan',
+            'sidebar' => 'partials.sidebarHimpunan',
             'seminars' => $seminars,
         ]);
     }
@@ -232,7 +232,7 @@ class HimpunanController extends \App\Http\Controllers\Controller
         return view('kp.pages.himpunan.seminar.jadwal', [
             'title' => 'Penjadwalan Seminar KP',
             'active' => 'jadwal-kp',
-            'sidebar' => 'kp.partials.sidebarHimpunan',
+            'sidebar' => 'partials.sidebarHimpunan',
             'sesi_seminars' => $sesi_seminars,
             'seminars_siap' => $seminars_siap,
             'dosens' => $dosens,
@@ -307,7 +307,7 @@ class HimpunanController extends \App\Http\Controllers\Controller
         return view('kp.pages.himpunan.seminar.detail-sesi', [
             'title' => 'Detail Sesi Seminar',
             'active' => 'jadwal-kp',
-            'sidebar' => 'kp.partials.sidebarHimpunan',
+            'sidebar' => 'partials.sidebarHimpunan',
             'sesi' => $sesi,
         ]);
     }
@@ -390,7 +390,7 @@ class HimpunanController extends \App\Http\Controllers\Controller
         return view('kp.pages.himpunan.payment', [
             'title' => 'Pengaturan Pembayaran',
             'active' => 'payment',
-            'sidebar' => 'kp.partials.sidebarHimpunan',
+            'sidebar' => 'partials.sidebarHimpunan',
             'himpunan' => $himpunan,
         ]);
     }

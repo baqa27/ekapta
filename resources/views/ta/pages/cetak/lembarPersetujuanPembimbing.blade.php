@@ -232,7 +232,7 @@
             <td height="100" width="580">
                 <center>
                     <p>
-                        @if (\App\Helpers\AppHelper::instance()->getDosen($prodi->kodekaprodi))
+                        @if ($prodi && $prodi->kodekaprodi && \App\Helpers\AppHelper::instance()->getDosen($prodi->kodekaprodi))
                         Kaprodi {{ $prodi->namaprodi }} <br><br><br><br>
                         <b><u>{{ \App\Helpers\AppHelper::instance()->getDosen($prodi->kodekaprodi)->nama.',
                                 '.\App\Helpers\AppHelper::instance()->getDosen($prodi->kodekaprodi)->gelar

@@ -81,9 +81,7 @@
                                 @foreach ($revisis as $revisi)
                                     <div class="direct-chat-msg">
                                         <div class="direct-chat-infos clearfix">
-                                            <span
-                                                class="direct-chat-name float-left">{{ $revisi->dosen->nama . ', ' . $revisi->dosen->gelar }}
-                                            </span>
+                                            <span class="direct-chat-name float-left">Dosen Pembimbing</span>
                                             <span class="direct-chat-timestamp float-right">
                                                 {{ $revisi->created_at->format('d M Y H:m a') }}
                                             </span>
@@ -93,11 +91,6 @@
                                             alt="message user image">
                                         <div class="direct-chat-text p-2">
                                             {!! nl2br($revisi->catatan) !!}
-                                            @if($revisi->tanggal_bimbingan)
-                                                <div>
-                                                    <small><i class="fas fa-calendar"></i> Tanggal bimbingan: {{ \Carbon\Carbon::parse($revisi->tanggal_bimbingan)->format('d M Y H:m a') }}</small>
-                                                </div>
-                                            @endif
                                             @if ($revisi->lampiran || $revisi->lampiran_revisi)
                                                 <div class="p-1 mt-3 bg-light rounded">
                                                     @if ($revisi->lampiran_revisi)

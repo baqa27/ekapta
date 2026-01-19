@@ -20,7 +20,7 @@ class FakultasController extends \App\Http\Controllers\Controller
             'title' => 'Master Data Fakultas',
             'active' => 'fakultas',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'fakultass' => $fakultass,
         ]);
@@ -45,7 +45,7 @@ class FakultasController extends \App\Http\Controllers\Controller
             'title' => '' . $fakultas->namafakultas,
             'active' => 'fakultas',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'fakultas' => $fakultas,
             'prodis' => $prodis,

@@ -21,7 +21,7 @@ class MahasiswaController extends \App\Http\Controllers\Controller
             'title' => 'Master Data Mahasiswa',
             'active' => 'mahasiswa',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'mahasiswas' => $mahasiswas,
         ]);

@@ -72,7 +72,7 @@ class ReviewUjianController extends \App\Http\Controllers\Controller
             'title' => 'Review Ujian TA',
             'active' => 'ujian-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'ta',
             'review_ujian' => $review_ujian,
             'revisis' => $review_ujian->revisis()->orderBy('created_at', 'desc')->paginate(5),
@@ -97,7 +97,7 @@ class ReviewUjianController extends \App\Http\Controllers\Controller
                 'mimes:pdf,docx', 'max:5000'
             ]
         ]);
-        $revisi->catatan = $request->catatan;
+        $revisi->keterangan = $request->catatan; // Database uses 'keterangan' column
 
         if ($request->file('lampiran')) {
             //$revisi->lampiran = AppHelper::instance()->uploadLampiran($request->lampiran, 'lampirans');
@@ -137,7 +137,7 @@ class ReviewUjianController extends \App\Http\Controllers\Controller
         $review_ujian = ReviewUjian::findOrFail($request->id);
 
         $revisi = new RevisiReviewUjian();
-        $revisi->catatan = $request->catatan;
+        $revisi->keterangan = $request->catatan; // Database uses 'keterangan' column
         $revisi->lampiran = $review_ujian->lampiran ? $review_ujian->lampiran : $review_ujian->ujian->lampiran_laporan;
         $review_ujian->update([
             'status' => ReviewUjian::DITERIMA,

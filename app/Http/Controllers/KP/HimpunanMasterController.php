@@ -17,7 +17,7 @@ class HimpunanMasterController extends \App\Http\Controllers\Controller
         return view('kp.pages.admin.himpunan.index', [
             'title' => 'Data Himpunan',
             'active' => 'himpunan',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'himpunans' => $himpunans,
             'prodis' => $prodis,

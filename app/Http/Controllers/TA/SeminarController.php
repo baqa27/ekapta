@@ -26,7 +26,7 @@ class SeminarController extends \App\Http\Controllers\Controller
         if ($mahasiswa->email == '-') {
             return redirect()->route('profile');
         }
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         $bagians_is_seminar = $prodi->bagians()->where("tahun_masuk", "LIKE", "%" . $mahasiswa->thmasuk . "%")->where('is_seminar', 1)->get();
         $bagians_is_ujian = $prodi->bagians()->where("tahun_masuk", "LIKE", "%" . $mahasiswa->thmasuk . "%")->where('is_pendadaran', 1)->get();
 
@@ -57,9 +57,6 @@ class SeminarController extends \App\Http\Controllers\Controller
         }
 
         $seminar = $mahasiswa->seminar;
-        if (!$seminar) {
-            return redirect()->route('ta.seminar.create');
-        }
 
         $is_ujian = false;
         if (count($bimbingans_is_acc_ujian) >= count($bagians_is_ujian) * 2) {
@@ -79,8 +76,8 @@ class SeminarController extends \App\Http\Controllers\Controller
             'dosen_utama' => $dosen_utama,
             'dosen_pendamping' => $dosen_pendamping,
             'seminar' => $seminar,
-            'dosens_penguji' => $seminar->reviews()->where('dosen_status', ReviewSeminar::DOSEN_PENGUJI)->get(),
-            'reviews_acc' => $seminar->reviews()->where('dosen_status', ReviewSeminar::DOSEN_PENGUJI)->where('status', ReviewSeminar::DITERIMA)->get(),
+            'dosens_penguji' => $seminar ? $seminar->reviews()->where('dosen_status', ReviewSeminar::DOSEN_PENGUJI)->get() : [],
+            'reviews_acc' => $seminar ? $seminar->reviews()->where('dosen_status', ReviewSeminar::DOSEN_PENGUJI)->where('status', ReviewSeminar::DITERIMA)->get() : [],
             'is_ujian' => $is_ujian,
             'check_ujian_has_done' => AppHelper::check_ujian_has_done(),
             'reviews_has_acc' => $reviews_has_acc == 3 ? true : false,
@@ -99,7 +96,7 @@ class SeminarController extends \App\Http\Controllers\Controller
             'title' => 'Validasi Seminar TA',
             'active' => 'seminar-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'seminars_review' => $seminars_review,
             'seminars_revisi' => $seminars_revisi,
@@ -116,7 +113,7 @@ class SeminarController extends \App\Http\Controllers\Controller
             'title' => 'Review Seminar TA',
             'active' => 'seminar-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'ta',
             'seminars_review' => $dosen->seminars()->where('status', ReviewSeminar::REVIEW)->get(),
             'seminars_acc' => $dosen->seminars()->where('status', ReviewSeminar::DITERIMA)->get(),
@@ -142,7 +139,7 @@ class SeminarController extends \App\Http\Controllers\Controller
             'title' => 'Daftar Seminar Mahasiswa',
             'active' => 'seminar-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'ta',
             'seminars' => $seminars_prodi,
         ];
@@ -159,7 +156,7 @@ class SeminarController extends \App\Http\Controllers\Controller
 
         $pendaftaran_acc = Pendaftaran::orderBy('created_at', 'desc')->where('mahasiswa_id', $mahasiswa->id)->where('status', 'diterima')->first();
 
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         $bagians_is_seminar = $prodi->bagians()->where("tahun_masuk", "LIKE", "%" . $mahasiswa->thmasuk . "%")->where('is_seminar', 1)->get();
         $bimbingans_is_acc_seminar = $mahasiswa->bimbingans()->where('status', Bimbingan::DITERIMA)
             ->whereHas('bagian', function ($query) {
@@ -422,7 +419,7 @@ class SeminarController extends \App\Http\Controllers\Controller
         }
         $seminar = Seminar::findOrFail($id);
         $mahasiswa = $seminar->mahasiswa;
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
 
         //$dosens = Dosen::where('kodeprodi', $prodi->kode)->get();
         $dosens = $prodi->dosens;
@@ -467,7 +464,7 @@ class SeminarController extends \App\Http\Controllers\Controller
     {
         $seminar = Seminar::findOrFail($request->id);
         $revisi = new RevisiSeminar();
-        $revisi->catatan = $request->catatan;
+        $revisi->keterangan = $request->catatan; // Database uses 'keterangan' column
         $request->validate([
             'lampiran' => [
                 Rule::requiredIf(function () use ($request) {
@@ -604,7 +601,7 @@ class SeminarController extends \App\Http\Controllers\Controller
     {
         $seminar = Seminar::with(['mahasiswa', 'reviews'])->where('id', $id)->first();
 
-        $prodi = Prodi::where('namaprodi', $seminar->mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $seminar->mahasiswa->prodi)->first();
         $presentase_nilai = $prodi->presentase_nilai;
 
         if (count($seminar->reviews) < 4 || !$presentase_nilai) {
@@ -617,7 +614,7 @@ class SeminarController extends \App\Http\Controllers\Controller
             'title' => 'Detail Seminar Mahasiswa',
             'active' => 'seminar-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'ta',
             'seminar' => $seminar,
             'revisis' => $seminar->revisis()->paginate(5),

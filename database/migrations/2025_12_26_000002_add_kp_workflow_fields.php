@@ -22,7 +22,7 @@ return new class extends Migration
                 $table->integer('jumlah_tolak')->default(0)->after('status');
             }
         });
-        
+
         // Tambah field link_akses_produk di seminar_kps
         $seminarTable = Schema::hasTable('seminar_kps') ? 'seminar_kps' : 'seminars';
         Schema::table($seminarTable, function (Blueprint $table) {
@@ -33,7 +33,7 @@ return new class extends Migration
                 $table->string('dokumen_penilaian')->nullable()->after('link_akses_produk');
             }
         });
-        
+
         // Tambah field masa_berlaku di pendaftaran_kps (untuk surat tugas)
         $pendaftaranTable = Schema::hasTable('pendaftaran_kps') ? 'pendaftaran_kps' : 'pendaftarans';
         Schema::table($pendaftaranTable, function (Blueprint $table) {
@@ -41,7 +41,7 @@ return new class extends Migration
                 $table->date('masa_berlaku_surat')->nullable()->after('file_lembar_bimbingan');
             }
         });
-        
+
         // Hapus tabel presentase_nilais jika ada (tidak dipakai di KP)
         // REVISI: Tabel ini masih dipakai di TA, jadi jangan dihapus di unified database.
         // if (Schema::hasTable('presentase_nilais')) {
@@ -57,7 +57,7 @@ return new class extends Migration
                 $table->dropColumn('jumlah_tolak');
             }
         });
-        
+
         $seminarTable = Schema::hasTable('seminar_kps') ? 'seminar_kps' : 'seminars';
         Schema::table($seminarTable, function (Blueprint $table) {
             if (Schema::hasColumn($table->getTable(), 'link_akses_produk')) {
@@ -67,7 +67,7 @@ return new class extends Migration
                 $table->dropColumn('dokumen_penilaian');
             }
         });
-        
+
         $pendaftaranTable = Schema::hasTable('pendaftaran_kps') ? 'pendaftaran_kps' : 'pendaftarans';
         Schema::table($pendaftaranTable, function (Blueprint $table) {
             if (Schema::hasColumn($table->getTable(), 'masa_berlaku_surat')) {

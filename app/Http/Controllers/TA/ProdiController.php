@@ -20,7 +20,7 @@ class ProdiController extends \App\Http\Controllers\Controller
             'title' => 'Master Data Prodi',
             'active' => 'prodi',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'prodis' => $prodis,
         ]);
@@ -33,7 +33,7 @@ class ProdiController extends \App\Http\Controllers\Controller
             'title' => 'Prodi: ' . $prodi->namaprodi,
             'active' => 'prodi',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'prodi' => $prodi,
         ]);
@@ -58,7 +58,7 @@ class ProdiController extends \App\Http\Controllers\Controller
             'title' => 'Prodi: ' . $prodi->namaprodi,
             'active' => 'prodi',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'prodi' => $prodi,
             'presentase_nilai' => $presentase_nilai ? $presentase_nilai : null,
@@ -104,7 +104,7 @@ class ProdiController extends \App\Http\Controllers\Controller
         $data = [
             'title' => 'Pengaturan Akun',
             'active' => '',
-            'sidebar' => 'ta.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'ta',
             'prodi' => $prodi,
         ];

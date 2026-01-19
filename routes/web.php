@@ -88,6 +88,8 @@ Route::post('/prodi/store', [ProdiController::class, 'store'])->name('prodi.stor
 Route::post('/prodi/import', [ProdiController::class, 'import'])->name('prodi.import')->middleware('isAdmin');
 Route::get('/prodi/presentase-nilai/{id}', [ProdiController::class, 'presentaseNilai'])->name('prodi.presentase.nilai')->middleware('isAdmin');
 Route::post('/prodi/presentase-nilai/store', [ProdiController::class, 'presentaseNilaiStore'])->name('prodi.presentase.nilai.store')->middleware('isAdmin');
+Route::get('/prodi/presentase-nilai-kp/{id}', [ProdiController::class, 'presentaseNilaiKp'])->name('prodi.presentase.nilai.kp')->middleware('isAdmin');
+Route::post('/prodi/presentase-nilai-kp/store', [ProdiController::class, 'presentaseNilaiKpStore'])->name('prodi.presentase.nilai.kp.store')->middleware('isAdmin');
 Route::get('/prodi/reset-password/{id}', [ProdiController::class, 'resetPassword'])->name('prodi.reset.password')->middleware('isAdmin');
 
 // Prodi Account

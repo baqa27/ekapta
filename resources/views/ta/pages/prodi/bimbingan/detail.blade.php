@@ -65,7 +65,7 @@
                                                 <a href="{{ asset($bimbingan->lampiran) }}" target="_blank">
                                                     <span class="badge badge-success">
                                                         <i class="fas fa-check-circle mr-1"></i>
-                                                        {{ $bimbingan->bagian->bagian . ' [ Di Acc pada ' . \Carbon\Carbon::parse($bimbingan->tanggal_acc)->formatLocalized('%d %B %Y') }}]
+                                                        {{ $bimbingan->bagian->bagian . ' [ Di Acc pada ' . \Carbon\Carbon::parse($bimbingan->tanggal_acc)->translatedFormat('d F Y') }}]
                                                     </span>
                                                 </a>
                                             @else
@@ -89,7 +89,7 @@
                                                 <a href="{{ asset($bimbingan->lampiran) }}" target="_blank">
                                                     <span class="badge badge-success">
                                                         <i class="fas fa-check-circle mr-1"></i>
-                                                        {{ $bimbingan->bagian->bagian . ' [ Di Acc pada ' . \Carbon\Carbon::parse($bimbingan->tanggal_acc)->formatLocalized('%d %B %Y') }}]
+                                                        {{ $bimbingan->bagian->bagian . ' [ Di Acc pada ' . \Carbon\Carbon::parse($bimbingan->tanggal_acc)->translatedFormat('d F Y') }}]
                                                     </span>
                                                 </a>
                                             @else

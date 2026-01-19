@@ -100,7 +100,7 @@
                                     {{-- Bimbingan Dosen Utama --}}
                                     @if ($dosenPembimbing->pivot->status == 'utama')
                                         @foreach ($mahasiswa->bimbingans()->where('pembimbing', 'utama')->get() as $bimbinganMahasiswa)
-                                            @if (\App\Helpers\AppHelper::instance()->cekBagianIsAcc($bimbinganMahasiswa->id))
+                                            @if (\App\Helpers\AppHelper::instance()->cekBimbinganIsAcc($bimbinganMahasiswa->id))
                                                 <a href="{{ asset($bimbinganMahasiswa->lampiran) }}"
                                                     class="badge badge-success mr-1" target="_blank">
                                                     <i class="fas fa-check-circle mr-1"></i>
@@ -117,7 +117,7 @@
                                         {{-- Bimbingan Dosen Pendamping --}}
                                     @elseif ($dosenPembimbing->pivot->status == 'pendamping')
                                         @foreach ($mahasiswa->bimbingans()->where('pembimbing', 'pendamping')->get() as $bimbinganMahasiswa)
-                                            @if (\App\Helpers\AppHelper::instance()->cekBagianIsAcc($bimbinganMahasiswa->id))
+                                            @if (\App\Helpers\AppHelper::instance()->cekBimbinganIsAcc($bimbinganMahasiswa->id))
                                                 <a href="{{ asset($bimbinganMahasiswa->lampiran) }}"
                                                     class="badge badge-success mr-1" target="_blank">
                                                     <i class="fas fa-check-circle mr-1"></i>
@@ -186,44 +186,16 @@
                                                     <i class="fas fa-calendar mr-2"></i>
                                                     {{ $revisi->created_at->format('d M Y H:m') }}
                                                 </span>
-                                                @if ($revisi->dosen->id == Auth::guard('dosen')->user()->id)
-                                                    {{--<div onclick="confirmDelete()">
-                                                        <form action="{{ route('ta.bimbingan.revisi.delete') }}"
-                                                            method="post">
-                                                            @csrf
-                                                            <input type="hidden" name="id"
-                                                                value="{{ $revisi->id }}">
-                                                            <button class="btn btn-danger btn-sm float-right"
-                                                                type="submit">
-                                                                <i class="fas fa-trash"></i></button>
-                                                        </form>
-                                                    </div>--}}
-                                                @endif
                                             </div>
                                         </div>
                                     </div>
                                     <div class="card-body">
                                         {!! nl2br($revisi->catatan) !!}
-                                        @if($revisi->tanggal_bimbingan)
-                                            <div class="mt-4 text-secondary">
-                                                <small><i class="fas fa-calendar mr-2"></i> Tanggal Bimbingan <b>{{ date('d M Y H:m', strtotime($revisi->tanggal_bimbingan)) }}</b></small>
-                                            </div>
-                                        @endif
-                                        @if ($revisi->lampiran_revisi)
-                                            <small>
-                                                Lampiran revisi:
-                                                @if ($revisi->lampiran_revisi)
-                                                    <a href="{{ asset($revisi->lampiran_revisi) }}" class="ml-3" target="_blank"><i
-                                                            class="fas fa-paperclip"></i>
-                                                        {{ Str::substr($revisi->lampiran_revisi, 40) }}</a>
-                                                @endif
-                                            </small>
-                                        @endif
                                     </div>
                                     @if ($revisi->lampiran)
                                     <div class="card-footer">
                                         <small>
-                                            Lampiran bimbingan sebelumnya:
+                                            Lampiran:
                                                 <a href="{{ asset($revisi->lampiran) }}" class="ml-3" target="_blank"><i
                                                         class="fas fa-paperclip"></i>
                                                     {{ Str::substr($revisi->lampiran, 40) }}</a>

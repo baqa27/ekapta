@@ -19,7 +19,7 @@ class ProdiController extends \App\Http\Controllers\Controller
         return view('kp.pages.admin.prodi.prodi', [
             'title' => 'Master Data Prodi',
             'active' => 'prodi',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'prodis' => $prodis,
         ]);
@@ -31,7 +31,7 @@ class ProdiController extends \App\Http\Controllers\Controller
         return view('kp.pages.admin.prodi.detail', [
             'title' => 'Prodi: ' . $prodi->namaprodi,
             'active' => 'prodi',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'prodi' => $prodi,
         ]);
@@ -76,7 +76,7 @@ class ProdiController extends \App\Http\Controllers\Controller
         return view('kp.pages.admin.prodi.presentase-nilai', [
             'title' => 'Prodi: ' . $prodi->namaprodi,
             'active' => 'prodi',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'prodi' => $prodi,
             'presentase_nilai' => $presentase_nilai ? $presentase_nilai : null,
@@ -122,7 +122,7 @@ class ProdiController extends \App\Http\Controllers\Controller
         $data = [
             'title' => 'Pengaturan Akun',
             'active' => '',
-            'sidebar' => 'kp.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'kp',
             'prodi' => $prodi,
         ];

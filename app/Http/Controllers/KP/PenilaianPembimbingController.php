@@ -37,7 +37,7 @@ class PenilaianPembimbingController extends \App\Http\Controllers\Controller
         return view('kp.pages.dosen.penilaian.index', [
             'title' => 'Penilaian Pembimbing',
             'active' => 'penilaian-kp',
-            'sidebar' => 'kp.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'kp',
             'mahasiswas' => $mahasiswas,
         ]);
@@ -71,7 +71,7 @@ class PenilaianPembimbingController extends \App\Http\Controllers\Controller
         return view('kp.pages.dosen.penilaian.create', [
             'title' => 'Form Penilaian Pembimbing',
             'active' => 'penilaian-kp',
-            'sidebar' => 'kp.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'kp',
             'mahasiswa' => $mahasiswa,
             'pengajuan' => $pengajuan,

@@ -89,7 +89,7 @@ class SeminarController extends \App\Http\Controllers\Controller
         $data = [
             'title' => 'Validasi Seminar KP',
             'active' => 'seminar-kp',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'seminars_review' => $seminars_review,
             'seminars_revisi' => $seminars_revisi,
@@ -105,7 +105,7 @@ class SeminarController extends \App\Http\Controllers\Controller
         $data = [
             'title' => 'Review Seminar KP',
             'active' => 'seminar-kp',
-            'sidebar' => 'kp.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'kp',
             'seminars_review' => $dosen->seminars()->where('status', ReviewSeminar::REVIEW)->get(),
             'seminars_acc' => $dosen->seminars()->where('status', ReviewSeminar::DITERIMA)->get(),
@@ -130,7 +130,7 @@ class SeminarController extends \App\Http\Controllers\Controller
         $data = [
             'title' => 'Daftar Seminar Mahasiswa',
             'active' => 'seminar-kp',
-            'sidebar' => 'kp.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'kp',
             'seminars' => $seminars_prodi,
         ];
@@ -655,7 +655,7 @@ class SeminarController extends \App\Http\Controllers\Controller
         $data = [
             'title' => 'Detail Seminar Mahasiswa',
             'active' => 'seminar-kp',
-            'sidebar' => 'kp.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'kp',
             'seminar' => $seminar,
             'revisis' => $seminar->revisis()->paginate(5),

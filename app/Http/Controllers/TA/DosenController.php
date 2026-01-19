@@ -23,7 +23,7 @@ class DosenController extends \App\Http\Controllers\Controller
             'title' => 'Master Data Dosen',
             'active' => 'dosen',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'dosens' => $dosens,
         ]);
@@ -58,7 +58,7 @@ class DosenController extends \App\Http\Controllers\Controller
             'title' => 'Setting Dosen',
             'active' => 'dosen',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'dosen' => $dosen,
             'prodis' => $prodis,
@@ -91,7 +91,7 @@ class DosenController extends \App\Http\Controllers\Controller
         $data = [
             'title' => 'Pengaturan Akun',
             'active' => '',
-            'sidebar' => 'ta.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'ta',
             'dosen' => $dosen,
         ];

@@ -29,7 +29,7 @@ class Bagian extends Model
 
     public function bimbingans()
     {
-        return $this->hasMany(Bimbingan::class);
+        return $this->hasMany(Bimbingan::class, 'bagian_id');
     }
 
     public function mahasiswas()

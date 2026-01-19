@@ -77,6 +77,7 @@ class Pendaftaran extends Model
     ];
 
     protected $casts = [
+        'tanggal_pembayaran' => 'date',
         'tanggal_acc' => 'datetime',
         'tanggal_verifikasi_bayar' => 'datetime',
         'tanggal_surat_tugas' => 'date',

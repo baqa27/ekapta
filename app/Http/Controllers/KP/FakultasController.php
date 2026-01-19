@@ -19,7 +19,7 @@ class FakultasController extends \App\Http\Controllers\Controller
         return view('kp.pages.admin.fakultas.fakultas', [
             'title' => 'Master Data Fakultas',
             'active' => 'fakultas',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'fakultass' => $fakultass,
         ]);
@@ -43,7 +43,7 @@ class FakultasController extends \App\Http\Controllers\Controller
         return view('kp.pages.admin.fakultas.setting', [
             'title' => '' . $fakultas->namafakultas,
             'active' => 'fakultas',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'fakultas' => $fakultas,
             'prodis' => $prodis,

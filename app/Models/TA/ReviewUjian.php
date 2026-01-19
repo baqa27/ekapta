@@ -26,6 +26,7 @@ class ReviewUjian extends Model
         'ujian_id',
         'dosen_id',
         'status',
+        'dosen_status',
         'nilai',
         'catatan',
     ];

@@ -163,7 +163,7 @@
                                     <div class="card-header"><i class="fas fa-calendar mr-2"></i>
                                         {{ $revisi->created_at->format('d M Y H:m') }}
                                         <div class="float-right" onclick="confirmDelete()">
-                                            <form action="{{ route('pengajuan.revisi.delete') }}" method="post">
+                                            <form action="{{ route('ta.pengajuan.revisi.delete') }}" method="post">
                                                 @csrf
                                                 <input type="hidden" name="id" value="{{ $revisi->id }}">
                                                 <button class="btn btn-danger btn-sm float-right" type="submit">
@@ -480,7 +480,7 @@
         <div class="modal fade" id="modal-edit-judul">
             <div class="modal-dialog">
                 <div class="modal-content">
-                    <form action="{{ route('pengajuan.edit.judul', $pengajuan->id) }}" method="post">
+                    <form action="{{ route('ta.pengajuan.edit.judul', $pengajuan->id) }}" method="post">
                         @method('PUT')
                         @csrf
 

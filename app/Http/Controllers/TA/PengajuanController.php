@@ -33,11 +33,8 @@ class PengajuanController extends \App\Http\Controllers\Controller
             'title' => 'Pengajuan Tugas Akhir',
             'active' => 'pengajuan-ta',
             'module' => 'ta',
+            'sidebar' => 'partials.sidebarProdi',
             'pengajuans' => $pengajuans_review,
-            'sidebar' => 'ta.partials.sidebarProdi',
-            'module' => 'ta',
-            'active' => 'pengajuan-ta',
-            'module' => 'ta',
             'pengajuans_acc' => $pengajuans_acc,
             'pengajuans_revisi' => $pengajuans_revisi,
             'pengajuans_ditolak' => $pengajuans_ditolak,
@@ -65,10 +62,9 @@ class PengajuanController extends \App\Http\Controllers\Controller
         $pengajuans = Pengajuan::orderBy('created_at', 'desc')->get();
         return view('ta.pages.admin.pengajuan.pengajuan', [
             'title' => 'Pengajuan Tugas Akhir',
-            'sidebar' => 'ta.partials.sidebarAdmin',
-            'module' => 'ta',
             'active' => 'pengajuan-ta',
             'module' => 'ta',
+            'sidebar' => 'partials.sidebarAdmin',
             'pengajuans' => $pengajuans,
         ]);
     }
@@ -120,10 +116,9 @@ class PengajuanController extends \App\Http\Controllers\Controller
             'title' => 'Review pengajuan',
             'active' => 'pengajuan-ta',
             'module' => 'ta',
+            'sidebar' => 'partials.sidebarProdi',
             'pengajuan' => $pengajuan,
             'dosens' => $dosens,
-            'sidebar' => 'ta.partials.sidebarProdi',
-            'module' => 'ta',
             'revisis' => $pengajuan->revisis()->orderBy('created_at', 'desc')->paginate(5),
             'dosen_utama' => $dosenUtama,
             'dosen_pendamping' => $dosenPendamping,
@@ -141,9 +136,8 @@ class PengajuanController extends \App\Http\Controllers\Controller
             'title' => 'Review pengajuan',
             'active' => 'pengajuan-ta',
             'module' => 'ta',
+            'sidebar' => 'partials.sidebarAdmin',
             'pengajuan' => $pengajuan,
-            'sidebar' => 'ta.partials.sidebarAdmin',
-            'module' => 'ta',
             'revisis' => $pengajuan->revisis()->orderBy('created_at', 'desc')->paginate(5),
         ]);
     }
@@ -151,7 +145,12 @@ class PengajuanController extends \App\Http\Controllers\Controller
     public function store(Request $request)
     {
         $cekPengajuan = Pengajuan::where('mahasiswa_id', Auth::guard('mahasiswa')->user()->id)->whereIn('status', [Pengajuan::REVIEW, Pengajuan::REVISI, Pengajuan::DITERIMA])->get();
-        $prodi = Prodi::where('namaprodi', Auth::guard('mahasiswa')->user()->prodi)->first();
+        
+        // Cari prodi berdasarkan namaprodi atau kode
+        $mahasiswaProdi = Auth::guard('mahasiswa')->user()->prodi;
+        $prodi = Prodi::where('kode', $mahasiswaProdi)
+                      ->orWhere('kode', $mahasiswaProdi)
+                      ->first();
 
         if ($cekPengajuan->isEmpty()) {
             $validatedData = $request->validate([
@@ -165,7 +164,12 @@ class PengajuanController extends \App\Http\Controllers\Controller
 
             $validatedData['mahasiswa_id'] = Auth::guard('mahasiswa')->user()->id;
 
-            $validatedData['prodi_id'] = $prodi->id;
+            // Cari prodi berdasarkan kode atau namaprodi
+            if ($prodi) {
+                $validatedData['prodi_id'] = $prodi->id;
+            } else {
+                return back()->with('error', 'Prodi tidak ditemukan. Hubungi admin untuk update data prodi Anda.');
+            }
 
             Pengajuan::create($validatedData);
 
@@ -243,7 +247,7 @@ class PengajuanController extends \App\Http\Controllers\Controller
         } else {
             if ($pengajuan->status == Pengajuan::REVIEW) {
                 $revisi = new RevisiPengajuan;
-                $revisi->catatan = $request->catatan;
+                $revisi->keterangan = $request->catatan;
 
                 $pengajuan->update([
                     'status' => Pengajuan::DITERIMA,
@@ -286,7 +290,7 @@ class PengajuanController extends \App\Http\Controllers\Controller
         } else {
             $revisi = new RevisiPengajuan;
             if ($request->catatan) {
-                $revisi->catatan = $request->catatan;
+                $revisi->keterangan = $request->catatan;
 
                 $request->validate([
                     'lampiran' => [Rule::requiredIf(function () use($request) {
@@ -344,7 +348,7 @@ class PengajuanController extends \App\Http\Controllers\Controller
         } else {
             if ($request->catatan) {
                 $revisi = new RevisiPengajuan;
-                $revisi->catatan = $request->catatan;
+                $revisi->keterangan = $request->catatan;
 
                 $request->validate([
                     'lampiran' => [Rule::requiredIf(function () use($request) {

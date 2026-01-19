@@ -52,6 +52,14 @@ class Prodi extends Authenticatable
         return $this->hasOne(PresentaseNilai::class);
     }
 
+    /**
+     * Presentase Nilai KP (tabel: presentase_nilai_kps)
+     */
+    public function presentase_nilai_kp()
+    {
+        return $this->hasOne(\App\Models\KP\PresentaseNilai::class);
+    }
+
     public function dosens()
     {
         return $this->belongsToMany(Dosen::class, 'dosen_prodis', 'prodi_id', 'dosen_id')

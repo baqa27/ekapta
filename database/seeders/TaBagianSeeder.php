@@ -2,20 +2,20 @@
 
 namespace Database\Seeders;
 
-use App\Models\KP\Bagian;
+use App\Models\TA\Bagian;
 use App\Models\Prodi;
 use Illuminate\Database\Seeder;
 
-class KpBagianSeeder extends Seeder
+class TaBagianSeeder extends Seeder
 {
     /**
-     * Seed bagian bimbingan khusus untuk KP
-     * Menggunakan tabel bagian_kps (bukan bagians untuk TA)
+     * Seed bagian bimbingan khusus untuk TA (Tugas Akhir)
+     * Menggunakan tabel bagians (bukan bagian_kps untuk KP)
      */
     public function run(): void
     {
         $this->command->info('');
-        $this->command->info('[KP] Seeding Bagian Bimbingan KP...');
+        $this->command->info('[TA] Seeding Bagian Bimbingan TA...');
 
         $chapters = [
             ['bagian' => 'Bab I', 'is_seminar' => false, 'is_pendadaran' => false],
@@ -48,6 +48,6 @@ class KpBagianSeeder extends Seeder
             }
         }
 
-        $this->command->info('   ✓ ' . $count . ' Bagian bimbingan KP berhasil diseed ke tabel bagian_kps');
+        $this->command->info('   ✓ ' . $count . ' Bagian bimbingan TA berhasil diseed ke tabel bagians');
     }
 }

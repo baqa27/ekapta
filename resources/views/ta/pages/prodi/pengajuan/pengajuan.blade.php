@@ -150,7 +150,7 @@
                                                             @if ($pengajuan->pendaftaran == null)
                                                                 @if (count($pengajuan->mahasiswa->dosens) == 0)
                                                                     <div onclick="confirmCancel()">
-                                                                        <form action="{{ route('pengajuan.cancel.acc') }}"
+                                                                        <form action="{{ route('ta.pengajuan.cancel.acc') }}"
                                                                             method="post">
                                                                             @csrf
                                                                             <input type="hidden" name="id"
@@ -292,7 +292,7 @@
                                                             </a>
                                                             @if ($pengajuan->status != 'diterima')
                                                                 <div onclick="confirmCancel()">
-                                                                    <form action="{{ route('pengajuan.cancel.tolak') }}"
+                                                                    <form action="{{ route('ta.pengajuan.cancel.tolak') }}"
                                                                         method="post">
                                                                         @csrf
                                                                         <input type="hidden" name="id"

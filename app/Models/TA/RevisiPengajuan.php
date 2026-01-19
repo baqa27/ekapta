@@ -21,6 +21,15 @@ class RevisiPengajuan extends Model
         'lampiran',
     ];
 
+    /**
+     * Accessor untuk backward compatibility
+     * View lama pakai 'catatan', tapi database pakai 'keterangan'
+     */
+    public function getCatatanAttribute()
+    {
+        return $this->keterangan;
+    }
+
     public function pengajuan()
     {
         return $this->belongsTo(Pengajuan::class);

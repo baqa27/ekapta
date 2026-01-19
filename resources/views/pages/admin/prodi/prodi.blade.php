@@ -43,7 +43,8 @@
                                         <th>Kode Prodi</th>
                                         <th>Nama Prodi</th>
                                         <th>Jenjang</th>
-                                        <th>Bagian Bimbingan</th>
+                                        <th>Bagian KP</th>
+                                        <th>Bagian TA</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -60,20 +61,30 @@
                                             <td>
                                                 <div class="d-flex justify-content-center">
                                                     <span
+                                                        class="badge {{ count($prodi->bagiansKP) == 0 ? 'bg-danger' : 'bg-info' }}">{{ count($prodi->bagiansKP) }}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="d-flex justify-content-center">
+                                                    <span
                                                         class="badge {{ count($prodi->bagians) == 0 ? 'bg-danger' : 'bg-success' }}">{{ count($prodi->bagians) }}</span>
                                                 </div>
                                             </td>
                                             <td>
                                                 <a href="{{ url('/prodi/' . $prodi->id) }}"
-                                                    class="btn btn-primary btn-sm shadow">
+                                                    class="btn btn-primary btn-sm shadow mb-1">
                                                     <i class="fas fa-plus mr-1"></i> Bagian Bimbingan
                                                 </a>
+                                                <a href="{{ route('prodi.presentase.nilai.kp' , $prodi->id) }}"
+                                                    class="btn btn-info btn-sm shadow mb-1">
+                                                    <i class="fas fa-star"></i> Presentase KP
+                                                </a>
                                                 <a href="{{ route('prodi.presentase.nilai' , $prodi->id) }}"
-                                                    class="btn btn-warning btn-sm shadow">
-                                                    <i class="fas fa-star"></i> Presentase Nilai
+                                                    class="btn btn-warning btn-sm shadow mb-1">
+                                                    <i class="fas fa-star"></i> Presentase TA
                                                 </a>
                                                 <a href="{{ route('prodi.reset.password' , $prodi->id) }}"
-                                                    class="btn btn-danger btn-sm shadow" onclick="return confirm('Yakin ingin reset password?')">
+                                                    class="btn btn-danger btn-sm shadow mb-1" onclick="return confirm('Yakin ingin reset password?')">
                                                     <i class="fas fa-history"></i> Reset Password
                                                 </a>
                                             </td>
@@ -87,7 +98,8 @@
                                         <th>Kode Prodi</th>
                                         <th>Nama Prodi</th>
                                         <th>Jenjang</th>
-                                        <th>Bagian Bimbingan</th>
+                                        <th>Bagian KP</th>
+                                        <th>Bagian TA</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </tfoot>

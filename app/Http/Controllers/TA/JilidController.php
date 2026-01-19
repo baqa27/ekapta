@@ -22,7 +22,7 @@ class JilidController extends \App\Http\Controllers\Controller
         return view('ta.pages.fotokopi.dashboard-fotokopi', [
             'title' => 'Manajemen Jilid Tugas Akhir',
             'active' => 'jilid-ta',
-            'sidebar' => Auth::guard('admin')->user()->type == \App\Models\Admin::TYPE_SUPER_ADMIN ? 'ta.partials.sidebarAdmin' : null,
+            'sidebar' => Auth::guard('admin')->user()->type == \App\Models\Admin::TYPE_SUPER_ADMIN ? 'partials.sidebarAdmin' : null,
             'module' => 'ta',
             // 'jilids' => Jilid::with(['mahasiswa'])->whereIn('status', Auth::guard('admin')->user()->type == 1 ? [Jilid::JILID_REVIEW, Jilid::JILID_SELESAI] : [Jilid::JILID_VALID, Jilid::JILID_SELESAI])->orderBy('created_at', 'desc')->get(),
             'jilids' => Auth::guard('admin')->user()->type == Admin::TYPE_SUPER_ADMIN ? Jilid::orderBy('created_at','desc')->get() : Jilid::orderBy('created_at','desc')->where('status', Jilid::JILID_VALID)->get(),
@@ -171,10 +171,10 @@ class JilidController extends \App\Http\Controllers\Controller
     {
         $jilid = Jilid::with(['mahasiswa','revisis'])->findOrFail($id);
         $mahasiswa = $jilid->mahasiswa()->with(['bimbingans'])->first();
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         return view('ta.pages.fotokopi.detail', [
             'title' => 'Detail Tugas Akhir',
-            'sidebar' => Auth::guard('admin')->user()->type == \App\Models\Admin::TYPE_SUPER_ADMIN ? 'ta.partials.sidebarAdmin' : null,
+            'sidebar' => Auth::guard('admin')->user()->type == \App\Models\Admin::TYPE_SUPER_ADMIN ? 'partials.sidebarAdmin' : null,
             'active' => 'jilid-ta',
             'module' => 'ta',
             'jilid' => $jilid,
@@ -189,7 +189,7 @@ class JilidController extends \App\Http\Controllers\Controller
     {
         $jilid = Jilid::with(['mahasiswa','revisis'])->findOrFail($id);
         $mahasiswa = $jilid->mahasiswa()->with(['bimbingans'])->first();
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         if(Auth::guard('mahasiswa')->user()->id != $mahasiswa->id){
             return back();
         }
@@ -375,7 +375,7 @@ class JilidController extends \App\Http\Controllers\Controller
         $jilid = Jilid::findOrFail($id);
         if($request->catatan){
             $revisi = new RevisiJilid;
-            $revisi->catatan = $request->catatan;
+            $revisi->keterangan = $request->catatan; // Database uses 'keterangan' column
             $revisi->jilid_id = $jilid->id;
             $jilid->revisis()->save($revisi);
         }

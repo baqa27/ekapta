@@ -22,13 +22,14 @@ class RevisiBimbingan extends Model
         'lampiran',
     ];
 
+    // Accessor untuk backward compatibility dengan view yang menggunakan 'catatan'
+    public function getCatatanAttribute()
+    {
+        return $this->keterangan;
+    }
+
     public function bimbingan()
     {
         return $this->belongsTo(Bimbingan::class);
-    }
-
-    public function dosen()
-    {
-        return $this->belongsTo(Dosen::class);
     }
 }

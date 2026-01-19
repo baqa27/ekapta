@@ -70,7 +70,7 @@ class PengajuanController extends \App\Http\Controllers\Controller
             'title' => 'Pengajuan Kerja Praktek',
             'active' => 'pengajuan-kp',
             'pengajuans' => $pengajuans_review,
-            'sidebar' => 'kp.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'kp',
             'pengajuans_acc' => $pengajuans_acc,
             'pengajuans_revisi' => $pengajuans_revisi,
@@ -98,7 +98,7 @@ class PengajuanController extends \App\Http\Controllers\Controller
         $pengajuans = Pengajuan::orderBy('created_at', 'desc')->get();
         return view('kp.pages.admin.pengajuan.pengajuan', [
             'title' => 'Pengajuan Kerja Praktek',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'active' => 'pengajuan-kp',
             'pengajuans' => $pengajuans,
@@ -140,8 +140,8 @@ class PengajuanController extends \App\Http\Controllers\Controller
         $dosenPendamping = $mahasiswa->dosens()->where('status', 'pendamping')->first();
         // Get dosens by prodi mahasiswa (via dosen_prodis pivot table)
         // Dosen yang double prodi (TI+MI) akan muncul di kedua prodi
-        $prodiMahasiswa = Prodi::where('namaprodi', $mahasiswa->prodi)
-            ->orWhere('kode', $mahasiswa->prodi)
+        $prodiMahasiswa = Prodi::where('kode', $mahasiswa->prodi)
+            ->orWhere('namaprodi', $mahasiswa->prodi)
             ->first();
         $dosens = $prodiMahasiswa ? $prodiMahasiswa->dosens : collect();
         $pengajuanCekIsPlagiat = Pengajuan::where('judul', 'LIKE', '%' . $pengajuan->judul . '%')->whereNotIn('id',[$pengajuan->id])->get();
@@ -155,7 +155,7 @@ class PengajuanController extends \App\Http\Controllers\Controller
             'active' => 'pengajuan-kp',
             'pengajuan' => $pengajuan,
             'dosens' => $dosens,
-            'sidebar' => 'kp.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'kp',
             'revisis' => $pengajuan->revisis()->orderBy('created_at', 'desc')->paginate(5),
             'dosen_utama' => $dosenUtama,
@@ -174,7 +174,7 @@ class PengajuanController extends \App\Http\Controllers\Controller
             'title' => 'Review pengajuan',
             'active' => 'pengajuan-kp',
             'pengajuan' => $pengajuan,
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'revisis' => $pengajuan->revisis()->orderBy('created_at', 'desc')->paginate(5),
         ]);

@@ -71,7 +71,7 @@ class ReviewSeminarController extends \App\Http\Controllers\Controller
             'title' => 'Review Seminar TA',
             'active' => 'seminar-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'ta',
             'review_seminar' => $review_seminar,
             'revisis' => $review_seminar->revisis()->orderBy('created_at','desc')->paginate(5),
@@ -85,7 +85,7 @@ class ReviewSeminarController extends \App\Http\Controllers\Controller
         $review_seminar = ReviewSeminar::findOrFail($request->id);
 
         $revisi = new RevisiReviewSeminar();
-        $revisi->catatan = $request->catatan;
+        $revisi->keterangan = $request->catatan; // Database uses 'keterangan' column
         $request->validate([
             'lampiran' => [
                 Rule::requiredIf(function () {
@@ -136,7 +136,7 @@ class ReviewSeminarController extends \App\Http\Controllers\Controller
         $review_seminar = ReviewSeminar::findOrFail($request->id);
 
         $revisi = new RevisiReviewSeminar();
-        $revisi->catatan = $request->catatan;
+        $revisi->keterangan = $request->catatan; // Database uses 'keterangan' column
         $revisi->lampiran = $review_seminar->lampiran ? $review_seminar->lampiran : $review_seminar->seminar->lampiran_3;
         $review_seminar->update([
             'status' => ReviewSeminar::DITERIMA,

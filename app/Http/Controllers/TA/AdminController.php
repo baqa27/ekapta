@@ -15,7 +15,7 @@ class AdminController extends \App\Http\Controllers\Controller
         $data = [
             'title' => 'Pengaturan Akun',
             'active' => '',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'admin' => $admin,
         ];

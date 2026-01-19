@@ -32,7 +32,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
             'title' => 'Bimbingan Tugas Akhir',
             'active' => 'bimbingan-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'ta',
             'mahasiswas' => $mahasiswas,
         ]);
@@ -46,7 +46,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
             'title' => 'Bimbingan Tugas Akhir',
             'active' => 'bimbingan-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'ta',
             'bimbingans' => $dosen->bimbingans()->where('status', 'review')->orderBy('tanggal_bimbingan', 'desc')->get(),
             'bimbingans_diterima' => $dosen->bimbingans()->where('status', 'diterima')->orderBy('tanggal_bimbingan', 'desc')->get(),
@@ -69,7 +69,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
             return redirect()->route('ta.pendaftaran.mahasiswa')->with('warning', 'Silahkan melakukan Pendaftaran Tugas Akhir terlebih dahulu');
         }
 
-        $prodi = Prodi::where('namaprodi', Auth::guard('mahasiswa')->user()->prodi)->first();
+        $prodi = Prodi::where('kode', Auth::guard('mahasiswa')->user()->prodi)->first();
         $bagians_is_seminar = $prodi->bagians()->where("tahun_masuk", "LIKE", "%" . $mahasiswa->thmasuk . "%")->where('is_seminar', 1)->get();
         $bagians_is_ujian = $prodi->bagians()->where("tahun_masuk", "LIKE", "%" . $mahasiswa->thmasuk . "%")->where('is_pendadaran', 1)->get();
         $bimbingans_is_acc_seminar = $mahasiswa->bimbingans()->where('status', Bimbingan::DITERIMA)
@@ -114,7 +114,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
     {
         return back();
         $mahasiswa = Mahasiswa::findOrFail(Auth::guard('mahasiswa')->user()->id);
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         return view('ta.pages.mahasiswa.bimbingan.create', [
             'title' => 'Form Bimbingan Tugas Akhir',
             'active' => 'bimbingan-ta',
@@ -164,9 +164,9 @@ class BimbinganController extends \App\Http\Controllers\Controller
     public function edit($id)
     {
         $mahasiswa = Mahasiswa::with(['bimbingans'])->findOrFail(Auth::guard('mahasiswa')->user()->id);
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         $pendaftaran = Pendaftaran::orderBy('created_at', 'desc')->where('mahasiswa_id', $mahasiswa->id)->where('status', 'diterima')->first();
-        $prodi = Prodi::where('namaprodi', Auth::guard('mahasiswa')->user()->prodi)->first();
+        $prodi = Prodi::where('kode', Auth::guard('mahasiswa')->user()->prodi)->first();
         $bagians_is_seminar = $prodi->bagians()->where("tahun_masuk", "LIKE", "%" . $mahasiswa->thmasuk . "%")->where('is_seminar', 1)->get();
         $bimbingans_is_acc_seminar = $mahasiswa->bimbingans()->where('status', Bimbingan::DITERIMA)
         ->whereHas('bagian', function($query) {
@@ -183,12 +183,10 @@ class BimbinganController extends \App\Http\Controllers\Controller
 
         if ($mahasiswa->id != $bimbingan->mahasiswa->id) {
             abort(404);
-        } elseif ($bimbingan->status == 'review' || $bimbingan->status == 'ditolak' ||    $bimbingan->status == 'diterima') {
+        } elseif ($bimbingan->status == 'review' || $bimbingan->status == 'ditolak' || $bimbingan->status == 'diterima') {
             return back()->with('warning', 'Bimbingan tidak dapat disubmit');
         } elseif (count($mahasiswa->bimbingans()->where('status', 'review')->get()) >= 2) {
             return back()->with('warning', 'Tunggu sampai bimbingan di Acc oleh dosen');
-        } elseif(count($bimbingans_is_acc_seminar) / 2  < count($bagians_is_seminar) && $bimbingan->bagian->is_pendadaran == 1){
-            return back();
         }
 
         return view('ta.pages.mahasiswa.bimbingan.edit', [
@@ -223,7 +221,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
     {
         $bimbingan = Bimbingan::with(['revisis'])->findOrFail($id);
         $mahasiswa = Mahasiswa::with(['bimbingans','pengajuans'])->find($bimbingan->mahasiswa->id);
-        $prodi = Prodi::with(['bagians'])->where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::with(['bagians'])->where('kode', $mahasiswa->prodi)->first();
         $pengajuan = $mahasiswa->pengajuans()->where('status', 'diterima')->first();
 
         $bimbingans_acc = $mahasiswa->bimbingans()->where('status', 'diterima')->get();
@@ -233,10 +231,10 @@ class BimbinganController extends \App\Http\Controllers\Controller
             'bimbingan' => $bimbingan,
             'active' => 'bimbingan-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'ta',
             'revisis' => $bimbingan->revisis()->orderBy('created_at', 'desc')->paginate(5),
-            'bagians' => $prodi->bagians,
+            'bagians' => $prodi ? $prodi->bagians : collect(),
             'bimbingans_acc' => $bimbingans_acc,
             'mahasiswa' => $mahasiswa,
             'pengajuan' => $pengajuan,
@@ -308,10 +306,8 @@ class BimbinganController extends \App\Http\Controllers\Controller
                 return true;
             }), 'mimes:pdf,docx', 'max:5000']
         ]);
-        $revisi->catatan = $request->catatan;
+        $revisi->keterangan = $request->catatan; // Database uses 'keterangan' column
         $revisi->lampiran = $bimbingan->lampiran;
-        $revisi->dosen_id = Auth::guard('dosen')->user()->id;
-        $revisi->tanggal_bimbingan = $bimbingan->tanggal_bimbingan;
         $bimbingan->update([
             'status' => 'diterima',
             'tanggal_acc' => now(),
@@ -347,12 +343,11 @@ class BimbinganController extends \App\Http\Controllers\Controller
         ]);
 
         if($request->lampiran){
-            $revisi->lampiran_revisi = AppHelper::instance()->uploadLampiran($request->lampiran, 'lampirans');
+            $revisi->lampiran = AppHelper::instance()->uploadLampiran($request->lampiran, 'lampirans');
+        } else {
+            $revisi->lampiran = $bimbingan->lampiran;
         }
-        $revisi->catatan = $request->catatan;
-        $revisi->lampiran = $bimbingan->lampiran;
-        $revisi->tanggal_bimbingan = $bimbingan->tanggal_bimbingan;
-        $revisi->dosen_id = Auth::guard('dosen')->user()->id;
+        $revisi->keterangan = $request->catatan; // Database uses 'keterangan' column
         $bimbingan->revisis()->save($revisi);
         $bimbingan->update([
             'status' => 'revisi',
@@ -407,7 +402,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
             'title' => 'Detail Bimbingan Tugas Akhir',
             'active' => 'bimbingan-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'ta',
             'pengajuan' => $pengajuan,
             'dosen_utama' => $dosen_utama,
@@ -425,7 +420,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
             'title' => 'Laporan Bimbingan Tugas Akhir',
             'active' => 'bimbingan-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'mahasiswas' => $mahasiswas,
         ]);
@@ -442,7 +437,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
             'title' => 'Detail Bimbingan Tugas Akhir',
             'active' => 'bimbingan-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'pengajuan' => $pengajuan,
             'dosen_utama' => $dosen_utama,
@@ -458,9 +453,9 @@ class BimbinganController extends \App\Http\Controllers\Controller
         $dosen = Dosen::findOrFail(Auth::guard('dosen')->user()->id);
         return view('ta.pages.dosen.bimbingan.bimbingan-progress', [
             'title' => 'Bimbingan Tugas Akhir',
-            'active' => 'bimbingan-progress',
+            'active' => 'bimbingan-progress-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'ta',
             'mahasiswas' => $dosen->mahasiswas()->with(['bimbingans'])->get(),
         ]);
@@ -473,7 +468,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
 
         return view('ta.pages.prodi.bimbingan.rekap-dosen', [
             'title' => 'Rekap Bimbingan Dosen',
-            'sidebar' => 'ta.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'ta',
             'active' => 'dashboard',
             'module' => 'ta',
@@ -578,7 +573,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
             abort(404);
         }
         $pengajuan = $mahasiswa->pengajuans()->where('status', Pengajuan::DITERIMA)->first();
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
         $dosen_utama = $mahasiswa->dosens()->where('status', 'utama')->first();
         $dosen_pendamping = $mahasiswa->dosens()->where('status', 'pendamping')->first();
         $pendaftaran_acc = Pendaftaran::orderBy('created_at', 'desc')->where('mahasiswa_id', $mahasiswa->id)->where('status', 'diterima')->first();

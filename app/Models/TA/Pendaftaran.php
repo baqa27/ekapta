@@ -41,6 +41,11 @@ class Pendaftaran extends Model
         'status',
     ];
 
+    protected $casts = [
+        'tanggal_pembayaran' => 'date',
+        'tanggal_acc' => 'datetime',
+    ];
+
     public function revisis()
     {
         return $this->hasMany(RevisiPendaftaran::class, 'pendaftaran_id');

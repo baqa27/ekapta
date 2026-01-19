@@ -114,19 +114,29 @@
                                         </td>
                                         <td>
                                             @if ($pendaftaran->status =='diterima')
-                                                <a href="{{ route('ta.cetak.surat.tugas.bimbingan') }}"
-                                                   class="btn btn-success btn-sm" target="_blank"><i
-                                                        class="fas fa-download mr-1"></i>
-                                                    Surat Tugas Bimbingan TA</a>
+                                                <div class="d-flex">
+                                                    <a href="{{ url('pendaftaran/detail/'.$pendaftaran->id) }}"
+                                                       class="btn btn-primary btn-sm shadow mr-2"><i
+                                                            class="fas fa-info-circle mr-1"></i>Detail</a>
+                                                    <a href="{{ route('ta.cetak.surat.tugas.bimbingan') }}"
+                                                       class="btn btn-success btn-sm shadow" target="_blank"><i
+                                                            class="fas fa-download mr-1"></i>
+                                                        Surat Tugas Bimbingan TA</a>
+                                                </div>
 
                                             @elseif ($pendaftaran->status =='revisi')
-                                                <a href="{{ url('pendaftaran/edit/'.$pendaftaran->id) }}"
-                                                   class="btn btn-primary btn-sm"><i class="fa fa-upload mr-1"></i>
-                                                    Submit Revisi</a>
+                                                <div class="d-flex">
+                                                    <a href="{{ url('pendaftaran/detail/'.$pendaftaran->id) }}"
+                                                       class="btn btn-primary btn-sm shadow mr-2"><i
+                                                            class="fas fa-info-circle mr-1"></i>Detail</a>
+                                                    <a href="{{ url('pendaftaran/edit/'.$pendaftaran->id) }}"
+                                                       class="btn btn-primary btn-sm shadow"><i class="fa fa-upload mr-1"></i>
+                                                        Submit Revisi</a>
+                                                </div>
 
                                             @elseif ($pendaftaran->status =='review')
                                                 <a href="{{ url('pendaftaran/detail/'.$pendaftaran->id) }}"
-                                                   class="btn btn-primary btn-sm"><i
+                                                   class="btn btn-primary btn-sm shadow"><i
                                                         class="fas fa-info-circle mr-1"></i>Detail</a>
 
                                             @endif

@@ -29,7 +29,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
         return view('kp.pages.admin.bimbingan.bimbingan', [
             'title' => 'Bimbingan Kerja Praktek',
             'active' => 'bimbingan-kp',
-            'sidebar' => 'kp.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'kp',
             'mahasiswas' => $mahasiswas,
         ]);
@@ -42,7 +42,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
         return view('kp.pages.dosen.bimbingan.bimbingan', [
             'title' => 'Bimbingan Kerja Praktek',
             'active' => 'bimbingan-kp',
-            'sidebar' => 'kp.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'kp',
             'bimbingans' => $dosen->bimbingansKP()->where('status', 'review')->orderBy('tanggal_bimbingan', 'desc')->get(),
             'bimbingans_diterima' => $dosen->bimbingansKP()->where('status', 'diterima')->orderBy('tanggal_bimbingan', 'desc')->get(),
@@ -417,8 +417,8 @@ class BimbinganController extends \App\Http\Controllers\Controller
         $bimbingan = Bimbingan::with(['revisis'])->findOrFail($id);
         $mahasiswa = Mahasiswa::with(['bimbingansKP','pengajuansKP'])->find($bimbingan->mahasiswa->id);
         // Cari prodi berdasarkan kode ATAU namaprodi
-        $prodi = Prodi::with(['bagiansKP'])->where('namaprodi', $mahasiswa->prodi)
-            ->orWhere('kode', $mahasiswa->prodi)
+        $prodi = Prodi::with(['bagiansKP'])->where('kode', $mahasiswa->prodi)
+            ->orWhere('namaprodi', $mahasiswa->prodi)
             ->first();
         $pengajuan = $mahasiswa->pengajuansKP()->where('status', 'diterima')->first();
 
@@ -428,7 +428,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
             'title' => 'Review Bimbingan Kerja Praktek',
             'bimbingan' => $bimbingan,
             'active' => 'bimbingan-kp',
-            'sidebar' => 'kp.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'kp',
             'revisis' => $bimbingan->revisis()->orderBy('created_at', 'desc')->paginate(5),
             'bagians' => $prodi ? $prodi->bagiansKP : collect(),
@@ -594,7 +594,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
         $data = [
             'title' => 'Review Bimbingan KP',
             'active' => 'bimbingan-input-kp',
-            'sidebar' => 'kp.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'kp',
             'bimbingan' => $bimbingan,
             'pengajuan' => $pengajuan,
@@ -612,7 +612,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
         return view('kp.pages.admin.bimbingan.bimbingan', [
             'title' => 'Laporan Bimbingan Kerja Praktek',
             'active' => 'bimbingan-kp',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'mahasiswas' => $mahasiswas,
         ]);
@@ -632,7 +632,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
         $data = [
             'title' => 'Detail Bimbingan Kerja Praktek',
             'active' => 'bimbingan-kp',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'pengajuan' => $pengajuan,
             'dosen_pembimbing' => $dosen_pembimbing,
@@ -648,7 +648,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
         return view('kp.pages.dosen.bimbingan.bimbingan-progress', [
             'title' => 'Bimbingan Kerja Praktek',
             'active' => 'bimbingan-progress-kp',
-            'sidebar' => 'kp.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'kp',
             'mahasiswas' => $dosen->mahasiswas()->with(['bimbingansKP'])->get(),
         ]);
@@ -661,7 +661,7 @@ class BimbinganController extends \App\Http\Controllers\Controller
 
         return view('kp.pages.prodi.bimbingan.rekap-dosen', [
             'title' => 'Rekap Bimbingan Dosen',
-            'sidebar' => 'kp.partials.sidebarProdi',
+            'sidebar' => 'partials.sidebarProdi',
             'module' => 'kp',
             'active' => 'dashboard',
             'dosens' => $dosens,

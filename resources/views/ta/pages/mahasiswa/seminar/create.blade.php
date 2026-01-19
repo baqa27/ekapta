@@ -55,7 +55,7 @@
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">Tanggal Pembuatan Tugas Akhir</label>
                                     <input type="text" class="form-control"
-                                        value="{{ \Carbon\Carbon::parse($pengajuan_acc->created_at)->formatLocalized('%d %B %Y') }}"
+                                        value="{{ \Carbon\Carbon::parse($pengajuan_acc->created_at)->translatedFormat('d F Y') }}"
                                         disabled>
                                 </div>
 

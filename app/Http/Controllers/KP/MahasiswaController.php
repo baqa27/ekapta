@@ -20,7 +20,7 @@ class MahasiswaController extends \App\Http\Controllers\Controller
         return view('kp.pages.admin.mahasiswa.mahasiswa', [
             'title' => 'Master Data Mahasiswa',
             'active' => 'mahasiswa',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'mahasiswas' => $mahasiswas,
         ]);

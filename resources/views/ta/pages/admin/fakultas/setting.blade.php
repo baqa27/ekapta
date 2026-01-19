@@ -196,7 +196,7 @@
                                                 <td>{{ $dekan->namadekan . ', ' . $dekan->gelar . ' (' . $dekan->nidn . ')' }}
                                                 </td>
                                                 <td>
-                                                    {{ \Carbon\Carbon::parse($dekan->dari)->formatLocalized('%d %B %Y') . ' - ' . \Carbon\Carbon::parse($dekan->sampai)->formatLocalized('%d %B %Y') }}
+                                                    {{ \Carbon\Carbon::parse($dekan->dari)->translatedFormat('d F Y') . ' - ' . \Carbon\Carbon::parse($dekan->sampai)->translatedFormat('d F Y') }}
                                                 </td>
                                                 <td>
                                                     <div class="d-flex justify-content-center">
@@ -524,13 +524,13 @@
                         <div class="form-group col-md-6">
                             <label for="" class="form-label">Periode Dari</label>
                             <input type="text"
-                                value="{{ $dekanActive != null ? \Carbon\Carbon::parse($dekanActive->dari)->formatLocalized('%d %B %Y') : '' }}"
+                                value="{{ $dekanActive != null ? \Carbon\Carbon::parse($dekanActive->dari)->translatedFormat('d F Y') : '' }}"
                                 class="form-control" disabled>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="" class="form-label">Periode Sampai</label>
                             <input type="text"
-                                value="{{ $dekanActive != null ? \Carbon\Carbon::parse($dekanActive->sampai)->formatLocalized('%d %B %Y') : '' }}"
+                                value="{{ $dekanActive != null ? \Carbon\Carbon::parse($dekanActive->sampai)->translatedFormat('d F Y') : '' }}"
                                 class="form-control" disabled>
                         </div>
                     </div>

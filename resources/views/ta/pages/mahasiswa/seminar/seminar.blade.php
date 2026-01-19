@@ -23,21 +23,23 @@
     <div class="content">
         <div class="container">
 
-            @if ($is_ujian)
+            @if ($seminar && $seminar->is_lulus == 1 && $is_ujian)
                 <div class="mb-3 bg-success rounded p-2">
                     Selamat anda sudah bisa melakukan pendaftaran Ujian Pendadaran TA. Silahkan lakukan pendaftaran
                     <a href="{{ route('ta.ujian.create') }}"><b><u>Ujian Pendadaran TA!</u></b></a>
                 </div>
             @endif
 
-            @if (count($reviews_acc) < 2)
-                <div class="mb-3 bg-secondary rounded p-2">
-                    Silahkan tunggu review dan penilaian dari dosen pembimbing dan penguji!
-                </div>
-            @else
-                <div class="mb-3 bg-primary rounded p-2">
-                    Selamat bimbingan Seminar TA anda sudah selesai.
-                </div>
+            @if ($seminar && $seminar->is_valid == 1)
+                @if (count($reviews_acc) < 2)
+                    <div class="mb-3 bg-secondary rounded p-2">
+                        Silahkan tunggu review dan penilaian dari dosen pembimbing dan penguji!
+                    </div>
+                @else
+                    <div class="mb-3 bg-primary rounded p-2">
+                        Selamat bimbingan Seminar TA anda sudah selesai.
+                    </div>
+                @endif
             @endif
 
             @if (!$seminar)

@@ -83,12 +83,67 @@ class AppHelper
         }
     }
 
-    public function cekBagianIsAcc($id)
+    public function cekBagianIsAcc($nim, $pembimbing = null)
     {
-        $bimbingan = Bimbingan::where('id', $id)->where('status', 'diterima')->first();
+        // Cek apakah ada bimbingan yang sedang dalam proses review/revisi
+        $mahasiswa = Mahasiswa::where('nim', $nim)->first();
+        if (!$mahasiswa) {
+            return false;
+        }
+        
+        $query = Bimbingan::where('mahasiswa_id', $mahasiswa->id)
+            ->whereIn('status', ['review', 'revisi']);
+        
+        // Jika pembimbing dispesifikkan, cek hanya untuk pembimbing tersebut
+        if ($pembimbing) {
+            $query->where('pembimbing', $pembimbing);
+        }
+        
+        $bimbingan_dalam_proses = $query->first();
+        
+        // Return true jika ada yang sedang review/revisi (artinya tidak bisa submit bab berikutnya)
+        if ($bimbingan_dalam_proses) {
+            return true;
+        }
+        
+        return false;
+    }
+
+    public function cekBimbinganIsAcc($bimbingan_id)
+    {
+        // Cek apakah bimbingan tertentu sudah ACC
+        $bimbingan = Bimbingan::where('id', $bimbingan_id)->where('status', 'diterima')->first();
         if ($bimbingan) {
             return true;
         }
+        return false;
+    }
+
+    public function canSubmitBabPendadaran($mahasiswa_id)
+    {
+        // Cek apakah mahasiswa sudah selesai semua bimbingan seminar
+        $mahasiswa = Mahasiswa::find($mahasiswa_id);
+        if (!$mahasiswa) {
+            return false;
+        }
+
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
+        if (!$prodi) {
+            return false;
+        }
+
+        $bagians_is_seminar = $prodi->bagians()->where("tahun_masuk", "LIKE", "%" . $mahasiswa->thmasuk . "%")->where('is_seminar', 1)->get();
+        $bimbingans_is_acc_seminar = Bimbingan::where('mahasiswa_id', $mahasiswa_id)
+            ->where('status', 'diterima')
+            ->whereHas('bagian', function($query) {
+                $query->where('is_seminar', 1);
+            })->get();
+        
+        // Butuh semua bagian seminar × 2 pembimbing
+        $required = count($bagians_is_seminar) * 2;
+        $current = count($bimbingans_is_acc_seminar);
+        
+        return $current >= $required;
     }
 
     /**
@@ -319,7 +374,28 @@ class AppHelper
     {
         $reviews = $ujian_or_seminar->reviews;
         $prodi = Prodi::where('namaprodi', $ujian_or_seminar->mahasiswa->prodi)->first();
+        
+        // Check if prodi exists
+        if (!$prodi) {
+            return [
+                'nilai_huruf' => null,
+                'nilai' => 0,
+                'nilai_penguji' => 0,
+                'nilai_pembimbing' => 0,
+            ];
+        }
+        
         $presentase_nilai = $prodi->presentase_nilai;
+        
+        // Check if presentase_nilai exists
+        if (!$presentase_nilai) {
+            return [
+                'nilai_huruf' => null,
+                'nilai' => 0,
+                'nilai_penguji' => 0,
+                'nilai_pembimbing' => 0,
+            ];
+        }
 
         $nilai_penguji = 0;
         $nilai_pembimbing = 0;

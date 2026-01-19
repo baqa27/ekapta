@@ -26,7 +26,7 @@ class PendaftaranController extends \App\Http\Controllers\Controller
             'title' => 'Pendaftaran Tugas Akhir',
             'active' => 'pendaftaran-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'pendaftarans' => $pendaftarans,
             'pendaftarans_acc' => $pendaftarans_acc,
@@ -122,9 +122,8 @@ class PendaftaranController extends \App\Http\Controllers\Controller
             $validatedData['mahasiswa_id'] = Auth::guard('mahasiswa')->user()->id;
             $validatedData['pengajuan_id'] = $pengajuan->id;
 
-            setlocale(LC_TIME, 'id');
-            $tanggal_pembayaran = Carbon::parse($request->tanggal_pembayaran);
-            $validatedData['tanggal_pembayaran'] = $tanggal_pembayaran->day.' '.$tanggal_pembayaran->monthName.' '.$tanggal_pembayaran->year;
+            // Keep the date in proper format for database (Y-m-d)
+            $validatedData['tanggal_pembayaran'] = $request->tanggal_pembayaran;
 
             Pendaftaran::create($validatedData);
             return redirect()->route('ta.pendaftaran.mahasiswa')->with('success', 'Berhasil melakukan pendaftaran');
@@ -173,7 +172,7 @@ class PendaftaranController extends \App\Http\Controllers\Controller
             'title' => 'Review Pendaftaran Tugas Akhir',
             'active' => 'pendaftaran-ta',
             'module' => 'ta',
-            'sidebar' => 'ta.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'ta',
             'dosen_utama' => $dosenUtama,
             'dosen_pendamping' => $dosenPendamping,
@@ -274,9 +273,8 @@ class PendaftaranController extends \App\Http\Controllers\Controller
         $validatedData['status'] = Pendaftaran::REVIEW;
 
         if ($request->tanggal_pembayaran) {
-            setlocale(LC_TIME, 'id');
-            $tanggal_pembayaran = Carbon::parse($request->tanggal_pembayaran);
-            $validatedData['tanggal_pembayaran'] = $tanggal_pembayaran->day.' '.$tanggal_pembayaran->monthName.' '.$tanggal_pembayaran->year;;
+            // Keep the date in proper format for database (Y-m-d)
+            $validatedData['tanggal_pembayaran'] = $request->tanggal_pembayaran;
         }
 
         $pendaftaran->update($validatedData);
@@ -312,10 +310,14 @@ class PendaftaranController extends \App\Http\Controllers\Controller
 
         $pendaftaran_disabled = Pendaftaran::where('mahasiswa_id', $mahasiswa->id)->where('status', Pendaftaran::DISABLED)->first();
 
-        $prodi = Prodi::where('namaprodi', $mahasiswa->prodi)->first();
+        $prodi = Prodi::where('kode', $mahasiswa->prodi)->first();
+
+        if (!$prodi) {
+            return back()->with('warning', 'Prodi tidak ditemukan untuk kode: ' . $mahasiswa->prodi);
+        }
 
         if (count($prodi->bagians()->where("tahun_masuk", "LIKE", "%" . $mahasiswa->thmasuk . "%")->get()) == 0) {
-            return back()->with('warning', 'Bagian bimbingan untuk prodi' . $mahasiswa->prodi . 'dan tahun masuk '.$mahasiswa->thmasuk.' masih kosong');
+            return back()->with('warning', 'Bagian bimbingan untuk prodi ' . $mahasiswa->prodi . ' dan tahun masuk '.$mahasiswa->thmasuk.' masih kosong');
         } elseif ($pendaftaran->status == Pendaftaran::DITERIMA) {
             return back()->with('warning', 'Pendaftaran sudah diacc');
         } else {
@@ -377,7 +379,7 @@ class PendaftaranController extends \App\Http\Controllers\Controller
     {
         $pendaftaran = Pendaftaran::findOrFail($request->id);
         $revisi = new RevisiPendaftaran;
-        $revisi->catatan = $request->catatan;
+        $revisi->keterangan = $request->catatan;
         $request->validate([
             'lampiran' => [Rule::requiredIf(function () {
                 if (empty($this->request->lampiran)) {

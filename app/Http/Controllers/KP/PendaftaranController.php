@@ -25,7 +25,7 @@ class PendaftaranController extends \App\Http\Controllers\Controller
         return view('kp.pages.admin.pendaftaran.pendaftaran', [
             'title' => 'Pendaftaran Kerja Praktik',
             'active' => 'pendaftaran-kp',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'pendaftarans' => $pendaftarans,
             'pendaftarans_acc' => $pendaftarans_acc,
@@ -131,9 +131,8 @@ class PendaftaranController extends \App\Http\Controllers\Controller
             $validatedData['mahasiswa_id'] = $mahasiswa->id;
             $validatedData['pengajuan_id'] = $pengajuan->id;
 
-            setlocale(LC_TIME, 'id');
-            $tanggal_pembayaran = Carbon::parse($request->tanggal_pembayaran);
-            $validatedData['tanggal_pembayaran'] = $tanggal_pembayaran->day.' '.$tanggal_pembayaran->monthName.' '.$tanggal_pembayaran->year;
+            // Keep the date in proper format for database (Y-m-d)
+            $validatedData['tanggal_pembayaran'] = $request->tanggal_pembayaran;
 
             Pendaftaran::create($validatedData);
             return redirect()->route('kp.pendaftaran.mahasiswa')->with('success', 'Berhasil melakukan pendaftaran');
@@ -185,7 +184,7 @@ class PendaftaranController extends \App\Http\Controllers\Controller
         return view('kp.pages.admin.pendaftaran.review', [
             'title' => 'Review Pendaftaran Kerja Praktik',
             'active' => 'pendaftaran-kp',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'dosen_pembimbing' => $dosenPembimbing,
             'pendaftaran' => $pendaftaran,
@@ -301,9 +300,8 @@ class PendaftaranController extends \App\Http\Controllers\Controller
         $validatedData['status'] = Pendaftaran::REVIEW;
 
         if ($request->tanggal_pembayaran) {
-            setlocale(LC_TIME, 'id');
-            $tanggal_pembayaran = Carbon::parse($request->tanggal_pembayaran);
-            $validatedData['tanggal_pembayaran'] = $tanggal_pembayaran->day.' '.$tanggal_pembayaran->monthName.' '.$tanggal_pembayaran->year;;
+            // Keep the date in proper format for database (Y-m-d)
+            $validatedData['tanggal_pembayaran'] = $request->tanggal_pembayaran;
         }
 
         $pendaftaran->update($validatedData);

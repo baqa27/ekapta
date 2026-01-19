@@ -22,7 +22,7 @@ class DosenController extends \App\Http\Controllers\Controller
         return view('kp.pages.admin.dosen.dosen', [
             'title' => 'Master Data Dosen',
             'active' => 'dosen',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'dosens' => $dosens,
         ]);
@@ -82,7 +82,7 @@ class DosenController extends \App\Http\Controllers\Controller
         return view('kp.pages.admin.dosen.setting',[
             'title' => 'Setting Dosen',
             'active' => 'dosen',
-            'sidebar' => 'kp.partials.sidebarAdmin',
+            'sidebar' => 'partials.sidebarAdmin',
             'module' => 'kp',
             'dosen' => $dosen,
             'prodis' => $prodis,
@@ -115,7 +115,7 @@ class DosenController extends \App\Http\Controllers\Controller
         $data = [
             'title' => 'Pengaturan Akun',
             'active' => '',
-            'sidebar' => 'kp.partials.sidebarDosen',
+            'sidebar' => 'partials.sidebarDosen',
             'module' => 'kp',
             'dosen' => $dosen,
         ];

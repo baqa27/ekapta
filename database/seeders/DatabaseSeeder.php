@@ -18,6 +18,9 @@ class DatabaseSeeder extends Seeder
 
             // Seeder bagian KP (tabel bagian_kps)
             KpBagianSeeder::class,
+
+            // Seeder bagian TA (tabel bagians)
+            TaBagianSeeder::class,
         ]);
     }
 }
